@@ -15,10 +15,60 @@ onMounted(() => {
     if(map.value){
         map.value = new mapboxgl.Map({
             container: map.value as HTMLElement,
-            style: 'mapbox://styles/mapbox/streets-v12',
-            center: [-24, 42], // starting center in [lng, lat]
-            zoom: 1
+            style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
+            //style: 'mapbox://styles/mapbox/streets-v12',
+            center: [
+            -2.474008,
+            53.155133
+          ], // starting center in [lng, lat]
+            zoom: 5
         });
+
+        map.value.on('load', () => {
+          // map.value?.addSource('earthquakes', {
+          //   type: 'geojson',
+          //   data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
+          // });
+
+
+          // map.value?.addSource('custom', {
+          //   type: 'geojson',
+          //   data: 'https://canalplan.org.uk/mapping/geodata/full/ukuk/canalplan_places.geojson'
+          //   //data: '/src/assets/geoJSON/features.geojson'
+          // });
+
+
+          // const datasetUrl = `https://api.mapbox.com/datasets/v1/mr-thomas-rogers/clvjxrof22w7l1orvqw1fy7uz/features?access_token=${import.meta.env.VITE_API_KEY}`;
+          // map.value?.addSource('canalplan', {
+          //   type: 'geojson',
+          //   data: datasetUrl
+          // })
+          // map.value?.addSource('lines', {
+          //   'type': 'geojson',
+          //   'data': 'https://api.mapbox.com/datasets/v1/mr-thomas-rogers/clvjxrof22w7l1orvqw1fy7uz/features?access_token='
+            
+          // });
+
+          // map.value?.addSource('test', {
+          //   'type': 'geojson',
+          //   'data': '/src/assets/geoJSON/test.geojson'
+          // });
+
+
+          // map.value?.addLayer({
+          //   'id': 'lines',
+          //   'type': 'line',
+          //   'source': 'test',
+          //   'paint': {
+          //       'line-width': 10,
+          //       // Use a get expression (https://docs.mapbox.comhttps://docs.mapbox.com/style-spec/reference/expressions/#get)
+          //       // to set the line-color to a feature property value.
+          //       'line-color': 'red'
+          //   }
+          // });
+
+        });
+
         map.value.addControl(
           new MapboxGeocoder({
               accessToken: mapboxgl.accessToken,
@@ -40,8 +90,6 @@ onMounted(() => {
         );
 
         map.value.addControl(new mapboxgl.NavigationControl());
-
-
     }
 });
 
