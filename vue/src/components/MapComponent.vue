@@ -1,12 +1,12 @@
 <template>
-    <div ref="map" class="map-container" id="map-container"></div>
+    <div ref="map" class="map-container w-1/1 h-full" id="map-container"></div>
 </template> 
   
 <script setup lang="ts">
 import {ref, onMounted, onUnmounted} from 'vue';
 import mapboxgl, {Map} from 'mapbox-gl';
 
-mapboxgl.accessToken = '';
+mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
 
 onMounted(() => {
@@ -27,8 +27,8 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.map-container {
-  width: 700px;
-  height: 700px;
-}
+/* .map-container {
+  width: 150%;
+  height: 100%;
+} */
 </style>
