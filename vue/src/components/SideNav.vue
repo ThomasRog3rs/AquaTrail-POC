@@ -1,5 +1,5 @@
 <template>
-   <aside id="default-sidebar" class="fixed top-69 left-0 z-40 w-1/5 h-screen shadow-lg border-solid transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+   <aside id="default-sidebar" class="fixed top-69 left-0 z-40 w-[25rem] h-screen shadow-lg border-solid transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
       <div class="h-full px-3 py-4 overflow-y-auto bg-slate-100">
          <div class="mb-4">
             <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
