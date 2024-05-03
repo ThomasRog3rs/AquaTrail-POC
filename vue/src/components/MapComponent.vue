@@ -17,11 +17,9 @@ onMounted(() => {
             container: map.value as HTMLElement,
             style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
             //style: 'mapbox://styles/mapbox/streets-v12',
-            center: [
-            -2.474008,
-            53.155133
-          ], // starting center in [lng, lat]
-            zoom: 5
+            //center: [-2.474008, 53.155133], // starting center in [lng, lat]
+            center: [-0.974478,51.449553],
+            zoom: 15
         });
 
         map.value.on('load', () => {
