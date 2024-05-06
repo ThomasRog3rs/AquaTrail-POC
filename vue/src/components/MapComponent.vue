@@ -1,7 +1,8 @@
 <template>
+    <button @click="showNearByShops">Show Nearby Shops</button>
     <div ref="map" class="map-container w-1/1 h-full" id="map-container"></div>
 </template> 
-  
+   
 <script setup lang="ts">
 import {ref, onMounted, onUnmounted} from 'vue';
 import mapboxgl, {Map} from 'mapbox-gl';
@@ -10,6 +11,25 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
+const showNearByShops = () => {
+  if(map.value){
+    const bounds = map.value.getBounds();
+    const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];
+    // const southWestCorner = [bounds.getSouth(), bounds.getWest()];
+    // const northEastCorner = [bounds.getNorth(), bounds.getEast()];
+    console.log(bbox);
+    const shopsUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/San%20Francisco.json?access_token=${import.meta.env.VITE_API_KEY}`;
+    console.log(shopsUrl);
+    fetch(shopsUrl)
+      .then(response => response.json())
+      .then(data => {
+        // Process the response data and display shops on the map
+        console.log(data);
+        console.table(data);
+      })
+      .catch(error => console.error('Error:', error));
+  }
+};
 
 onMounted(() => {
     if(map.value){
@@ -18,9 +38,12 @@ onMounted(() => {
             style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
             //style: 'mapbox://styles/mapbox/streets-v12',
             //center: [-2.474008, 53.155133], // starting center in [lng, lat]
-            center: [-0.974478,51.449553],
-            zoom: 15
+            //center: [-0.974478,51.449553],
+            bounds: [[-22.92826178066636, 47.677731905744565], [17.98024578066787, 56.887536758179465]],
+            zoom: 5
         });
+        
+        //TODO: show nearby shops
 
         map.value.on('load', () => {
           // map.value?.addSource('earthquakes', {
@@ -72,7 +95,7 @@ onMounted(() => {
               accessToken: mapboxgl.accessToken,
               mapboxgl: mapboxgl
           })
-        )
+        );
 
         // Add geolocate control to the map.
         map.value.addControl(
@@ -96,4 +119,5 @@ onUnmounted(() => {
     map.value.remove();
   }
 });
+
 </script>

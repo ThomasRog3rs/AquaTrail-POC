@@ -15,6 +15,7 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@types/mapbox__mapbox-gl-geocoder": "^5.0.0",
     "@types/mapbox-gl": "^3.1.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "autoprefixer": "^10.4.19",
