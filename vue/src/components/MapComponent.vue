@@ -1,5 +1,5 @@
 <template>
-    <button @click="showNearByShops">Show Nearby Shops</button>
+    <button @click="showNearByShops">Show Nearby Shops - test</button>
     <div ref="map" class="map-container w-1/1 h-full" id="map-container"></div>
 </template> 
    
