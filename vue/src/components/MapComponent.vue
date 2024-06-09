@@ -46,7 +46,6 @@ onMounted(() => {
             // style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
             //style: 'mapbox://styles/mapbox/streets-v12',
             center: [-1.474008, 52.155133], // starting center in [lng, lat]
-            // center: [-0.974478,51.449553],
             //bounds: [[-22.92826178066636, 47.677731905744565], [9.98024578066787, 50.887536758179465]],
             zoom: 6
         });
