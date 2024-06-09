@@ -28,7 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-import SavedRoutes from './SavedRoutes.vue';
 import { useMapStore } from '../stores/mapStore';
 import { useNavStore } from '../stores/navStore';
 

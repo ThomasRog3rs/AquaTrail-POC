@@ -24,6 +24,7 @@ watch(() => mapStore.showMoorings,() =>{
 function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
   if(map.value){
     map.value.flyTo({
+      //@ts-ignore
       center: currentFeature.geometry.coordinates,
       zoom: 15
     });
@@ -33,6 +34,7 @@ function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
 onMounted(() => {
     if(map.value){
         map.value = new mapboxgl.Map({
+            //@ts-ignore
             container: map.value as HTMLElement,
             style: 'mapbox://styles/mr-thomas-rogers/clx7iv6sm00cs01qqd577ddc8',
             // style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
@@ -58,8 +60,10 @@ onMounted(() => {
 
             console.log(features);
             const feature = features[0];
-            new mapboxgl.Popup({ offset: [0, -15] })
+            new mapboxgl.Popup({ offset: [0, -15] }) 
+                //@ts-ignore
                 .setLngLat(feature.geometry.coordinates)
+                //@ts-ignore
                 .setHTML(`<h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</p>`)
                 .addTo(map.value!);
 
