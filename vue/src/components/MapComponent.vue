@@ -21,6 +21,12 @@ watch(() => mapStore.showMoorings,() =>{
   }
 });
 
+watch(() => mapStore.showMarinas,() =>{
+  if(map.value){
+    map.value.setLayoutProperty('actual-marinas', 'visibility', mapStore.showMarinas ? 'visible' : 'none');  
+  }
+});
+
 function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
   if(map.value){
     map.value.flyTo({
@@ -36,7 +42,7 @@ onMounted(() => {
         map.value = new mapboxgl.Map({
             //@ts-ignore
             container: map.value as HTMLElement,
-            style: 'mapbox://styles/mr-thomas-rogers/clx7iv6sm00cs01qqd577ddc8',
+            style: 'mapbox://styles/mr-thomas-rogers/clx7qe3r701pv01qs1dtoethy',
             // style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
             //style: 'mapbox://styles/mapbox/streets-v12',
             center: [-1.474008, 52.155133], // starting center in [lng, lat]
@@ -49,11 +55,12 @@ onMounted(() => {
 
         map.value.on('load', () => {
           map.value!.setLayoutProperty('marinas', 'visibility', mapStore.showMoorings ? 'visible' : 'none');
+          map.value!.setLayoutProperty('actual-marinas', 'visibility', mapStore.showMarinas ? 'visible' : 'none');
         });
 
         map.value.on('click', (e) => {
             const features = map.value!.queryRenderedFeatures(e.point, {
-                layers: ['marinas']
+                layers: ['marinas', 'actual-marinas']
             });
 
             if(!features.length) return;
@@ -64,7 +71,7 @@ onMounted(() => {
                 //@ts-ignore
                 .setLngLat(feature.geometry.coordinates)
                 //@ts-ignore
-                .setHTML(`<h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</p>`)
+                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title} - ${feature.properties.layer}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</p></span>`)
                 .addTo(map.value!);
 
             flyToLocation(feature);
@@ -115,14 +122,24 @@ onUnmounted(() => {
         width: 185px;
         }
 
+        .mapboxgl-popup-content span.facilities h3 {
+          background:#613583;
+          color: #fff;
+          margin: 0;
+          padding: 10px;
+          border-radius: 3px 3px 0 0;
+          font-weight: 700;
+          margin-top: -15px;
+        }
+
         .mapboxgl-popup-content h3 {
-        background:rgb(22 163 74);
-        color: #fff;
-        margin: 0;
-        padding: 10px;
-        border-radius: 3px 3px 0 0;
-        font-weight: 700;
-        margin-top: -15px;
+          background:rgb(22 163 74);
+          color: #fff;
+          margin: 0;
+          padding: 10px;
+          border-radius: 3px 3px 0 0;
+          font-weight: 700;
+          margin-top: -15px;
         }
 
         .mapboxgl-popup-content h4 {
@@ -136,6 +153,13 @@ onUnmounted(() => {
           padding: 10px;
           font-weight: 400;
           color: rgb(22 163 74);
+        }
+
+        .mapboxgl-popup-content span.facilities a {
+          margin-top: 10px;
+          padding: 10px;
+          font-weight: 400;
+          color: #613583;
         }
 
         .mapboxgl-popup-content div {

@@ -13,12 +13,21 @@
                <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-green-600 hover:bg-green-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:hover:bg-green-700 ">Search</button>
             </div>
          </div> -->
+         <div>
          <div class="mb-4">
             <label class="cursor-pointer" >
                <p class="text-sm font-medium text-gray-900 mb-2">Display Moorings</p>
                <input type="checkbox" value="" class="sr-only peer" :checked="mapStore.showMoorings" @click="toggleMoorings">
                <div class="relative w-11 h-6 bg-green-800 rounded-full peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
             </label>
+         </div>
+         <div class="mb-4">
+            <label class="cursor-pointer" >
+               <p class="text-sm font-medium text-gray-900 mb-2">Display Marinas</p>
+               <input type="checkbox" value="" class="sr-only peer" :checked="mapStore.showMarinas" @click="toggleMarinas">
+               <div class="relative w-11 h-6 bg-green-800 rounded-full peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+            </label>
+         </div>
          </div>
          <div style="margin-bottom: 75px;">
             <p>Map data for this project was downloaded from <a href="https://canalplan.org.uk/wiki/downloads:introduction" target="_blank">Canal Plan</a></p>
@@ -36,6 +45,10 @@ const navStore = useNavStore();
 
 const toggleMoorings = () => {
    mapStore.showMoorings = !mapStore.showMoorings;
+}
+
+const toggleMarinas = () => {
+   mapStore.showMarinas = !mapStore.showMarinas;
 }
 
 </script>
