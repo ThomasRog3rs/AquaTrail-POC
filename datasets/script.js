@@ -1,25 +1,30 @@
+const fs = require('fs');
 //Get only Moorings
-fetch('./canalplan_places.geojson')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data.features);
-        data.features = data.features.filter((x) => {
-            return x.properties.layer === "mooring"
-        });
-        console.log(data);
-        stores = data;
-    })
-    .catch(error => console.error('Error:', error));
+try{
+    let data = fs.readFileSync('./canalplan_places.geojson', 'utf8');
+    data = JSON.parse(data);
+    data.features = data.features.filter((x) => {
+        return x.properties.layer === "mooring"
+    });
+    const output = JSON.stringify({"type": "FeatureCollection", "features": data.features})
+    console.log(output);
 
-//Get only Marinas
-fetch('./canalplan_places.geojson')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data.features);
-        data.features = data.features.filter((x) => {
-            return x.properties.layer === "facilities" && x.properties.icon === "cp-boatyard"
-        });
-        console.log(data);
-        stores = data;
-    })
-    .catch(error => console.error('Error:', error));
+    fs.writeFileSync('./moorings.geojson', output);
+}catch(err){
+    console.error(err);
+}
+
+// //Get only Marinas
+try{
+    let data = fs.readFileSync('./canalplan_places.geojson', 'utf8');
+    data = JSON.parse(data);
+    data.features = data.features.filter((x) => {
+        return x.properties.layer === "facilities" && x.properties.icon === "cp-boatyard"
+    });
+    const output = JSON.stringify({"type": "FeatureCollection", "features": data.features})
+    console.log(output);
+
+    fs.writeFileSync('./marinas.geojson', output);
+}catch(err){
+    console.error(err);
+}
