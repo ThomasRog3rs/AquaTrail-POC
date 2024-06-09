@@ -63,6 +63,8 @@ onMounted(() => {
                 layers: ['marinas', 'actual-marinas']
             });
 
+            features[0].state
+
             if(!features.length) return;
 
             console.log(features);
@@ -71,7 +73,7 @@ onMounted(() => {
                 //@ts-ignore
                 .setLngLat(feature.geometry.coordinates)
                 //@ts-ignore
-                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title} - ${feature.properties.layer}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</p></span>`)
+                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</p></span>`)
                 .addTo(map.value!);
 
             flyToLocation(feature);
