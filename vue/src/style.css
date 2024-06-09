@@ -5,3 +5,7 @@
 html, body, main{
     overflow: hidden;
 }
+
+.mapboxgl-popup-content{
+    border: red !important;
+}

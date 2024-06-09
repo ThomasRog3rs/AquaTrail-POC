@@ -4,38 +4,37 @@
 </template> 
    
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted} from 'vue';
+import {ref, onMounted, onUnmounted, watch} from 'vue';
 import mapboxgl, {Map} from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import { useMapStore } from '../stores/mapStore';
+
+const mapStore = useMapStore();
 
 mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
-const showNearByShops = () => {
+
+watch(() => mapStore.showMoorings,() =>{
   if(map.value){
-    const bounds = map.value.getBounds();
-    const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];
-    // const southWestCorner = [bounds.getSouth(), bounds.getWest()];
-    // const northEastCorner = [bounds.getNorth(), bounds.getEast()];
-    console.log(bbox);
-    const shopsUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/San%20Francisco.json?access_token=${import.meta.env.VITE_API_KEY}`;
-    console.log(shopsUrl);
-    fetch(shopsUrl)
-      .then(response => response.json())
-      .then(data => {
-        // Process the response data and display shops on the map
-        console.log(data);
-        console.table(data);
-      })
-      .catch(error => console.error('Error:', error));
+    map.value.setLayoutProperty('marinas', 'visibility', mapStore.showMoorings ? 'visible' : 'none');  
   }
-};
+});
+
+function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
+  if(map.value){
+    map.value.flyTo({
+      center: currentFeature.geometry.coordinates,
+      zoom: 15
+    });
+  }
+}
 
 onMounted(() => {
     if(map.value){
         map.value = new mapboxgl.Map({
             container: map.value as HTMLElement,
-            style: 'mapbox://styles/mr-thomas-rogers/clx6y3zyt01zl01qrbjgu4cug',
+            style: 'mapbox://styles/mr-thomas-rogers/clx7iv6sm00cs01qqd577ddc8',
             // style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
             //style: 'mapbox://styles/mapbox/streets-v12',
             //center: [-2.474008, 53.155133], // starting center in [lng, lat]
@@ -47,48 +46,7 @@ onMounted(() => {
         //TODO: show nearby shops
 
         map.value.on('load', () => {
-          // map.value?.addSource('earthquakes', {
-          //   type: 'geojson',
-          //   data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
-          // });
-
-
-          // map.value?.addSource('custom', {
-          //   type: 'geojson',
-          //   data: 'https://canalplan.org.uk/mapping/geodata/full/ukuk/canalplan_places.geojson'
-          //   //data: '/src/assets/geoJSON/features.geojson'
-          // });
-
-
-          // const datasetUrl = `https://api.mapbox.com/datasets/v1/mr-thomas-rogers/clvjxrof22w7l1orvqw1fy7uz/features?access_token=${import.meta.env.VITE_API_KEY}`;
-          // map.value?.addSource('canalplan', {
-          //   type: 'geojson',
-          //   data: datasetUrl
-          // })
-          // map.value?.addSource('lines', {
-          //   'type': 'geojson',
-          //   'data': 'https://api.mapbox.com/datasets/v1/mr-thomas-rogers/clvjxrof22w7l1orvqw1fy7uz/features?access_token='
-            
-          // });
-
-          // map.value?.addSource('test', {
-          //   'type': 'geojson',
-          //   'data': '/src/assets/geoJSON/test.geojson'
-          // });
-
-
-          // map.value?.addLayer({
-          //   'id': 'lines',
-          //   'type': 'line',
-          //   'source': 'test',
-          //   'paint': {
-          //       'line-width': 10,
-          //       // Use a get expression (https://docs.mapbox.comhttps://docs.mapbox.com/style-spec/reference/expressions/#get)
-          //       // to set the line-color to a feature property value.
-          //       'line-color': 'red'
-          //   }
-          // });
-
+          map.value!.setLayoutProperty('marinas', 'visibility', mapStore.showMoorings ? 'visible' : 'none');
         });
 
         map.value.on('click', (e) => {
@@ -100,11 +58,12 @@ onMounted(() => {
 
             console.log(features);
             const feature = features[0];
-
             new mapboxgl.Popup({ offset: [0, -15] })
                 .setLngLat(feature.geometry.coordinates)
-                .setHTML(`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`)
+                .setHTML(`<h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</p>`)
                 .addTo(map.value!);
+
+            flyToLocation(feature);
         })
 
         map.value.addControl(
@@ -138,3 +97,52 @@ onUnmounted(() => {
 });
 
 </script>
+
+<style>
+        .mapboxgl-popup-close-button {
+        display: none;
+        }
+        .mapboxgl-popup-content {
+        font:
+            400 15px/22px 'Source Sans Pro',
+            'Helvetica Neue',
+            sans-serif;
+        padding: 0;
+        width: 185px;
+        }
+
+        .mapboxgl-popup-content h3 {
+        background:rgb(22 163 74);
+        color: #fff;
+        margin: 0;
+        padding: 10px;
+        border-radius: 3px 3px 0 0;
+        font-weight: 700;
+        margin-top: -15px;
+        }
+
+        .mapboxgl-popup-content h4 {
+        margin: 0;
+        padding: 10px;
+        font-weight: 400;
+        }
+
+        .mapboxgl-popup-content a {
+          margin-top: 10px;
+          padding: 10px;
+          font-weight: 400;
+          color: rgb(22 163 74);
+        }
+
+        .mapboxgl-popup-content div {
+        padding: 10px;
+        }
+
+        .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+        margin-top: 15px;
+        }
+
+        .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+        border-bottom-color: #91c949;
+        }
+</style>
