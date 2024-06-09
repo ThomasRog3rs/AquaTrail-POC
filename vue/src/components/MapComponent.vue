@@ -35,7 +35,8 @@ onMounted(() => {
     if(map.value){
         map.value = new mapboxgl.Map({
             container: map.value as HTMLElement,
-            style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
+            style: 'mapbox://styles/mr-thomas-rogers/clx6y3zyt01zl01qrbjgu4cug',
+            // style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
             //style: 'mapbox://styles/mapbox/streets-v12',
             //center: [-2.474008, 53.155133], // starting center in [lng, lat]
             //center: [-0.974478,51.449553],
@@ -89,6 +90,22 @@ onMounted(() => {
           // });
 
         });
+
+        map.value.on('click', (e) => {
+            const features = map.value!.queryRenderedFeatures(e.point, {
+                layers: ['marinas']
+            });
+
+            if(!features.length) return;
+
+            console.log(features);
+            const feature = features[0];
+
+            new mapboxgl.Popup({ offset: [0, -15] })
+                .setLngLat(feature.geometry.coordinates)
+                .setHTML(`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`)
+                .addTo(map.value!);
+        })
 
         map.value.addControl(
           new MapboxGeocoder({
