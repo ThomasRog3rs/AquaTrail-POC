@@ -1,6 +1,6 @@
 <template>
    <aside id="default-sidebar" class="fixed top-69 left-0 z-40 w-[25rem] h-screen shadow-lg border-solid transition-transform sm:translate-x-0" aria-label="Sidebar" :class="{'-translate-x-full' : !navStore.toggleNav, '-translate-x-0' : navStore.toggleNav}">
-      <div class="h-full px-3 py-4 overflow-y-auto bg-slate-100">
+      <div class="h-full px-3 py-4 overflow-y-auto bg-slate-100 flex flex-col justify-between">
          <!-- <div class="mb-4">
             <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
             <div class="relative">
@@ -20,6 +20,9 @@
                <div class="relative w-11 h-6 bg-green-800 rounded-full peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
             </label>
          </div>
+         <div style="margin-bottom: 75px;">
+            <p>Map data for this project was downloaded from <a href="https://canalplan.org.uk/wiki/downloads:introduction" target="_blank">Canal Plan</a></p>
+         </div>
       </div>
    </aside>
 </template>
@@ -37,3 +40,10 @@ const toggleMoorings = () => {
 }
 
 </script>
+
+<style scoped>
+   a{
+      color: rgb(22 163 74);
+      text-decoration: underline;
+   }
+</style>
