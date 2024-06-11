@@ -12,6 +12,8 @@ import { useMapStore } from '../stores/mapStore';
 
 const mapStore = useMapStore();
 
+//test comment
+
 mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
 
