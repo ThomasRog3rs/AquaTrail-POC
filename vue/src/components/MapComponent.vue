@@ -9,10 +9,9 @@ import mapboxgl, {Map} from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
+// import PopupContent from './PopupContent.vue';
 
 const mapStore = useMapStore();
-
-//test comment
 
 mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
@@ -37,6 +36,15 @@ function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
       zoom: 15
     });
   }
+}
+
+//Needs to be on the window object so it can be called from the template string in popup
+//@ts-ignore
+Window.prototype.saveLocation = function(coordinates : Array<number>, layer: string, title: string) {
+  alert("SAVE THIS LOCATION");
+  console.log(coordinates);
+  console.log(layer)
+  console.log(title)
 }
 
 onMounted(() => {
@@ -74,11 +82,11 @@ onMounted(() => {
                 //@ts-ignore
                 .setLngLat(feature.geometry.coordinates)
                 //@ts-ignore
-                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</p></span>`)
+                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</a><button onclick="saveLocation([${feature.geometry.coordinates}], '${feature.properties.layer}', '${feature.properties.title}')">Save</button></span>`)
                 .addTo(map.value!);
 
-            flyToLocation(feature);
-        })
+              flyToLocation(feature);
+          })
 
         map.value.addControl(
           new MapboxGeocoder({
