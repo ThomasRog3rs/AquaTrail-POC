@@ -28,6 +28,13 @@
                <div class="relative w-11 h-6 bg-[#431A63] rounded-full peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#613583]"></div>
             </label>
          </div>
+         <div v-if="mapStore.savedLocations.length > 0">
+            <h1>Saved Locations:</h1>
+
+            <template v-for="location in mapStore.savedLocations" :key="location.id">
+               <SavedRoutes :location="location" @click.self="zoomToLocation(location.coordinates)" @zoomToLocation="zoomToLocation"></SavedRoutes>
+            </template>
+         </div>
          </div>
          <div style="margin-bottom: 75px;">
             <p>Map data for this project was downloaded from <a href="https://canalplan.org.uk/wiki/downloads:introduction" target="_blank">Canal Plan</a></p>
@@ -39,6 +46,7 @@
 <script lang="ts" setup>
 import { useMapStore } from '../stores/mapStore';
 import { useNavStore } from '../stores/navStore';
+import SavedRoutes from './SavedRoutes.vue';
 
 const mapStore = useMapStore();
 const navStore = useNavStore();
@@ -49,6 +57,10 @@ const toggleMoorings = () => {
 
 const toggleMarinas = () => {
    mapStore.showMarinas = !mapStore.showMarinas;
+}
+
+const zoomToLocation = (coordinates : Array<number>) => {
+   mapStore.zoomToLocationCoordinates = coordinates;
 }
 
 </script>
