@@ -9,10 +9,12 @@ import mapboxgl, {Map} from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
+import { useNavStore } from '../stores/navStore';
 // import PopupContent from './PopupContent.vue';
 import {savedLocation} from '../types/location';
 
 const mapStore = useMapStore();
+const navStore = useNavStore();
 
 mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
@@ -51,7 +53,8 @@ function zoomToLocation(coordinates: Array<number>){
       //@ts-ignore
       center: coordinates,
       zoom: 15
-    })
+    });
+    navStore.toggleNav = false;
   }
 }
 
