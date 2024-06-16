@@ -23,4 +23,4 @@ export const useMapStore = defineStore('mapStore', () => {
     }
 
     return {showMoorings, showMarinas, savedLocations, zoomToLocationCoordinates, addLocation, removeLocation};
-});
+}, {persist: true});
