@@ -118,7 +118,7 @@ onMounted(() => {
                 //@ts-ignore
                 .setLngLat(feature.geometry.coordinates)
                 //@ts-ignore
-                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</a><button onclick="saveLocation([${feature.geometry.coordinates}], '${feature.properties.layer}', '${feature.properties.title}', '${feature.properties.cp_id}')">Save</button></span>`)
+                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${feature.geometry.coordinates}], '${feature.properties.layer}', '${feature.properties.title}', '${feature.properties.cp_id}')">Save</button></span>`)
                 .addTo(map.value!);
 
             flyToLocation(feature);
@@ -202,6 +202,17 @@ onUnmounted(() => {
     font-weight: 400;
     color: rgb(22 163 74);
   }
+
+  .mapboxgl-popup-content button.save {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    display: block;
+    width: 90%;
+    padding: 5px;
+    border: 1px solid grey;
+    font-weight: 400;
+    color: rgb(22 163 74);
+  } 
 
   .mapboxgl-popup-content span.facilities a {
     margin-top: 10px;
