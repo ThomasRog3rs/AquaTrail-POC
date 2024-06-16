@@ -32,12 +32,8 @@
             <h1>Saved Locations:</h1>
 
             <template v-for="location in mapStore.savedLocations" :key="location.id">
-               <SavedRoutes></SavedRoutes>
+               <SavedRoutes :location="location"></SavedRoutes>
             </template>
-            
-            <ul>
-               <li v-for="item in mapStore.savedLocations">{{item.title}}</li>
-            </ul>
          </div>
          </div>
          <div style="margin-bottom: 75px;">

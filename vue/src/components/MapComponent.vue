@@ -53,7 +53,12 @@ Window.prototype.saveLocation = function(coordinates : Array<number>, layer: str
 
   //@ts-ignore
   const store = window.globalStore;
-  store.state.value.mapStore.savedLocations.push(location);
+
+  const exists = store.state.value.mapStore.savedLocations.find((x:any) =>  x.id === location.id) == undefined ? false : true;
+
+  if(!exists){
+    store.state.value.mapStore.savedLocations.push(location);
+  }
 
   console.log(store.state.value.mapStore.savedLocations);
 
