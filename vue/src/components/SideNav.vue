@@ -32,7 +32,7 @@
             <h1>Saved Locations:</h1>
 
             <template v-for="location in mapStore.savedLocations" :key="location.id">
-               <SavedRoutes :location="location"></SavedRoutes>
+               <SavedRoutes :location="location" @click.self="zoomToLocation(location.coordinates)" @zoomToLocation="zoomToLocation"></SavedRoutes>
             </template>
          </div>
          </div>
@@ -57,6 +57,10 @@ const toggleMoorings = () => {
 
 const toggleMarinas = () => {
    mapStore.showMarinas = !mapStore.showMarinas;
+}
+
+const zoomToLocation = (coordinates : Array<number>) => {
+   mapStore.zoomToLocationCoordinates = coordinates;
 }
 
 </script>

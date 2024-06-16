@@ -29,6 +29,12 @@ watch(() => mapStore.showMarinas,() =>{
   }
 });
 
+watch(() => mapStore.zoomToLocationCoordinates, () => {
+  if(map.value && mapStore.zoomToLocationCoordinates != undefined){
+    zoomToLocation(mapStore.zoomToLocationCoordinates);
+  }
+})
+
 function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
   if(map.value){
     map.value.flyTo({
@@ -39,6 +45,15 @@ function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
   }
 }
 
+function zoomToLocation(coordinates: Array<number>){
+  if(map.value){
+    map.value.flyTo({
+      //@ts-ignore
+      center: coordinates,
+      zoom: 15
+    })
+  }
+}
 
 //Needs to be on the window object so it can be called from the template string in popup
 //@ts-ignore
@@ -57,7 +72,7 @@ Window.prototype.saveLocation = function(coordinates : Array<number>, layer: str
   const exists = store.state.value.mapStore.savedLocations.find((x:any) =>  x.id === location.id) == undefined ? false : true;
 
   if(!exists){
-    store.state.value.mapStore.savedLocations.push(location);
+    store.state.value.mapStore.savedLocations.push(location); 
   }
 
   console.log(store.state.value.mapStore.savedLocations);

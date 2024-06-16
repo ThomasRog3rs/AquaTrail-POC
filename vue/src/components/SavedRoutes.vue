@@ -1,6 +1,6 @@
 <template>
     <div :class="location?.layer" class="text-slate-100 rounded-lg p-2 hover:cursor-pointer mb-2 transition duration-75">
-        <h3 class="text-lg font-bold">{{ location?.title }} - {{ locationType }}</h3>
+        <h3 class="text-lg font-bold" @click="$emit('zoomToLocation', location?.coordinates)">{{ location?.title }} - {{ locationType }}</h3>
         <a :href="href" target="_blank">Canal Plan Page</a>
         <button @click="removeLocation">Delete</button>
     </div>
