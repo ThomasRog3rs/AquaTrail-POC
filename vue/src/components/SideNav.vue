@@ -28,6 +28,12 @@
                <div class="relative w-11 h-6 bg-[#431A63] rounded-full peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#613583]"></div>
             </label>
          </div>
+         <div>
+         Saved Locations:
+         <ul>
+            <li v-for="item in mapStore.savedLocations">{{item.title}}</li>
+         </ul>
+      </div>
          </div>
          <div style="margin-bottom: 75px;">
             <p>Map data for this project was downloaded from <a href="https://canalplan.org.uk/wiki/downloads:introduction" target="_blank">Canal Plan</a></p>

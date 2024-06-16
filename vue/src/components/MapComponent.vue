@@ -10,6 +10,7 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
 // import PopupContent from './PopupContent.vue';
+import {savedLocation} from '../types/location';
 
 const mapStore = useMapStore();
 
@@ -38,13 +39,28 @@ function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
   }
 }
 
+
 //Needs to be on the window object so it can be called from the template string in popup
 //@ts-ignore
-Window.prototype.saveLocation = function(coordinates : Array<number>, layer: string, title: string) {
-  alert("SAVE THIS LOCATION");
+Window.prototype.saveLocation = function(coordinates : Array<number>, layer: string, title: string, id: string) {
+  const location : savedLocation = {
+    coordinates: coordinates,
+    layer: layer,
+    title:title,
+    id: id
+  }
+  console.log(location);
+
+  //@ts-ignore
+  const store = window.globalStore;
+  store.state.value.mapStore.savedLocations.push(location);
+
+  console.log(store.state.value.mapStore.savedLocations);
+
   console.log(coordinates);
   console.log(layer)
   console.log(title)
+  console.log(id);
 }
 
 onMounted(() => {
@@ -82,10 +98,10 @@ onMounted(() => {
                 //@ts-ignore
                 .setLngLat(feature.geometry.coordinates)
                 //@ts-ignore
-                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</a><button onclick="saveLocation([${feature.geometry.coordinates}], '${feature.properties.layer}', '${feature.properties.title}')">Save</button></span>`)
+                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</a><button onclick="saveLocation([${feature.geometry.coordinates}], '${feature.properties.layer}', '${feature.properties.title}', '${feature.properties.cp_id}')">Save</button></span>`)
                 .addTo(map.value!);
 
-              flyToLocation(feature);
+            flyToLocation(feature);
           })
 
         map.value.addControl(
