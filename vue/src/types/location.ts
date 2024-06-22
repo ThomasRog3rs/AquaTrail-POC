@@ -5,6 +5,14 @@ export type savedLocation = {
     id: string
 }
 
+export type location = {
+    cp_id?: string | undefined,
+    cp_route?: string | undefined,
+    icon?: string | undefined,
+    layer?: string | undefined,
+    title?: string | undefined,
+}
+
 export type currentLocation = {
     coordinates: Array<number>,
     bearing: number,

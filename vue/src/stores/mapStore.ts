@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
-import {savedLocation, currentLocation} from '../types/location';
+import {savedLocation, currentLocation, location} from '../types/location';
 
 export const useMapStore = defineStore('mapStore', () => {
     const showMoorings = ref<boolean>(true);
@@ -11,6 +11,8 @@ export const useMapStore = defineStore('mapStore', () => {
     const zoomToLocationCoordinates = ref<Array<number> | undefined>(undefined);
 
     const currentLocation = ref<currentLocation | undefined>(undefined);
+
+    const allMarinas = ref<Array<location> | undefined>(undefined);
 
     //click event trigger (not ideal)
     const triggerLocationChange = ref<number>(0);
@@ -38,8 +40,8 @@ export const useMapStore = defineStore('mapStore', () => {
         currentLocation.value = newCurrentLocation;
     }
 
-
     return {
+        allMarinas,
         showMoorings, 
         showMarinas, 
         savedLocations, 

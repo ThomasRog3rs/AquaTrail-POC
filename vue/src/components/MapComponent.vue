@@ -11,7 +11,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
 import { useNavStore } from '../stores/navStore';
 // import PopupContent from './PopupContent.vue';
-import {currentLocation, savedLocation} from '../types/location';
+import {currentLocation, location, savedLocation} from '../types/location';
 
 const mapStore = useMapStore();
 const navStore = useNavStore();
@@ -132,6 +132,35 @@ onMounted(() => {
 
           map.value!.setLayoutProperty('marinas', 'visibility', mapStore.showMoorings ? 'visible' : 'none');
           map.value!.setLayoutProperty('actual-marinas', 'visibility', mapStore.showMarinas ? 'visible' : 'none');
+
+          const marinas = map.value!.querySourceFeatures('composite', {
+            'sourceLayer': 'actual-marinas'
+          });
+
+          console.log('All marinas?: ', marinas);
+
+          console.log('test search: ', marinas.filter((x : any) => x.properties.title === 'undefined' || x.properties.title == undefined));
+          //map to correct object
+          const allMarinas : Array<location> = [];
+
+          marinas.forEach((x) => {
+            const properties = x.properties;
+            if(!properties) return;
+
+            const locationInfo : location = {
+              cp_id: properties.cp_id,
+              cp_route: properties.cp_route,
+              icon: properties.icon,
+              layer: properties.layer,
+              title: properties.title
+            };
+
+            allMarinas.push(locationInfo);
+          });
+
+          mapStore.allMarinas = allMarinas;
+
+          console.log('all marinas from store: ', mapStore.allMarinas);
         });
 
         map.value.on('move', () => {
