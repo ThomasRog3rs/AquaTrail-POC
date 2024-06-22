@@ -4,14 +4,14 @@
 </template> 
    
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, watch, watchEffect} from 'vue';
+import {ref, onMounted, onUnmounted, watch, computed} from 'vue';
 import mapboxgl, {Map} from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
 import { useNavStore } from '../stores/navStore';
 // import PopupContent from './PopupContent.vue';
-import {savedLocation} from '../types/location';
+import {currentLocation, savedLocation} from '../types/location';
 
 const mapStore = useMapStore();
 const navStore = useNavStore();
@@ -31,7 +31,22 @@ watch(() => mapStore.showMarinas,() =>{
   }
 });
 
-watchEffect(() => {
+const currentMapLocation = computed(() => mapStore.currentLocation);
+const zoomCoordinates = computed(() => mapStore.zoomToLocationCoordinates);
+
+watch(zoomCoordinates, (newCoordinates) => {
+  console.log('Zoom to Coordinates updated:', newCoordinates);
+});
+
+watch(currentMapLocation, (newCurrentMapLocation)=>{
+  console.log('Map Location updated:', newCurrentMapLocation);
+
+  if(newCurrentMapLocation !== zoomCoordinates.value){
+
+  }
+});
+
+watch(() => mapStore.triggerLocationChange, () => {
   if(!map.value) return;
   if(mapStore.zoomToLocationCoordinates === undefined) return;
   if(mapStore.zoomToLocationCoordinates === mapStore.currentLocation?.coordinates) return;
@@ -106,16 +121,29 @@ onMounted(() => {
         console.log('zoom', map.value.getZoom());
 
         map.value.on('load', () => {
-          mapStore.currentLocation = {
+          const currentLocation : currentLocation = {
             //@ts-ignore
             coordinates: map.value.getCenter(),
             bearing: map.value!.getBearing(),
             zoom: map.value!.getZoom()
           }
 
+          mapStore.setCurrentLocation(currentLocation);
+
           map.value!.setLayoutProperty('marinas', 'visibility', mapStore.showMoorings ? 'visible' : 'none');
           map.value!.setLayoutProperty('actual-marinas', 'visibility', mapStore.showMarinas ? 'visible' : 'none');
         });
+
+        map.value.on('move', () => {
+          const currentLocation : currentLocation = {
+              //@ts-ignore
+              coordinates: map.value.getCenter(),
+              bearing: map.value!.getBearing(),
+              zoom: map.value!.getZoom()
+            }
+
+            mapStore.setCurrentLocation(currentLocation);
+        })
 
         map.value.on('click', async (e) => {
             const features = map.value!.queryRenderedFeatures(e.point, {
@@ -137,12 +165,14 @@ onMounted(() => {
 
             await flyToLocation(feature);
 
-            mapStore.currentLocation = {
-              //@ts-ignore
-              coordinates: map.value.getCenter(),
-              bearing: map.value!.getBearing(),
-              zoom: map.value!.getZoom()
-            }
+            // const currentLocation : currentLocation = {
+            //   //@ts-ignore
+            //   coordinates: map.value.getCenter(),
+            //   bearing: map.value!.getBearing(),
+            //   zoom: map.value!.getZoom()
+            // }
+
+            // mapStore.setCurrentLocation(currentLocation);
           })
 
         map.value.addControl(

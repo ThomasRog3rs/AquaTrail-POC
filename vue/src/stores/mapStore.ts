@@ -12,6 +12,9 @@ export const useMapStore = defineStore('mapStore', () => {
 
     const currentLocation = ref<currentLocation | undefined>(undefined);
 
+    //click event trigger (not ideal)
+    const triggerLocationChange = ref<number>(0);
+
     function addLocation(location : savedLocation){
         savedLocations.value.push(location);
         console.log(savedLocations.value);
@@ -24,6 +27,17 @@ export const useMapStore = defineStore('mapStore', () => {
         savedLocations.value.splice(index, 1);
     }
 
+    function setZoomLocation(coordinates: Array<number>){
+        // currentLocation.value = undefined;
+        zoomToLocationCoordinates.value = coordinates;
+        triggerLocationChange.value ++;
+        // console.log(zoomToLocationCoordinates.value);
+    }
+
+    function setCurrentLocation(newCurrentLocation: currentLocation){
+        currentLocation.value = newCurrentLocation;
+    }
+
 
     return {
         showMoorings, 
@@ -31,7 +45,10 @@ export const useMapStore = defineStore('mapStore', () => {
         savedLocations, 
         zoomToLocationCoordinates,
         currentLocation, 
+        triggerLocationChange,
+        setCurrentLocation,
         addLocation, 
-        removeLocation
+        removeLocation,
+        setZoomLocation
     };
 }, {persist: true});

@@ -60,7 +60,7 @@ const toggleMarinas = () => {
 }
 
 const zoomToLocation = (coordinates : Array<number>) => {
-   mapStore.zoomToLocationCoordinates = coordinates;
+   mapStore.setZoomLocation(coordinates);
 }
 
 </script>
