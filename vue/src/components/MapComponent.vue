@@ -4,14 +4,14 @@
 </template> 
    
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, watch} from 'vue';
+import {ref, onMounted, onUnmounted, watch, watchEffect} from 'vue';
 import mapboxgl, {Map} from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
 import { useNavStore } from '../stores/navStore';
 // import PopupContent from './PopupContent.vue';
-import {savedLocation} from '../types/location';
+import {savedLocation, currentLocation} from '../types/location';
 
 const mapStore = useMapStore();
 const navStore = useNavStore();
@@ -31,11 +31,12 @@ watch(() => mapStore.showMarinas,() =>{
   }
 });
 
-watch(() => mapStore.zoomToLocationCoordinates, () => {
-  if(map.value && mapStore.zoomToLocationCoordinates != undefined){
-    zoomToLocation(mapStore.zoomToLocationCoordinates);
-  }
-})
+watchEffect(() => {
+  if(!map.value) return;
+  if(mapStore.zoomToLocationCoordinates === undefined) return;
+  if(mapStore.zoomToLocationCoordinates === mapStore.currentLocation?.coordinates) return;
+  zoomToLocation(mapStore.zoomToLocationCoordinates);
+});
 
 function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
   if(map.value){
@@ -99,14 +100,24 @@ onMounted(() => {
             zoom: 6
         });
         
-        //TODO: show nearby shops
+
+        console.log('Bearing', map.value.getBearing());
+        console.log('Location', map.value.getCenter());
+        console.log('zoom', map.value.getZoom());
 
         map.value.on('load', () => {
+          mapStore.currentLocation = {
+            //@ts-ignore
+            coordinates: map.value.getCenter(),
+            bearing: map.value!.getBearing(),
+            zoom: map.value!.getZoom()
+          }
+
           map.value!.setLayoutProperty('marinas', 'visibility', mapStore.showMoorings ? 'visible' : 'none');
           map.value!.setLayoutProperty('actual-marinas', 'visibility', mapStore.showMarinas ? 'visible' : 'none');
         });
 
-        map.value.on('click', (e) => {
+        map.value.on('click', async (e) => {
             const features = map.value!.queryRenderedFeatures(e.point, {
                 layers: ['marinas', 'actual-marinas']
             });
@@ -124,7 +135,14 @@ onMounted(() => {
                 .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${feature.geometry.coordinates}], '${feature.properties.layer}', '${feature.properties.title}', '${feature.properties.cp_id}')">Save</button></span>`)
                 .addTo(map.value!);
 
-            flyToLocation(feature);
+            await flyToLocation(feature);
+
+            mapStore.currentLocation = {
+              //@ts-ignore
+              coordinates: map.value.getCenter(),
+              bearing: map.value!.getBearing(),
+              zoom: map.value!.getZoom()
+            }
           })
 
         map.value.addControl(

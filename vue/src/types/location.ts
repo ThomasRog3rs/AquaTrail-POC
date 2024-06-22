@@ -4,3 +4,9 @@ export type savedLocation = {
     title: string,
     id: string
 }
+
+export type currentLocation = {
+    coordinates: Array<number>,
+    bearing: number,
+    zoom: number
+}

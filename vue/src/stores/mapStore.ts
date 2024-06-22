@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
-import {savedLocation} from '../types/location';
+import {savedLocation, currentLocation} from '../types/location';
 
 export const useMapStore = defineStore('mapStore', () => {
     const showMoorings = ref<boolean>(true);
@@ -9,6 +9,8 @@ export const useMapStore = defineStore('mapStore', () => {
     const savedLocations = ref<Array<savedLocation>>([]);
 
     const zoomToLocationCoordinates = ref<Array<number> | undefined>(undefined);
+
+    const currentLocation = ref<currentLocation | undefined>(undefined);
 
     function addLocation(location : savedLocation){
         savedLocations.value.push(location);
@@ -22,5 +24,14 @@ export const useMapStore = defineStore('mapStore', () => {
         savedLocations.value.splice(index, 1);
     }
 
-    return {showMoorings, showMarinas, savedLocations, zoomToLocationCoordinates, addLocation, removeLocation};
+
+    return {
+        showMoorings, 
+        showMarinas, 
+        savedLocations, 
+        zoomToLocationCoordinates,
+        currentLocation, 
+        addLocation, 
+        removeLocation
+    };
 }, {persist: true});
