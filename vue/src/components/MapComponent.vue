@@ -11,7 +11,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
 import { useNavStore } from '../stores/navStore';
 // import PopupContent from './PopupContent.vue';
-import {savedLocation, currentLocation} from '../types/location';
+import {savedLocation} from '../types/location';
 
 const mapStore = useMapStore();
 const navStore = useNavStore();
