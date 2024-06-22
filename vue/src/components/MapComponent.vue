@@ -75,9 +75,10 @@ function addPopup(location: location){
 
   if(map.value){
     popup.value = new mapboxgl.Popup({ offset: [0, -15] })  
-              .setLngLat(location.coordinates)
-              .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${location.title}', '${location.cp_id}')">Save</button></span>`)
-              .addTo(map.value!);
+      //@ts-ignore
+      .setLngLat(location.coordinates)
+      .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${location.title}', '${location.cp_id}')">Save</button></span>`)
+      .addTo(map.value!);
   }
 
 }
