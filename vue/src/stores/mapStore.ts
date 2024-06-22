@@ -6,9 +6,9 @@ export const useMapStore = defineStore('mapStore', () => {
     const showMoorings = ref<boolean>(true);
     const showMarinas = ref<boolean>(true);
 
-    const savedLocations = ref<Array<savedLocation>>([]);
+    const savedLocations = ref<Array<location>>([]);
 
-    const zoomToLocationCoordinates = ref<Array<number> | undefined>(undefined);
+    const zoomToLocation = ref<location | undefined>(undefined);
 
     const currentLocation = ref<currentLocation | undefined>(undefined);
 
@@ -23,15 +23,15 @@ export const useMapStore = defineStore('mapStore', () => {
     }
 
     function removeLocation(locationId: string){
-        const item : savedLocation | undefined = savedLocations.value.find(x =>  x.id === locationId);
+        const item : location | undefined = savedLocations.value.find(x =>  x.cp_id === locationId);
         if(item === undefined) return;
         const index = savedLocations.value.indexOf(item);
         savedLocations.value.splice(index, 1);
     }
 
-    function setZoomLocation(coordinates: Array<number>){
+    function setZoomLocation(location: location){
         // currentLocation.value = undefined;
-        zoomToLocationCoordinates.value = coordinates;
+        zoomToLocation.value = location;
         triggerLocationChange.value ++;
         // console.log(zoomToLocationCoordinates.value);
     }
@@ -45,7 +45,7 @@ export const useMapStore = defineStore('mapStore', () => {
         showMoorings, 
         showMarinas, 
         savedLocations, 
-        zoomToLocationCoordinates,
+        zoomToLocation,
         currentLocation, 
         triggerLocationChange,
         setCurrentLocation,

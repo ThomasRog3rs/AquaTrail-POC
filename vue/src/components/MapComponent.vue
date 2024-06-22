@@ -16,6 +16,8 @@ import {currentLocation, location, savedLocation} from '../types/location';
 const mapStore = useMapStore();
 const navStore = useNavStore();
 
+const popup = ref<any>(null);
+
 mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
 
@@ -32,74 +34,71 @@ watch(() => mapStore.showMarinas,() =>{
 });
 
 const currentMapLocation = computed(() => mapStore.currentLocation);
-const zoomCoordinates = computed(() => mapStore.zoomToLocationCoordinates);
+const zoomToLocation = computed(() => mapStore.zoomToLocation);
 
-watch(zoomCoordinates, (newCoordinates) => {
-  console.log('Zoom to Coordinates updated:', newCoordinates);
+watch(zoomToLocation, (newZoomToLocation) => {
+  console.log('Zoom to Coordinates updated:', newZoomToLocation);
 });
 
 watch(currentMapLocation, (newCurrentMapLocation)=>{
   console.log('Map Location updated:', newCurrentMapLocation);
-
-  if(newCurrentMapLocation !== zoomCoordinates.value){
-
-  }
 });
 
 watch(() => mapStore.triggerLocationChange, () => {
+  console.log(mapStore.zoomToLocation);
   if(!map.value) return;
-  if(mapStore.zoomToLocationCoordinates === undefined) return;
-  if(mapStore.zoomToLocationCoordinates === mapStore.currentLocation?.coordinates) return;
-  zoomToLocation(mapStore.zoomToLocationCoordinates);
+  if(mapStore.zoomToLocation === undefined) return;
+  if(!mapStore.zoomToLocation.coordinates) return;
+  if(mapStore.zoomToLocation.coordinates === mapStore.currentLocation?.coordinates) return;
+
+  addPopup(mapStore.zoomToLocation);
+  flyToLocation(mapStore.zoomToLocation.coordinates);
+  navStore.toggleNav = false;
 });
 
-function flyToLocation(currentFeature :  mapboxgl.MapboxGeoJSONFeature){
-  if(map.value){
-    map.value.flyTo({
-      //@ts-ignore
-      center: currentFeature.geometry.coordinates,
-      zoom: 15
-    });
-  }
-}
-
-function zoomToLocation(coordinates: Array<number>){
+function flyToLocation(coordinates: Array<number>){
   if(map.value){
     map.value.flyTo({
       //@ts-ignore
       center: coordinates,
       zoom: 15
     });
-    navStore.toggleNav = false;
   }
+}
+
+function addPopup(location: location){
+  if(popup.value){
+    popup.value.remove();
+  }
+  popup.value = new mapboxgl.Popup({ offset: [0, -15] }) 
+              //@ts-ignore
+              .setLngLat(location.coordinates)
+              .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${location.title}', '${location.cp_id}')">Save</button></span>`)
+              .addTo(map.value!);
 }
 
 //Needs to be on the window object so it can be called from the template string in popup
 //@ts-ignore
-Window.prototype.saveLocation = function(coordinates : Array<number>, layer: string, title: string, id: string) {
-  const location : savedLocation = {
+Window.prototype.saveLocation = function(coordinates : Array<number>, layer: string, title: string, id: string, icon: string) {
+  const location : location = {
     coordinates: coordinates,
     layer: layer,
     title:title,
-    id: id
+    cp_id: id,
+    icon: icon
   }
   console.log(location);
 
   //@ts-ignore
   const store = window.globalStore;
 
-  const exists = store.state.value.mapStore.savedLocations.find((x:any) =>  x.id === location.id) == undefined ? false : true;
+  const exists = store.state.value.mapStore.savedLocations.find((x:any) =>  x.cp_id === location.cp_id) == undefined ? false : true;
 
   if(!exists){
     store.state.value.mapStore.savedLocations.push(location); 
   }
 
   console.log(store.state.value.mapStore.savedLocations);
-
-  console.log(coordinates);
-  console.log(layer)
-  console.log(title)
-  console.log(id);
 }
 
 onMounted(() => {
@@ -140,14 +139,22 @@ onMounted(() => {
           console.log('All marinas?: ', marinas);
 
           console.log('test search: ', marinas.filter((x : any) => x.properties.title === 'undefined' || x.properties.title == undefined));
+          
           //map to correct object
           const allMarinas : Array<location> = [];
 
           marinas.forEach((x) => {
             const properties = x.properties;
+            //@ts-ignore
+            const coordinates = x.geometry.coordinates;
+            
             if(!properties) return;
+            if(!coordinates) return;
+
+            console.log(properties.title + ': ', coordinates);
 
             const locationInfo : location = {
+              coordinates: coordinates,
               cp_id: properties.cp_id,
               cp_route: properties.cp_route,
               icon: properties.icon,
@@ -185,24 +192,24 @@ onMounted(() => {
 
             console.log(features);
             const feature = features[0];
-            new mapboxgl.Popup({ offset: [0, -15] }) 
-                //@ts-ignore
-                .setLngLat(feature.geometry.coordinates)
-                //@ts-ignore
-                .setHTML(`<span class="${feature.properties.layer}"><h3>${feature.properties.title}</h3><a href="https://canalplan.uk/place/${feature.properties.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${feature.geometry.coordinates}], '${feature.properties.layer}', '${feature.properties.title}', '${feature.properties.cp_id}')">Save</button></span>`)
-                .addTo(map.value!);
+            if(!feature) return;
+            if(!feature.properties) return;
 
-            await flyToLocation(feature);
+            const location : location = {
+              //@ts-ignore
+              coordinates: feature.geometry.coordinates,
+              cp_id: feature.properties.cp_id,
+              cp_route: feature.properties.cp_route,
+              icon: feature.properties.icon,
+              layer: feature.properties.layer,
+              title: feature.properties.title
+            }
 
-            // const currentLocation : currentLocation = {
-            //   //@ts-ignore
-            //   coordinates: map.value.getCenter(),
-            //   bearing: map.value!.getBearing(),
-            //   zoom: map.value!.getZoom()
-            // }
+            addPopup(location);
 
-            // mapStore.setCurrentLocation(currentLocation);
-          })
+            //@ts-ignore
+            await flyToLocation(feature.geometry.coordinates);
+        });
 
         map.value.addControl(
           new MapboxGeocoder({
@@ -311,5 +318,9 @@ onUnmounted(() => {
 
   .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
     border-bottom-color: #91c949;
+  }
+
+  a{
+    outline: none !important;
   }
 </style>

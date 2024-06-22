@@ -6,6 +6,7 @@ export type savedLocation = {
 }
 
 export type location = {
+    coordinates?: Array<number> | undefined,
     cp_id?: string | undefined,
     cp_route?: string | undefined,
     icon?: string | undefined,
