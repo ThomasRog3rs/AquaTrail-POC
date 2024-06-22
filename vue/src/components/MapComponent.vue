@@ -4,14 +4,14 @@
 </template> 
    
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, watch, computed} from 'vue';
+import {ref, onMounted, onUnmounted, watch} from 'vue';
 import mapboxgl, {Map} from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
 import { useNavStore } from '../stores/navStore';
 // import PopupContent from './PopupContent.vue';
-import {currentLocation, location, savedLocation} from '../types/location';
+import {currentLocation, location} from '../types/location';
 
 const mapStore = useMapStore();
 const navStore = useNavStore();
@@ -33,31 +33,24 @@ watch(() => mapStore.showMarinas,() =>{
   }
 });
 
-const currentMapLocation = computed(() => mapStore.currentLocation);
-const zoomToLocation = computed(() => mapStore.zoomToLocation);
-
-watch(zoomToLocation, (newZoomToLocation) => {
-  console.log('Zoom to Coordinates updated:', newZoomToLocation);
-});
-
-watch(currentMapLocation, (newCurrentMapLocation)=>{
-  console.log('Map Location updated:', newCurrentMapLocation);
-});
-
-watch(() => mapStore.triggerLocationChange, () => {
+watch(() => mapStore.triggerLocationChange, async () => {
   console.log(mapStore.zoomToLocation);
   if(!map.value) return;
   if(mapStore.zoomToLocation === undefined) return;
   if(!mapStore.zoomToLocation.coordinates) return;
   if(mapStore.zoomToLocation.coordinates === mapStore.currentLocation?.coordinates) return;
 
-  addPopup(mapStore.zoomToLocation);
-  flyToLocation(mapStore.zoomToLocation.coordinates);
+  await flyToLocation(mapStore.zoomToLocation.coordinates);
+  await addPopup(mapStore.zoomToLocation);
+
   navStore.toggleNav = false;
 });
 
 function flyToLocation(coordinates: Array<number>){
-  if(map.value){
+  console.log('fly to coordinates', coordinates);
+  console.log('map status in fly to: ', map.value ? 'true' : 'HELP, NO MAP')
+  if(map.value && coordinates){
+    console.log(coordinates)
     map.value.flyTo({
       //@ts-ignore
       center: coordinates,
@@ -67,14 +60,26 @@ function flyToLocation(coordinates: Array<number>){
 }
 
 function addPopup(location: location){
+  if(!map.value) return;
+  if(!location) return;
+  if(!location.coordinates) return;
+
   if(popup.value){
+    console.log(popup.value);
     popup.value.remove();
   }
-  popup.value = new mapboxgl.Popup({ offset: [0, -15] }) 
-              //@ts-ignore
+
+  
+
+  console.log('MAP STATUS: ', map.value ? 'true' : 'FALSE HELP');
+
+  if(map.value){
+    popup.value = new mapboxgl.Popup({ offset: [0, -15] })  
               .setLngLat(location.coordinates)
               .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${location.title}', '${location.cp_id}')">Save</button></span>`)
               .addTo(map.value!);
+  }
+
 }
 
 //Needs to be on the window object so it can be called from the template string in popup
@@ -132,48 +137,56 @@ onMounted(() => {
           map.value!.setLayoutProperty('marinas', 'visibility', mapStore.showMoorings ? 'visible' : 'none');
           map.value!.setLayoutProperty('actual-marinas', 'visibility', mapStore.showMarinas ? 'visible' : 'none');
 
-          const marinas = map.value!.querySourceFeatures('composite', {
-            'sourceLayer': 'actual-marinas'
-          });
+          // const marinas = map.value!.querySourceFeatures('composite', {
+          //   'sourceLayer': 'actual-marinas'
+          // });
 
-          console.log('All marinas?: ', marinas);
+          // console.log('All marinas?: ', marinas);
 
-          console.log('test search: ', marinas.filter((x : any) => x.properties.title === 'undefined' || x.properties.title == undefined));
+          // console.log('test search: ', marinas.filter((x : any) => x.properties.title === 'undefined' || x.properties.title == undefined));
           
-          //map to correct object
-          const allMarinas : Array<location> = [];
+          // //map to correct object
+          // const allMarinas : Array<location> = [];
 
-          marinas.forEach((x) => {
-            const properties = x.properties;
-            //@ts-ignore
-            const coordinates = x.geometry.coordinates;
+          // marinas.forEach((x) => {
+          //   const properties = x.properties;
+          //   //@ts-ignore
+          //   const coordinates = x.geometry.coordinates;
             
-            if(!properties) return;
-            if(!coordinates) return;
+          //   if(!properties) return;
+          //   if(!coordinates) return;
 
-            console.log(properties.title + ': ', coordinates);
+          //   console.log(properties.title + ': ', coordinates);
 
-            const locationInfo : location = {
-              coordinates: coordinates,
-              cp_id: properties.cp_id,
-              cp_route: properties.cp_route,
-              icon: properties.icon,
-              layer: properties.layer,
-              title: properties.title
-            };
+          //   const locationInfo : location = {
+          //     coordinates: coordinates,
+          //     cp_id: properties.cp_id,
+          //     cp_route: properties.cp_route,
+          //     icon: properties.icon,
+          //     layer: properties.layer,
+          //     title: properties.title
+          //   };
 
-            allMarinas.push(locationInfo);
-          });
+          //   allMarinas.push(locationInfo);
+          // });
 
-          mapStore.allMarinas = allMarinas;
+          // mapStore.allMarinas = allMarinas;
 
-          console.log('all marinas from store: ', mapStore.allMarinas);
+          // console.log('all marinas from store: ', mapStore.allMarinas);
         });
 
         map.value.on('move', () => {
+          if(map.value === null || map.value === undefined){
+            console.warn("MAP IS NULL");
+          }
+
+          console.log('Bearing', map.value?.getBearing());
+          console.log('Location', map.value?.getCenter());
+          console.log('zoom', map.value?.getZoom());
+
           const currentLocation : currentLocation = {
               //@ts-ignore
-              coordinates: map.value.getCenter(),
+              coordinates: map.value!.getCenter(),
               bearing: map.value!.getBearing(),
               zoom: map.value!.getZoom()
             }
@@ -205,7 +218,7 @@ onMounted(() => {
               title: feature.properties.title
             }
 
-            addPopup(location);
+            await addPopup(location);
 
             //@ts-ignore
             await flyToLocation(feature.geometry.coordinates);
