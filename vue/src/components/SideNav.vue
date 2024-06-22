@@ -32,7 +32,7 @@
             <h1>Saved Locations:</h1>
 
             <template v-for="location in mapStore.savedLocations" :key="location.id">
-               <SavedRoutes :location="location" @click.self="zoomToLocation(location.coordinates)" @zoomToLocation="zoomToLocation"></SavedRoutes>
+               <SavedRoutes :location="location" @click.self="zoomToLocation(location)" @zoomToLocation="zoomToLocation"></SavedRoutes>
             </template>
          </div>
          </div>
@@ -46,6 +46,7 @@
 <script lang="ts" setup>
 import { useMapStore } from '../stores/mapStore';
 import { useNavStore } from '../stores/navStore';
+import * as types from '../types/location';
 import SavedRoutes from './SavedRoutes.vue';
 
 const mapStore = useMapStore();
@@ -59,8 +60,9 @@ const toggleMarinas = () => {
    mapStore.showMarinas = !mapStore.showMarinas;
 }
 
-const zoomToLocation = (coordinates : Array<number>) => {
-   mapStore.setZoomLocation(coordinates);
+const zoomToLocation = (location : types.location | undefined) => {
+   if(!location) return;
+   mapStore.setZoomLocation(location);
 }
 
 </script>
