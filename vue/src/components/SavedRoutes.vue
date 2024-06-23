@@ -20,12 +20,12 @@ const locationType = ref<string>('');
 const href = ref<string>('');
 
 function removeLocation(){
-    mapStore.removeLocation(props.location?.id);
+    mapStore.removeLocation(props.location?.cp_id);
 }
 
 onMounted(() => {
     locationType.value = props.location?.layer === "facilities" ? "Marina" : "Mooring";
-    href.value = `https://canalplan.uk/place/${props.location?.id}`
+    href.value = `https://canalplan.uk/place/${props.location?.cp_id}`
 })
 
 

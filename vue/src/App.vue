@@ -26,7 +26,29 @@ import NavBar from './components/NavBar.vue';
 import MapComponent from './components/MapComponent.vue';
 import SideNav from './components/SideNav.vue';
 import { useMapStore } from './stores/mapStore';
+import { onMounted, onUnmounted } from 'vue';
 const mapStore = useMapStore();
+
+const handleScroll = () => {
+            const scrollPosition = {
+                x: window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft,
+                y: window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+            };
+            if(scrollPosition.y !== 0){
+                window.scrollY = 0;
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop
+            }
+        };
+
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+})
+
 </script>
 
 <style>

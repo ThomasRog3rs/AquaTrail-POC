@@ -59,6 +59,10 @@ function flyToLocation(coordinates: Array<number>){
   }
 }
 
+function escapeStringForHTML(str:string | undefined) {
+  if(str ==undefined) return;
+  return str.replace(/'/g, "\\'");}
+
 function addPopup(location: location){
   if(!map.value) return;
   if(!location) return;
@@ -69,15 +73,13 @@ function addPopup(location: location){
     popup.value.remove();
   }
 
-  
-
-  console.log('MAP STATUS: ', map.value ? 'true' : 'FALSE HELP');
-
   if(map.value){
+    const theTitle = escapeStringForHTML(location.title);
+
     popup.value = new mapboxgl.Popup({ offset: [0, -15] })  
       //@ts-ignore
       .setLngLat(location.coordinates)
-      .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${location.title}', '${location.cp_id}')">Save</button></span>`)
+      .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${theTitle}', '${location.cp_id}')">Save</button></span>`)
       .addTo(map.value!);
   }
 
