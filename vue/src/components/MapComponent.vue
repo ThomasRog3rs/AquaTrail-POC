@@ -108,6 +108,7 @@ Window.prototype.saveLocation = function(coordinates : Array<number>, layer: str
 }
 
 onMounted(() => {
+    mapStore.mapLoaded = false;
     if(map.value){
         map.value = new mapboxgl.Map({
             //@ts-ignore
@@ -126,6 +127,7 @@ onMounted(() => {
         console.log('zoom', map.value.getZoom());
 
         map.value.on('load', () => {
+          mapStore.mapLoaded = true;
           const currentLocation : currentLocation = {
             //@ts-ignore
             coordinates: map.value.getCenter(),
