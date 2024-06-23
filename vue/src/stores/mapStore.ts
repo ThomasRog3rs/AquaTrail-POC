@@ -3,6 +3,7 @@ import {ref} from 'vue';
 import {savedLocation, currentLocation, location} from '../types/location';
 
 export const useMapStore = defineStore('mapStore', () => {
+    const mapLoaded = ref<boolean>(false);
     const showMoorings = ref<boolean>(true);
     const showMarinas = ref<boolean>(true);
 
@@ -41,6 +42,7 @@ export const useMapStore = defineStore('mapStore', () => {
     }
 
     return {
+        mapLoaded,
         allMarinas,
         showMoorings, 
         showMarinas, 
