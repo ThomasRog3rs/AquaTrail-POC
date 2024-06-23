@@ -20,7 +20,7 @@ const locationType = ref<string>('');
 const href = ref<string>('');
 
 function removeLocation(){
-    mapStore.removeLocation(props.location?.id);
+    mapStore.removeLocation(props.location?.cp_id);
 }
 
 onMounted(() => {
