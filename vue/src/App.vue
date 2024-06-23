@@ -1,5 +1,10 @@
 <template>
-  <div v-if="!mapStore.mapLoaded" class="overlay">
+    <NavBar></NavBar>
+    <SideNav></SideNav>
+
+  <main>
+    <div class="flex-1 min-h-0 h-[calc(100vh-69px)] w-full ml-0 sm:ml-[25rem] sm:w-[calc(100vw-25rem)]">
+        <div v-if="!mapStore.mapLoaded" class="overlay">
     <h1>Loading...</h1>
     <div class="loading">
       <span></span>
@@ -7,14 +12,6 @@
       <span></span>
     </div>
   </div>
-
-  <template v-if="mapStore.mapLoaded">
-    <NavBar></NavBar>
-    <SideNav></SideNav>
-  </template>
-
-  <main>
-    <div class="flex-1 min-h-0 h-[calc(100vh-69px)] w-full ml-0 sm:ml-[25rem] sm:w-[calc(100vw-25rem)]">
       <MapComponent></MapComponent>
     </div>
   </main>
@@ -30,16 +27,17 @@ import { onMounted, onUnmounted } from 'vue';
 const mapStore = useMapStore();
 
 const handleScroll = () => {
-            const scrollPosition = {
-                x: window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft,
-                y: window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
-            };
-            if(scrollPosition.y !== 0){
-                window.scrollY = 0;
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop
-            }
-        };
+    const scrollPosition = {
+        x: window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft,
+        y: window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+    };
+
+    if(scrollPosition.y !== 0){
+        window.scrollY = 0;
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop
+    }
+};
 
 onMounted(() => {
     window.addEventListener('scroll', handleScroll);
@@ -53,8 +51,8 @@ onUnmounted(() => {
 
 <style>
 .overlay{
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgb(234, 234, 234);
   display: flex;
   flex-direction: column;
