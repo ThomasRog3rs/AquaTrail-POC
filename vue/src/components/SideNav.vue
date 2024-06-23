@@ -1,5 +1,5 @@
 <template>
-   <aside id="default-sidebar" class="absolute top-69 left-0 z-40 w-[25rem] h-screen shadow-lg border-solid transition-transform sm:translate-x-0" aria-label="Sidebar" :class="{'-translate-x-full' : !navStore.toggleNav, '-translate-x-0' : navStore.toggleNav}">
+   <aside id="default-sidebar" class="absolute top-69 left-0 z-40 w-full sm:w-[25rem] h-screen shadow-lg border-solid transition-transform sm:translate-x-0" aria-label="Sidebar" :class="{'-translate-x-full' : !navStore.toggleNav, '-translate-x-0' : navStore.toggleNav}">
       <div class="h-full px-3 py-4 overflow-y-auto bg-slate-100 flex flex-col justify-between">
          <!-- <div class="mb-4">
             <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
