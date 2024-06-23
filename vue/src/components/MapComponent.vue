@@ -79,7 +79,7 @@ function addPopup(location: location){
     popup.value = new mapboxgl.Popup({ offset: [0, -15] })  
       //@ts-ignore
       .setLngLat(location.coordinates)
-      .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${theTitle}', '${location.cp_id}')">Save</button></span>`)
+      .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${theTitle}', '${location.cp_id}')">Save Location</button></span>`)
       .addTo(map.value!);
   }
 
@@ -271,8 +271,11 @@ onUnmounted(() => {
       400 15px/22px 'Source Sans Pro',
       'Helvetica Neue',
       sans-serif;
-    padding: 0;
-    width: 185px;
+    padding: 0px;
+    min-width: 12rem;
+    min-height: 7rem;
+    border-radius: 0.5rem;
+
   }
 
   .mapboxgl-popup-content span.facilities h3 {
@@ -280,7 +283,8 @@ onUnmounted(() => {
     color: #fff;
     margin: 0;
     padding: 10px;
-    border-radius: 3px 3px 0 0;
+    border-radius: 0.5rem 0.5rem 0 0;
+    /* border-radius: 0.5rem; */
     font-weight: 700;
     margin-top: -15px;
   }
@@ -290,7 +294,8 @@ onUnmounted(() => {
     color: #fff;
     margin: 0;
     padding: 10px;
-    border-radius: 3px 3px 0 0;
+    border-radius: 0.5rem 0.5rem 0 0;
+    /* border-radius: 0.5rem; */
     font-weight: 700;
     margin-top: -15px;
   }
@@ -302,7 +307,11 @@ onUnmounted(() => {
   }
 
   .mapboxgl-popup-content a {
-    margin-top: 10px;
+    display: inline-block;
+    padding-left: 10px !important;
+    /* margin-bottom: 10px; */
+    text-decoration: underline;
+    margin-top: 0px;
     padding: 10px;
     font-weight: 400;
     color: rgb(22 163 74);
@@ -316,11 +325,17 @@ onUnmounted(() => {
     padding: 5px;
     border: 1px solid grey;
     font-weight: 400;
-    color: rgb(22 163 74);
-  } 
+    color: rgb(230, 230, 230);
+    border-radius: 0.5rem;
+    background-color: #613583;
+  }
+  
+  .mapboxgl-popup-content span.mooring button.save{
+    background:rgb(22 163 74);  
+  }
 
   .mapboxgl-popup-content span.facilities a {
-    margin-top: 10px;
+    /* margin-top: 10px; */
     padding: 10px;
     font-weight: 400;
     color: #613583;
