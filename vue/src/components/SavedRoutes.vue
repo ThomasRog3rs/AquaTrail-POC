@@ -25,7 +25,7 @@ function removeLocation(){
 
 onMounted(() => {
     locationType.value = props.location?.layer === "facilities" ? "Marina" : "Mooring";
-    href.value = `https://canalplan.uk/place/${props.location?.id}`
+    href.value = `https://canalplan.uk/place/${props.location?.cp_id}`
 })
 
 
