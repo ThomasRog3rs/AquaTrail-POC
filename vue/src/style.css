@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* html, body, main{
+html, body, main{
     overflow: hidden;
-} */
+}
 
 body, html {
     margin: 0;
