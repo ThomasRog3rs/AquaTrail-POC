@@ -110,6 +110,8 @@ Window.prototype.saveLocation = function(coordinates : Array<number>, layer: str
 }
 
 onMounted(() => {
+    mapStore.getDataSets();
+    //console.log();
     mapStore.mapLoaded = false;
     if(map.value){
         map.value = new mapboxgl.Map({
