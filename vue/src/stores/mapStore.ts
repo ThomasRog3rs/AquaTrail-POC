@@ -23,6 +23,7 @@ export const useMapStore = defineStore('mapStore', () => {
     //click event trigger (not ideal)
     const triggerLocationChange = ref<number>(0);
 
+    //For some reason this does not work, yet to work out why:
     function getDataSets(){
         const token = import.meta.env.VITE_API_KEY;
         const datasetsService = mapboxSdk({ accessToken: token});
