@@ -46,17 +46,28 @@ watch(() => mapStore.triggerLocationChange, async () => {
   navStore.toggleNav = false;
 });
 
-function flyToLocation(coordinates: Array<number>){
-  console.log('fly to coordinates', coordinates);
-  console.log('map status in fly to: ', map.value ? 'true' : 'HELP, NO MAP')
-  if(map.value && coordinates){
-    console.log(coordinates)
-    map.value.flyTo({
-      //@ts-ignore
-      center: coordinates,
-      zoom: 15
-    });
-  }
+function flyToLocation(coordinates: Array<number>): Promise<void>{
+  return new Promise((resolve, reject) => {
+    console.log('fly to coordinates', coordinates);
+    console.log('map status in fly to: ', map.value ? 'true' : 'HELP, NO MAP');
+
+    if(map.value && coordinates){
+      console.log(coordinates);
+      map.value.flyTo({
+        //@ts-ignore
+        center: coordinates,
+        zoom: 15
+      });
+
+      map.value.once('moveend', (e) => {
+        // alert("Moved!");
+        resolve();
+      });
+    }else{
+      reject("No init map or no provided coordinates");
+    }
+
+  });
 }
 
 function escapeStringForHTML(str:string | undefined) {
@@ -107,6 +118,21 @@ Window.prototype.saveLocation = function(coordinates : Array<number>, layer: str
   }
 
   console.log(store.state.value.mapStore.savedLocations);
+}
+
+function getFeaturesFromPoint(point : mapboxgl.Point | mapboxgl.PointLike){
+  const features = map.value!.queryRenderedFeatures(point, {
+    layers: ['marinas', 'actual-marinas']
+  });
+
+  if(features.length < 1) return;
+
+  console.log(features);
+  const feature = features[0];
+
+  if(!feature) return;
+  if(!feature.properties) return;
+  return feature;
 }
 
 onMounted(() => {
@@ -187,9 +213,9 @@ onMounted(() => {
             console.warn("MAP IS NULL");
           }
 
-          console.log('Bearing', map.value?.getBearing());
-          console.log('Location', map.value?.getCenter());
-          console.log('zoom', map.value?.getZoom());
+          // console.log('Bearing', map.value?.getBearing());
+          // console.log('Location', map.value?.getCenter());
+          // console.log('zoom', map.value?.getZoom());
 
           const currentLocation : currentLocation = {
               //@ts-ignore
@@ -202,19 +228,26 @@ onMounted(() => {
         })
 
         map.value.on('click', async (e) => {
-            const features = map.value!.queryRenderedFeatures(e.point, {
-                layers: ['marinas', 'actual-marinas']
-            });
+            // const features = map.value!.queryRenderedFeatures(e.point, {
+            //     layers: ['marinas', 'actual-marinas']
+            // });
 
-            features[0].state
+            // if(features.length < 1) return;
 
-            if(!features.length) return;
+            // console.log(features);
+            // const feature = features[0];
 
-            console.log(features);
-            const feature = features[0];
+            let feature = getFeaturesFromPoint(e.point);
+
             if(!feature) return;
             if(!feature.properties) return;
 
+            //@ts-ignore
+            await flyToLocation(feature.geometry.coordinates);
+
+            feature = getFeaturesFromPoint(e.point);
+            if(!feature) return;
+            if(!feature.properties) return;
             const location : location = {
               //@ts-ignore
               coordinates: feature.geometry.coordinates,
@@ -225,10 +258,9 @@ onMounted(() => {
               title: feature.properties.title
             }
 
+            //@ts-ignore
             await addPopup(location);
 
-            //@ts-ignore
-            await flyToLocation(feature.geometry.coordinates);
         });
 
         map.value.addControl(
