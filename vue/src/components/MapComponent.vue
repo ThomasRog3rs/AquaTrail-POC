@@ -41,6 +41,7 @@ watch(() => mapStore.triggerLocationChange, async () => {
   if(mapStore.zoomToLocation.coordinates === mapStore.currentLocation?.coordinates) return;
 
   await flyToLocation(mapStore.zoomToLocation.coordinates);
+  removePopup();
   await addPopup(mapStore.zoomToLocation);
 
   navStore.toggleNav = false;
@@ -72,28 +73,36 @@ function flyToLocation(coordinates: Array<number>): Promise<void>{
 
 function escapeStringForHTML(str:string | undefined) {
   if(str ==undefined) return;
-  return str.replace(/'/g, "\\'");}
+  return str.replace(/'/g, "\\'");
+}
 
-function addPopup(location: location){
-  if(!map.value) return;
-  if(!location) return;
-  if(!location.coordinates) return;
-
+function removePopup(){
   if(popup.value){
-    console.log(popup.value);
     popup.value.remove();
   }
+}
 
-  if(map.value){
-    const theTitle = escapeStringForHTML(location.title);
+function addPopup(location: location): Promise<void>{
+  return new Promise((resolve, reject) => {
+    if(!map.value) return;
+    if(!location) return;
+    if(!location.coordinates) return;
 
-    popup.value = new mapboxgl.Popup({ offset: [0, -15] })  
+    if(map.value){
+      const theTitle = escapeStringForHTML(location.title);
+
+      popup.value = new mapboxgl.Popup({ offset: [0, -15] })  
       //@ts-ignore
       .setLngLat(location.coordinates)
       .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${theTitle}', '${location.cp_id}')">Save Location</button></span>`)
       .addTo(map.value!);
-  }
 
+      resolve();
+
+    }else{
+      reject("No init map");
+    }
+  })
 }
 
 //Needs to be on the window object so it can be called from the template string in popup
@@ -238,14 +247,17 @@ onMounted(() => {
             // const feature = features[0];
 
             let feature = getFeaturesFromPoint(e.point);
-
+            console.log("original feature: ", feature)
             if(!feature) return;
             if(!feature.properties) return;
 
             //@ts-ignore
-            await flyToLocation(feature.geometry.coordinates);
+            const flyRes = await flyToLocation(feature.geometry.coordinates);
+            console.log(flyRes);
 
+            //update feature coordinates for creatubg popup
             feature = getFeaturesFromPoint(e.point);
+            console.log("updated feature: ", feature);
             if(!feature) return;
             if(!feature.properties) return;
             const location : location = {
@@ -258,9 +270,9 @@ onMounted(() => {
               title: feature.properties.title
             }
 
+            removePopup();
             //@ts-ignore
             await addPopup(location);
-
         });
 
         map.value.addControl(
