@@ -252,11 +252,10 @@ onMounted(() => {
             if(!feature.properties) return;
 
             //@ts-ignore
-            const flyRes = await flyToLocation(feature.geometry.coordinates);
-            console.log(flyRes);
+            await flyToLocation(feature.geometry.coordinates);
 
             //update feature coordinates for creatubg popup
-            feature = getFeaturesFromPoint(e.point);
+            // feature = getFeaturesFromPoint(e.point);
             console.log("updated feature: ", feature);
             if(!feature) return;
             if(!feature.properties) return;
