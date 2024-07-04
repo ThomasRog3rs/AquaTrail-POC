@@ -91,14 +91,13 @@ function addPopup(location: location): Promise<void>{
     if(map.value){
       const theTitle = escapeStringForHTML(location.title);
 
-      popup.value = new mapboxgl.Popup()  
+      popup.value = new mapboxgl.Popup({ offset: [0, -15] })  
       //@ts-ignore
       .setLngLat(location.coordinates)
       .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${theTitle}', '${location.cp_id}')">Save Location</button></span>`)
       .addTo(map.value!);
 
       resolve();
-
     }else{
       reject("No init map");
     }
