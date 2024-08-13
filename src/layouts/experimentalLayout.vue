@@ -34,6 +34,7 @@
 " image="" :has-image="true" :distance="1.2"></Card>
         </div>
       </section>
+            <RouterLink to="/old">View Legacy</RouterLink>
   </template>
   <script setup lang="ts">
   import {ref, onMounted} from 'vue';
