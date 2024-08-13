@@ -6,8 +6,8 @@ import Home from '../pages/Home.vue';
 const router = createRouter({
     history: createWebHistory(""),
     routes: [
-        { path: '/', name: 'Default', component: Home },
-        {path: '/booking-pin', name: 'Experimental', component: experimentalLayout}
+        { path: '/old', name: 'Default', component: Home },
+        {path: '/', name: 'Experimental', component: experimentalLayout}
     ]
 });
 
