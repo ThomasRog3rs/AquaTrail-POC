@@ -1,7 +1,7 @@
 <template>
 
 
-<div class="max-w-sm bg-white border border-gray-500 rounded-lg shadow">
+<div class="max-w-sm bg-white border border-gray-500 rounded-lg shadow mr-4">
     <img v-if="props.hasImage" class="rounded-t-lg" src="https://i.pinimg.com/736x/78/b2/fb/78b2fbc764bfab4a210ae9ae9117b941.jpg" alt="" />
 
     <div class="p-5">
@@ -28,3 +28,9 @@ const props = defineProps<{
   distance: number;
 }>();
 </script>
+
+<style scoped>
+div.max-w-sm{
+    max-width: 25%;
+}
+</style>
