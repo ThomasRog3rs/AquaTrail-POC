@@ -5,7 +5,9 @@
    
 <script setup lang="ts">
 import {ref, onMounted, onUnmounted, watch} from 'vue';
+//@ts-ignore
 import mapboxgl, {Map} from 'mapbox-gl';
+//@ts-ignore
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
@@ -41,48 +43,67 @@ watch(() => mapStore.triggerLocationChange, async () => {
   if(mapStore.zoomToLocation.coordinates === mapStore.currentLocation?.coordinates) return;
 
   await flyToLocation(mapStore.zoomToLocation.coordinates);
+  removePopup();
   await addPopup(mapStore.zoomToLocation);
 
   navStore.toggleNav = false;
 });
 
-function flyToLocation(coordinates: Array<number>){
-  console.log('fly to coordinates', coordinates);
-  console.log('map status in fly to: ', map.value ? 'true' : 'HELP, NO MAP')
-  if(map.value && coordinates){
-    console.log(coordinates)
-    map.value.flyTo({
-      //@ts-ignore
-      center: coordinates,
-      zoom: 15
-    });
-  }
+function flyToLocation(coordinates: Array<number>): Promise<void>{
+  return new Promise((resolve, reject) => {
+    console.log('fly to coordinates', coordinates);
+    console.log('map status in fly to: ', map.value ? 'true' : 'HELP, NO MAP');
+
+    if(map.value && coordinates){
+      console.log(coordinates);
+      map.value.flyTo({
+        //@ts-ignore
+        center: coordinates,
+        zoom: 15
+      });
+
+      map.value.once('moveend', (e) => {
+        // alert("Moved!");
+        resolve();
+      });
+    }else{
+      reject("No init map or no provided coordinates");
+    }
+
+  });
 }
 
 function escapeStringForHTML(str:string | undefined) {
   if(str ==undefined) return;
-  return str.replace(/'/g, "\\'");}
+  return str.replace(/'/g, "\\'");
+}
 
-function addPopup(location: location){
-  if(!map.value) return;
-  if(!location) return;
-  if(!location.coordinates) return;
-
+function removePopup(){
   if(popup.value){
-    console.log(popup.value);
     popup.value.remove();
   }
+}
 
-  if(map.value){
-    const theTitle = escapeStringForHTML(location.title);
+function addPopup(location: location): Promise<void>{
+  return new Promise((resolve, reject) => {
+    if(!map.value) return;
+    if(!location) return;
+    if(!location.coordinates) return;
 
-    popup.value = new mapboxgl.Popup({ offset: [0, -15] })  
+    if(map.value){
+      const theTitle = escapeStringForHTML(location.title);
+
+      popup.value = new mapboxgl.Popup({ offset: [0, -15] })  
       //@ts-ignore
       .setLngLat(location.coordinates)
       .setHTML(`<span class="${location.layer}"><h3>${location.title}</h3><a href="https://canalplan.uk/place/${location.cp_id}" target="_blank">Canal Plan Page</a><br/><button class="save" onclick="saveLocation([${location.coordinates}], '${location.layer}', '${theTitle}', '${location.cp_id}')">Save Location</button></span>`)
       .addTo(map.value!);
-  }
 
+      resolve();
+    }else{
+      reject("No init map");
+    }
+  })
 }
 
 //Needs to be on the window object so it can be called from the template string in popup
@@ -109,7 +130,24 @@ Window.prototype.saveLocation = function(coordinates : Array<number>, layer: str
   console.log(store.state.value.mapStore.savedLocations);
 }
 
+function getFeaturesFromPoint(point : mapboxgl.Point | mapboxgl.PointLike){
+  const features = map.value!.queryRenderedFeatures(point, {
+    layers: ['marinas', 'actual-marinas']
+  });
+
+  if(features.length < 1) return;
+
+  console.log(features);
+  const feature = features[0];
+
+  if(!feature) return;
+  if(!feature.properties) return;
+  return feature;
+}
+
 onMounted(() => {
+    mapStore.getDataSets();
+    //console.log();
     mapStore.mapLoaded = false;
     if(map.value){
         map.value = new mapboxgl.Map({
@@ -124,10 +162,11 @@ onMounted(() => {
         });
         
 
-        console.log('Bearing', map.value.getBearing());
-        console.log('Location', map.value.getCenter());
-        console.log('zoom', map.value.getZoom());
+        // console.log('Bearing', map.value.getBearing());
+        // console.log('Location', map.value.getCenter());
+        // console.log('zoom', map.value.getZoom());
 
+        //@ts-ignore
         map.value.on('load', () => {
           mapStore.mapLoaded = true;
           const currentLocation : currentLocation = {
@@ -180,14 +219,15 @@ onMounted(() => {
           // console.log('all marinas from store: ', mapStore.allMarinas);
         });
 
+        //@ts-ignore
         map.value.on('move', () => {
           if(map.value === null || map.value === undefined){
             console.warn("MAP IS NULL");
           }
 
-          console.log('Bearing', map.value?.getBearing());
-          console.log('Location', map.value?.getCenter());
-          console.log('zoom', map.value?.getZoom());
+          // console.log('Bearing', map.value?.getBearing());
+          // console.log('Location', map.value?.getCenter());
+          // console.log('zoom', map.value?.getZoom());
 
           const currentLocation : currentLocation = {
               //@ts-ignore
@@ -199,20 +239,30 @@ onMounted(() => {
             mapStore.setCurrentLocation(currentLocation);
         })
 
+        //@ts-ignore
         map.value.on('click', async (e) => {
-            const features = map.value!.queryRenderedFeatures(e.point, {
-                layers: ['marinas', 'actual-marinas']
-            });
+            // const features = map.value!.queryRenderedFeatures(e.point, {
+            //     layers: ['marinas', 'actual-marinas']
+            // });
 
-            features[0].state
+            // if(features.length < 1) return;
 
-            if(!features.length) return;
+            // console.log(features);
+            // const feature = features[0];
 
-            console.log(features);
-            const feature = features[0];
+            let feature = getFeaturesFromPoint(e.point);
+            console.log("original feature: ", feature)
             if(!feature) return;
             if(!feature.properties) return;
 
+            //@ts-ignore
+            await flyToLocation(feature.geometry.coordinates);
+
+            //update feature coordinates for creatubg popup
+            // feature = getFeaturesFromPoint(e.point);
+            console.log("updated feature: ", feature);
+            if(!feature) return;
+            if(!feature.properties) return;
             const location : location = {
               //@ts-ignore
               coordinates: feature.geometry.coordinates,
@@ -223,12 +273,12 @@ onMounted(() => {
               title: feature.properties.title
             }
 
-            await addPopup(location);
-
+            removePopup();
             //@ts-ignore
-            await flyToLocation(feature.geometry.coordinates);
+            await addPopup(location);
         });
 
+        //@ts-ignore
         map.value.addControl(
           new MapboxGeocoder({
               accessToken: mapboxgl.accessToken,
@@ -237,6 +287,7 @@ onMounted(() => {
         );
 
         // Add geolocate control to the map.
+        //@ts-ignore
         map.value.addControl(
           new mapboxgl.GeolocateControl({
             positionOptions: {
@@ -249,6 +300,7 @@ onMounted(() => {
           })
         );
 
+        //@ts-ignore
         map.value.addControl(new mapboxgl.NavigationControl());
     }
 });
