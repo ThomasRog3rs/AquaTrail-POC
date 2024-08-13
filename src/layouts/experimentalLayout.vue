@@ -34,7 +34,7 @@
 " image="" :has-image="true" :distance="1.2"></Card>
         </div>
       </section>
-            <RouterLink to="/old">View Legacy</RouterLink>
+      <RouterLink to="/old">View Legacy</RouterLink>
   </template>
   <script setup lang="ts">
   import {ref, onMounted} from 'vue';
@@ -56,6 +56,9 @@
   </script>
 
   <style scoped>
+  body{
+    overflow: scroll !important;
+  }
     nav, section{
       padding: 20px;
     }
@@ -137,9 +140,9 @@
     }
 
     .close-items{
-      width: 1200px;
+      width: 800px;
       display: flex;
-      justify-content: space-between;
+      justify-content:flex-start;
     }
 
     section#close-by{
