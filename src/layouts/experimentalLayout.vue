@@ -1,7 +1,7 @@
 <template>
       <nav class="bg-blue-700">
         <h1 class="logo">Mooring Pin</h1>
-        <div class="search-types">
+        <p v-if="location">Your location: {{ location.latitude }}, {{ location.longitude }}</p>        <div class="search-types">
           <template v-for="type in searchStore.searchItems">
               <div class="search-type" :class="{ active: type.active }" @click="setActive(type.title)">
                 {{ type.title }}
@@ -105,9 +105,54 @@
     activeOption.value = searchStore.searchItems.find(x => x.active)!.title;
   }
 
-  onMounted(() => {
-    activeOption.value = searchStore.searchItems.find(x => x.active)!.title;
-  })
+  interface Location {
+  latitude: number;
+  longitude: number;
+}
+
+const location = ref<Location | null>(null);
+const error = ref<string | null>(null);
+
+const requestLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        location.value = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        console.log('Location:', location.value);  // Log location when obtained
+      },
+      (err) => {
+        switch (err.code) {
+          case err.PERMISSION_DENIED:
+            error.value = "User denied the request for Geolocation.";
+            break;
+          case err.POSITION_UNAVAILABLE:
+            error.value = "Location information is unavailable.";
+            break;
+          case err.TIMEOUT:
+            error.value = "The request to get user location timed out.";
+            break;
+          case err.UNKNOWN_ERROR:
+            error.value = "An unknown error occurred.";
+            break;
+        }
+        console.log('Error:', error.value);  // Log error if occurred
+      }
+    );
+  } else {
+    error.value = "Geolocation is not supported by this browser.";
+    console.log('Error:', error.value);  // Log if geolocation is not supported
+  }
+};
+
+onMounted(() => {
+  requestLocation();
+  // Log current state immediately after request
+  console.log('Initial Location:', location.value);
+  console.log('Initial Error:', error.value);
+});
   </script>
 
   <style scoped>
