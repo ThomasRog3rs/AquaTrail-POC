@@ -5,7 +5,9 @@
    
 <script setup lang="ts">
 import {ref, onMounted, onUnmounted, watch} from 'vue';
+//@ts-ignore
 import mapboxgl, {Map} from 'mapbox-gl';
+//@ts-ignore
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
@@ -160,10 +162,13 @@ onMounted(() => {
         });
         
 
-        console.log('Bearing', map.value.getBearing());
-        console.log('Location', map.value.getCenter());
-        console.log('zoom', map.value.getZoom());
+        // //@ts-ignore
+        // console.log('Bearing', map.value.getBearing());
+        // //@ts-ignore
+        // console.log('Location', map.value.getCenter());
+        // console.log('zoom', map.value.getZoom());
 
+        //@ts-ignore
         map.value.on('load', () => {
           mapStore.mapLoaded = true;
           const currentLocation : currentLocation = {
@@ -216,6 +221,7 @@ onMounted(() => {
           // console.log('all marinas from store: ', mapStore.allMarinas);
         });
 
+        //@ts-ignore
         map.value.on('move', () => {
           if(map.value === null || map.value === undefined){
             console.warn("MAP IS NULL");
@@ -235,6 +241,7 @@ onMounted(() => {
             mapStore.setCurrentLocation(currentLocation);
         })
 
+        //@ts-ignore
         map.value.on('click', async (e) => {
             // const features = map.value!.queryRenderedFeatures(e.point, {
             //     layers: ['marinas', 'actual-marinas']
@@ -273,6 +280,7 @@ onMounted(() => {
             await addPopup(location);
         });
 
+        //@ts-ignore
         map.value.addControl(
           new MapboxGeocoder({
               accessToken: mapboxgl.accessToken,
@@ -281,6 +289,7 @@ onMounted(() => {
         );
 
         // Add geolocate control to the map.
+        //@ts-ignore
         map.value.addControl(
           new mapboxgl.GeolocateControl({
             positionOptions: {
@@ -293,6 +302,7 @@ onMounted(() => {
           })
         );
 
+        //@ts-ignore
         map.value.addControl(new mapboxgl.NavigationControl());
     }
 });
