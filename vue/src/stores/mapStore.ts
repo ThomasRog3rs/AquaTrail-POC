@@ -1,7 +1,6 @@
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
 import {savedLocation, currentLocation, location} from '../types/location';
-//@ts-ignore
 import mapboxSdk from '@mapbox/mapbox-sdk/services/datasets';
 // import { SdkConfig } from '@mapbox/mapbox-sdk/lib/classes/mapi-client';
 // import { MapiRequest } from '@mapbox/mapbox-sdk/lib/classes/mapi-request';
