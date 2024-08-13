@@ -162,7 +162,9 @@ onMounted(() => {
         });
         
 
+        // //@ts-ignore
         // console.log('Bearing', map.value.getBearing());
+        // //@ts-ignore
         // console.log('Location', map.value.getCenter());
         // console.log('zoom', map.value.getZoom());
 
