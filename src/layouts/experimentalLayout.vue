@@ -140,7 +140,7 @@
     }
 
     .close-items{
-      width: 1200px;
+      width: 800px;
       display: flex;
       justify-content:flex-start;
     }

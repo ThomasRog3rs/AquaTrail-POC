@@ -31,6 +31,6 @@ const props = defineProps<{
 
 <style scoped>
 div.max-w-sm{
-    max-width: 25%;
+    max-width: 33%;
 }
 </style>
