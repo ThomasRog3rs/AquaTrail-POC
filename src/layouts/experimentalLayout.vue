@@ -134,7 +134,7 @@ const requestLocation = () => {
           case err.TIMEOUT:
             error.value = "The request to get user location timed out.";
             break;
-          case err.UNKNOWN_ERROR:
+          default:
             error.value = "An unknown error occurred.";
             break;
         }
