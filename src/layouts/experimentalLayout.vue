@@ -148,6 +148,7 @@ const requestLocation = () => {
 };
 
 onMounted(() => {
+  activeOption.value = searchStore.searchItems.find(x => x.active)!.title;
   requestLocation();
   // Log current state immediately after request
   console.log('Initial Location:', location.value);
