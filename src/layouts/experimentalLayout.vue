@@ -11,16 +11,19 @@
       </nav>
       <section id="search">
         <div class="search-container">
-          <form>
-            <input type="search" placeholder="Search Marina Name">
-            <v-select label="name" placeholder="Which service are you looking for?" :options="serviceValues"></v-select>
+          <div class="container-header">
+              <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
+            </div>
+          <form>            
+            <input type="search" placeholder="Search Marina Name" v-model="marinaSearchValue">
+            <v-select label="name" placeholder="Which service are you looking for?" :options="serviceValues" v-model="serviceSearchValue"></v-select>
             <!-- <select>
               <option value="" disabled selected>Select Services (optional)</option>
             </select> -->
             <!-- <input type="number" placeholder="Distance from current location (km)"> -->
           </form>
           <div class="container-footer">
-              <button class="bg-blue-700">Search</button>
+              <button class="bg-blue-700" @click="search">Search</button>
           </div>
         </div>
       </section>
@@ -96,9 +99,10 @@
   <script setup lang="ts">
   import 'vue-select/dist/vue-select.css';
   import {ref, onMounted} from 'vue';
+  import {useRouter} from 'vue-router';
   import Card from '../components/experimental/Card.vue';
   import { useSearchStore } from '../stores/searchStore';
-  import { useMapStore } from '../stores/mapStore';
+  import { useMapStore } from '../stores/mapStore'
 
   const mapStore = useMapStore();
   const searchStore = useSearchStore();
@@ -106,6 +110,30 @@
   const activeOption = ref<string>();
 
   const adOpen = ref<boolean>(true);
+
+  const router = useRouter();
+  const marinaSearchValue = ref<string | undefined>();
+  const serviceSearchValue = ref<string | undefined>();
+  const searchErrorMsg = ref<string>("");
+  const searchHasError = ref<boolean>(false);
+
+  function search() {
+  if (
+    (marinaSearchValue.value === undefined || marinaSearchValue.value === null || marinaSearchValue.value === '') &&
+    (serviceSearchValue.value === undefined || serviceSearchValue.value === null || serviceSearchValue.value === '')
+  ) {
+    searchErrorMsg.value = "Please provide one or more values";
+    searchHasError.value = true;
+    return;
+  }
+
+  router.push("/results");
+
+  searchHasError.value = false;
+
+  //Call the API
+  //alert(`Searching: ${marinaSearchValue.value}, ${serviceSearchValue.value}`);
+}
 
   function closeAd(){
     adOpen.value = false;
@@ -205,7 +233,7 @@ onMounted(() => {
 });
   </script>
 
-  <style scoped>
+  <style>
   body{
     overflow: scroll !important;
   }
@@ -316,5 +344,17 @@ onMounted(() => {
       background-color: whitesmoke;
       outline: 2px solid rgb(88, 88, 88);
       padding: 20px;
+    }
+
+    .container-header > div.search-error{
+      /* background-color: red !important; */
+      width: 100%;
+      color: white;
+      padding: 0px;
+      padding: 15px;
+      font-weight: 500;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      text-align: center;
     }
   </style>
