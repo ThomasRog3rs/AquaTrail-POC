@@ -16,7 +16,7 @@ body, html {
 }
 
 div.v-select.vs--single.vs--searchable{
-    border-bottom: 1px solid rgb(186, 186, 186);
+    /* border-bottom: 1px solid rgb(186, 186, 186); */
     /* padding: 20px; */
 }
 div.vs__dropdown-toggle{

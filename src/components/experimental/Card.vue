@@ -22,7 +22,7 @@ import { closeLocation } from '@/types/closeToHome';
 // Define props based on the closeLocation type
 const props = defineProps<{
   name: string;
-  description: string;
+  description: string | undefined;
   image: string;
   hasImage: boolean;
   distance: number;
@@ -32,5 +32,6 @@ const props = defineProps<{
 <style scoped>
 div.max-w-sm{
     max-width: 33%;
+    min-width: 33%;
 }
 </style>

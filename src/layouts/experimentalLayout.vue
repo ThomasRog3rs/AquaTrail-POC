@@ -1,11 +1,11 @@
 <template>
       <nav class="bg-blue-700">
         <h1 class="logo">Mooring Pin</h1>
-        <p v-if="location">Your location: {{ location.latitude }}, {{ location.longitude }}</p>        <div class="search-types">
-          <template v-for="type in searchStore.searchItems">
+        <p v-if="userLocation">Your location: {{ userLocation.latitude }}, {{ userLocation.longitude }}</p>        <div class="search-types">
+          <template v-if="searchStore.searchItems.length > 1" v-for="type in searchStore.searchItems">
               <div class="search-type" :class="{ active: type.active }" @click="setActive(type.title)">
                 {{ type.title }}
-              </div>
+              </div>location
           </template>
         </div>
       </nav>
@@ -13,17 +13,18 @@
         <div class="search-container">
           <form>
             <input type="search" placeholder="Search Marina Name">
-            <v-select label="name" placeholder="Select Services (optional)" :options="serviceValues"></v-select>
+            <v-select label="name" placeholder="Which service are you looking for?" :options="serviceValues"></v-select>
             <!-- <select>
               <option value="" disabled selected>Select Services (optional)</option>
             </select> -->
-            <input type="number" placeholder="Distance from current location (km)">
+            <!-- <input type="number" placeholder="Distance from current location (km)"> -->
           </form>
           <div class="container-footer">
               <button class="bg-blue-700">Search</button>
           </div>
         </div>
       </section>
+      <template v-if="userLocation">
       <div style="padding: 20px; padding-bottom: 0px;">
         <h2 class="mb-2">{{ activeOption }} close to you</h2>
       </div>
@@ -37,19 +38,25 @@
 " image="" :has-image="true" :distance="1.2"></Card>
         </div>
       </section>
+    </template>
+    <template v-if="mapStore.savedLocations.length > 0">
       <div style="padding: 20px; padding-bottom: 0px;">
         <h2 class="mb-2">Your saved locations</h2>
       </div>
       <section id="close-by">
         <div class="close-items">
-          <Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
+          <template v-for="location in mapStore.savedLocations" :key="location.id">
+               <Card :name="location.title!" :description="undefined" image="" :has-image="false" :distance="1.2"></Card>
+            </template>
+          <!-- <Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
 " image="" :has-image="true" :distance="1.2"></Card>
 <Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
 " image="" :has-image="false" :distance="1.2"></Card>
 <Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="true" :distance="1.2"></Card>
+" image="" :has-image="true" :distance="1.2"></Card> -->
         </div>
       </section>
+    </template>
 
 
 <footer class="bg-blue-700 rounded-lg shadow m-4">
@@ -91,6 +98,9 @@
   import {ref, onMounted} from 'vue';
   import Card from '../components/experimental/Card.vue';
   import { useSearchStore } from '../stores/searchStore';
+  import { useMapStore } from '../stores/mapStore';
+
+  const mapStore = useMapStore();
   const searchStore = useSearchStore();
 
   const activeOption = ref<string>();
@@ -144,23 +154,23 @@
     activeOption.value = searchStore.searchItems.find(x => x.active)!.title;
   }
 
-  interface Location {
+  interface userLocation {
   latitude: number;
   longitude: number;
 }
 
-const location = ref<Location | null>(null);
+const userLocation = ref<userLocation | null>(null);
 const error = ref<string | null>(null);
 
 const requestLocation = () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        location.value = {
+        userLocation.value = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         };
-        console.log('Location:', location.value);  // Log location when obtained
+        console.log('Location:', userLocation.value);  // Log location when obtained
       },
       (err) => {
         switch (err.code) {
@@ -190,7 +200,7 @@ onMounted(() => {
   activeOption.value = searchStore.searchItems.find((x:any) => x.active)!.title;
   requestLocation();
   // Log current state immediately after request
-  console.log('Initial Location:', location.value);
+  console.log('Initial Location:', userLocation.value);
   console.log('Initial Error:', error.value);
 });
   </script>
@@ -291,6 +301,7 @@ onMounted(() => {
 
     section#close-by{
       overflow-x: scroll;
+      margin-right: 20px;
     }
 
     /* Hide scrollbar for Chrome, Safari, and Edge */
