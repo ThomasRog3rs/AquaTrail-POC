@@ -3,6 +3,7 @@ import experimentalLayout from '../layouts/experimentalLayout.vue';
 import App from '../App.vue';
 import Home from '../pages/Home.vue';
 
+
 const router = createRouter({
     history: createWebHistory(""),
     routes: [
