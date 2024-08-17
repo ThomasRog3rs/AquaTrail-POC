@@ -16,7 +16,7 @@
                 &downarrow;
                 Sort
             </span>
-            <span>
+            <span @click="openFilter">
                 &#9906;
                 Filter
             </span>
@@ -104,11 +104,7 @@
     </div>
 
     <transition name="slide">
-        <div id="sortContainer" class="shadow-lg" v-if="sortResultsOpen">
-            <div class="header">
-                <h1>Sort By</h1>
-                <span class="close" @click="closeSort">&cross;</span>
-            </div>
+        <FilterBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
             <fieldset>
             <legend class="sr-only">Select a maintenance drone:</legend>
 
@@ -126,24 +122,87 @@
                     <input type="radio" id="Services" name="filter" value="Services" />
                     <label for="Services">Number Of Services</label>
                 </div>
-</fieldset>
-        </div>
+            </fieldset>
+        </FilterBox>
+    </transition>
+
+    <transition name="slide">
+        <FilterBox :open="filterResultsOpen" title="Filter By" @close="closeFilter">
+            <fieldset>
+            <legend class="">Services:</legend>
+                <div>
+                    <input type="checkbox" id="Distance" name="filter" value="Distance" checked />
+                    <label for="Distance">Distance</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="Alphabetically" name="filter" value="Alphabetically" />
+                    <label for="Alphabetically">Alphabetically</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="Services" name="filter" value="Services" />
+                    <label for="Services">Number Of Services</label>
+                </div>
+            </fieldset>
+            <fieldset>
+            <legend class="">Close by:</legend>
+                <div>
+                    <input type="checkbox" id="Distance" name="filter" value="Distance" checked />
+                    <label for="Distance">Distance</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="Alphabetically" name="filter" value="Alphabetically" />
+                    <label for="Alphabetically">Alphabetically</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="Services" name="filter" value="Services" />
+                    <label for="Services">Number Of Services</label>
+                </div>
+            </fieldset>
+            <fieldset>
+            <legend class="">Distance:</legend>
+                <div>
+                    <input type="checkbox" id="Distance" name="filter" value="Distance" checked />
+                    <label for="Distance">Filter by distance</label>
+                </div>
+                <div>
+                    <input type="number" id="Distance" name="filter" value="Distance" placeholder="distance(km)" />
+                    <!-- <label for="Distance">Filter by distance</label> -->
+                </div>
+            </fieldset>
+        </FilterBox>
     </transition>
 </template>
 
 <script setup lang="ts">
 import {ref} from 'vue';
 import { useRouter } from 'vue-router';
+import FilterBox from '../components/experimental/FilterBox.vue'
 const router = useRouter();
 
+
 const sortResultsOpen = ref<boolean>(false);
+const filterResultsOpen = ref<boolean>(false);
 
 const openSort = () => {
     sortResultsOpen.value = true;
+    filterResultsOpen.value = false;
 }
 
 const closeSort = () =>{
     sortResultsOpen.value = false;
+}
+
+const openFilter = () => {
+    filterResultsOpen.value = true;
+    sortResultsOpen.value = false;
+}
+
+const closeFilter = () => {
+    filterResultsOpen.value = false;
 }
 
 function goHome(){
@@ -152,32 +211,6 @@ function goHome(){
 </script>
 
 <style>
-div#sortContainer{
-    padding: 30px;
-    border-top: 2px solid rgb(186, 186, 186);
-    border-top-right-radius: 20px;
-    border-top-left-radius: 20px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: whitesmoke;
-    min-height: 30vh;
-    max-height: 50vh;
-    overflow: scroll;
-    /* transition: transform 0.3s ease-out, opacity 0.3s ease-out; */
-}
-
-div#sortContainer > div.header{
-    font-size: 25px;
-    display: flex;
-    justify-content:space-between
-}
-
-div#sortContainer > div.header > span.close:hover{
-    cursor: pointer;
-}
-
 .slide-enter-from{
     opacity: 0;
     transform: translateY(100%);

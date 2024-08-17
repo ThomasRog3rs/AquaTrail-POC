@@ -1,5 +1,6 @@
 <template>
       <nav class="bg-blue-700">
+        <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
         <h1 class="logo">Mooring Pin</h1>
         <p v-if="userLocation">Your location: {{ userLocation.latitude }}, {{ userLocation.longitude }}</p>        <div class="search-types">
           <template v-if="searchStore.searchItems.length > 1" v-for="type in searchStore.searchItems">
