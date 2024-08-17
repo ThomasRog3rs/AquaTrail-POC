@@ -106,7 +106,7 @@
     <transition name="slide">
         <FilterBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
             <fieldset>
-            <legend class="sr-only">Select a maintenance drone:</legend>
+            <legend class="sr-only">Select an option to sort the results:</legend>
 
                 <div>
                     <input type="radio" id="Distance" name="filter" value="Distance" checked />
@@ -129,38 +129,20 @@
     <transition name="slide">
         <FilterBox :open="filterResultsOpen" title="Filter By" @close="closeFilter">
             <fieldset>
-            <legend class="">Services:</legend>
-                <div>
-                    <input type="checkbox" id="Distance" name="filter" value="Distance" checked />
-                    <label for="Distance">Distance</label>
+                <legend class="">Marinas with these services:</legend>
+                <div v-if="!showAllServiceOptions" v-for="index in 5">
+                    <input type="checkbox" :id="searchStore.serviceValues[index]" name="filter-services" :value="searchStore.serviceValues[index]" />
+                    <label :for="searchStore.serviceValues[index]">{{ searchStore.serviceValues[index] }}</label>
+                </div>
+                <div v-for="service in searchStore.serviceValues" v-if="showAllServiceOptions">
+                    <input type="checkbox" :id="service" name="filter-services" :value="service" />
+                    <label :for="service">{{ service }}</label>
                 </div>
 
-                <div>
-                    <input type="checkbox" id="Alphabetically" name="filter" value="Alphabetically" />
-                    <label for="Alphabetically">Alphabetically</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="Services" name="filter" value="Services" />
-                    <label for="Services">Number Of Services</label>
-                </div>
-            </fieldset>
-            <fieldset>
-            <legend class="">Close by:</legend>
-                <div>
-                    <input type="checkbox" id="Distance" name="filter" value="Distance" checked />
-                    <label for="Distance">Distance</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="Alphabetically" name="filter" value="Alphabetically" />
-                    <label for="Alphabetically">Alphabetically</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="Services" name="filter" value="Services" />
-                    <label for="Services">Number Of Services</label>
-                </div>
+                <span>
+                    <span v-if="!showAllServiceOptions" @click="displayAllServiceOptions" class="text-blue-700 cursor-auto hover:cursor-pointer">View More</span>
+                    <span v-if="showAllServiceOptions" @click="hideAllServiceOptions" class="text-blue-700 cursor-auto hover:cursor-pointer">View Less</span>
+                </span>
             </fieldset>
             <fieldset>
             <legend class="">Distance:</legend>
@@ -169,8 +151,25 @@
                     <label for="Distance">Filter by distance</label>
                 </div>
                 <div>
-                    <input type="number" id="Distance" name="filter" value="Distance" placeholder="distance(km)" />
+                    <input class="shadow" type="number" id="Distance" name="filter" value="Distance" placeholder="distance (km)" /> &ThickSpace; km
                     <!-- <label for="Distance">Filter by distance</label> -->
+                </div>
+            </fieldset>
+            <fieldset>
+            <legend class="">Marinas with these close by:</legend>
+                <div>
+                    <input type="checkbox" id="Pubs" name="filter-close" value="Pubs" checked />
+                    <label for="Pubs">Pubs</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="Supermarkets" name="filter-shop" value="Supermarkets" />
+                    <label for="Supermarkets">Supermarkets</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="Transport" name="filter-transport" value="Transport" />
+                    <label for="Transport">Public transport</label>
                 </div>
             </fieldset>
         </FilterBox>
@@ -180,9 +179,13 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 import { useRouter } from 'vue-router';
-import FilterBox from '../components/experimental/FilterBox.vue'
-const router = useRouter();
+import FilterBox from '../components/experimental/FilterBox.vue';
+import { useSearchStore } from '../stores/searchStore';
 
+const router = useRouter();
+const searchStore = useSearchStore();
+
+const showAllServiceOptions = ref<boolean>(false);
 
 const sortResultsOpen = ref<boolean>(false);
 const filterResultsOpen = ref<boolean>(false);
@@ -203,6 +206,14 @@ const openFilter = () => {
 
 const closeFilter = () => {
     filterResultsOpen.value = false;
+}
+
+const displayAllServiceOptions = () => {
+    showAllServiceOptions.value = true;
+}
+
+const hideAllServiceOptions = () => {
+    showAllServiceOptions.value = false;
 }
 
 function goHome(){

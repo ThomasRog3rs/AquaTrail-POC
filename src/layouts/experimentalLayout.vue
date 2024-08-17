@@ -17,7 +17,7 @@
             </div>
           <form>            
             <input type="search" placeholder="Search Marina Name" v-model="marinaSearchValue">
-            <v-select label="name" placeholder="Which service are you looking for?" :options="serviceValues" v-model="serviceSearchValue"></v-select>
+            <v-select label="name" placeholder="Which service are you looking for?" :options="searchStore.serviceValues" v-model="serviceSearchValue"></v-select>
             <!-- <select>
               <option value="" disabled selected>Select Services (optional)</option>
             </select> -->
@@ -139,43 +139,6 @@
   function closeAd(){
     adOpen.value = false;
   }
-
-  const serviceValues = [
-    "Boat Hire Services",
-    "Boat Sales and Brokerage",
-    "Boat Lifting and Storage",
-    "Slipway",
-    "Boat Mail",
-    "Calor Gas",
-    "Coal",
-    "Composting",
-    "Diesel",
-    "EV Charging",
-    "Fuel and Utilities",
-    "Petrol",
-    "Waste Disposal",
-    "Elsan",
-    "Pump Out",
-    "Bar",
-    "Cafe",
-    "Blacking",
-    "Boat Maintenance and Repair",
-    "Chandlery",
-    "Laundry",
-    "Cleaning",
-    "Parking",
-    "Showers",
-    "Toilets",
-    "Lifting and Craning",
-    "Hard Standing",
-    "Club and Social Areas",
-    "WiFi",
-    "Water",
-    "Boat Construction and Building",
-    "Sanitation Station",
-    "Boat Yard and Dock Services"
-];
-
 
   function setActive(title:string){
     searchStore.searchItems.find(x => x.active)!.active = false;

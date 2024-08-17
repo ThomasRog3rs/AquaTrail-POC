@@ -62,3 +62,29 @@ ul#vs1__listbox{
 ul#vs2__listbox > li:hover{
     background-color: #1d4ed8 !important;
 }
+
+input[type="radio"],
+input[type="checkbox"]{
+    margin-right: 10px;
+    margin-top: 10px;
+    width: 15px;
+    height: 15px;
+}
+
+fieldset > div{
+    padding: 3px;
+    padding-left: 0px;
+    font-size: 17px;
+    /* border: 1px solid red; */
+}
+
+fieldset{
+    border-bottom: 1px solid rgb(186, 186, 186);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+fieldset > div > input[type="number"]{
+    padding: 10px;
+    border-radius: 8px;
+}
