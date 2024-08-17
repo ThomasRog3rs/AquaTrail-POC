@@ -11,7 +11,7 @@
     </div>
     <div id="searchOptions" class="shadow-lg p-4">
         <div class="mt-6 flex justify-between">
-            <span>
+            <span @click="openSort">
                 &uparrow;
                 &downarrow;
                 Sort
@@ -31,9 +31,9 @@
             <h1>Marina Name</h1>
             
         </div> -->
+        <span>12 results</span>
 
-
-<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4">
+<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4 mt-2">
     <a href="#">
         <img class="rounded-t-lg" src="" alt="" />
     </a>
@@ -101,14 +101,50 @@
         </a>
     </div>
 </div>
-
-
     </div>
+
+    <transition name="slide">
+        <div id="sortContainer" class="shadow-lg" v-if="sortResultsOpen">
+            <div class="header">
+                <h1>Sort By</h1>
+                <span class="close" @click="closeSort">&cross;</span>
+            </div>
+            <fieldset>
+            <legend class="sr-only">Select a maintenance drone:</legend>
+
+                <div>
+                    <input type="radio" id="Distance" name="filter" value="Distance" checked />
+                    <label for="Distance">Distance</label>
+                </div>
+
+                <div>
+                    <input type="radio" id="Alphabetically" name="filter" value="Alphabetically" />
+                    <label for="Alphabetically">Alphabetically</label>
+                </div>
+
+                <div>
+                    <input type="radio" id="Services" name="filter" value="Services" />
+                    <label for="Services">Number Of Services</label>
+                </div>
+</fieldset>
+        </div>
+    </transition>
 </template>
 
 <script setup lang="ts">
+import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
+
+const sortResultsOpen = ref<boolean>(false);
+
+const openSort = () => {
+    sortResultsOpen.value = true;
+}
+
+const closeSort = () =>{
+    sortResultsOpen.value = false;
+}
 
 function goHome(){
     router.push("/");
@@ -116,6 +152,81 @@ function goHome(){
 </script>
 
 <style>
+div#sortContainer{
+    padding: 30px;
+    border-top: 2px solid rgb(186, 186, 186);
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: whitesmoke;
+    min-height: 30vh;
+    max-height: 50vh;
+    overflow: scroll;
+    /* transition: transform 0.3s ease-out, opacity 0.3s ease-out; */
+}
+
+div#sortContainer > div.header{
+    font-size: 25px;
+    display: flex;
+    justify-content:space-between
+}
+
+div#sortContainer > div.header > span.close:hover{
+    cursor: pointer;
+}
+
+.slide-enter-from{
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.slide-enter-to{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.slide-enter-active{
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-out;
+}
+
+.slide-leave-from{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.slide-leave-to{
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.slide-leave-active{
+    transition: transform 0.3s ease-in-out, opacity 0.5s ease-out;
+
+}
+
+/* Slide-up transition */
+/* .slide-up-enter-active, .slide-up-leave-active {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.slide-up-enter, .slide-up-leave-to {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.slide-up-enter-to {
+    transform: translateY(100%);
+    opacity: 1 !important;
+}
+
+.slide-up-leave {
+    transform: translateY(100%);
+    opacity: 1 !important;
+} */
+
 div#searchTerm{
     background-color: whitesmoke;
     padding: 15px;
