@@ -1,13 +1,14 @@
 <template>
     <div class="bg-blue-700" style="padding: 15px; padding-top: 0px; height: 80px;">
-        <div id="searchContainer">
+        <SearchBar @back="goHome"></SearchBar>
+        <!-- <div id="searchContainer">
             <div id="searchTerm">
                 <span class="back" @click="goHome">
                 &LeftArrow;
                 </span>
                 <span class="searchTerm">"Search Term here"</span>
             </div>
-        </div>
+        </div> -->
     </div>
     <div id="searchOptions" class="shadow-lg p-4">
         <div class="mt-6 flex justify-between">
@@ -20,7 +21,7 @@
                 &#9906;
                 Filter
             </span>
-            <span>                
+            <span @click="router.push('/results/map')">                
                 &GreaterLess;
                 Map
             </span>
@@ -181,6 +182,7 @@ import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 import FilterBox from '../components/experimental/FilterBox.vue';
 import { useSearchStore } from '../stores/searchStore';
+import SearchBar from '../components/experimental/SearchBar.vue';
 
 const router = useRouter();
 const searchStore = useSearchStore();
