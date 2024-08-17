@@ -16,6 +16,11 @@ export const useSearchStore = defineStore('searchStore', () => {
         // { icon: "", title: "Services", active: false },
     ]);
 
+    const marinaSearchValue = ref<string>("");
+    const serviceSearchValue =  ref<string>("");
+
+
+    //get from API
     const serviceValues = ref<string[]>([
         "Boat Hire Services",
         "Boat Sales and Brokerage",
@@ -52,5 +57,5 @@ export const useSearchStore = defineStore('searchStore', () => {
         "Boat Yard and Dock Services"
     ]);
 
-    return { searchItems, serviceValues };
+    return { searchItems, serviceValues, marinaSearchValue, serviceSearchValue };
 });

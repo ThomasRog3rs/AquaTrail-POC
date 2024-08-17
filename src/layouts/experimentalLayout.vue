@@ -11,7 +11,7 @@
         </div>
       </nav>
       <section id="search">
-        <SearchForm :search-has-error="searchHasError" :search-error-msg="searchErrorMsg" @search="search"></SearchForm>
+        <SearchForm></SearchForm>
         <!-- <div class="search-container">
           <div class="container-header">
               <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
@@ -117,25 +117,8 @@
   const searchErrorMsg = ref<string>("");
   const searchHasError = ref<boolean>(false);
 
-  
-
-  function search(payload: SearchPayload) {
-  if (
-    (payload.marina === undefined || payload.marina === null || payload.marina === '') &&
-    (payload.service === undefined || payload.service === null || payload.service  === '')
-  ) {
-    searchErrorMsg.value = "Please provide one or more values";
-    searchHasError.value = true;
-    return;
-  }
-
-  router.push("/results");
-
-  searchHasError.value = false;
-
   //Call the API
   //alert(`Searching: ${marinaSearchValue.value}, ${serviceSearchValue.value}`);
-}
 
   function closeAd(){
     adOpen.value = false;

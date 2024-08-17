@@ -6,7 +6,7 @@
                 <h3 class="mb-2">Edit your search</h3>
                 <span></span>
             </div>
-            <SearchForm :search-has-error="false" :search-error-msg="undefined"></SearchForm>
+            <SearchForm :search-has-error="false" :search-error-msg="undefined" @searched="searchBoxOpen = false"></SearchForm>
         </div>
     </transition>
 

@@ -1,15 +1,11 @@
 <template>
     <div class="search-container">
         <div class="container-header">
-            <div class="search-error bg-red-600" v-if="props.searchHasError">{{props.searchErrorMsg}}</div>            
+            <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
         </div>
         <form>            
-            <input type="search" placeholder="Search Marina Name" v-model="marinaSearchValue">
-            <v-select label="name" placeholder="Which service are you looking for?" :options="searchStore.serviceValues" v-model="serviceSearchValue"></v-select>
-            <!-- <select>
-              <option value="" disabled selected>Select Services (optional)</option>
-            </select> -->
-            <!-- <input type="number" placeholder="Distance from current location (km)"> -->
+            <input type="search" placeholder="Search Marina Name" v-model="searchStore.marinaSearchValue">
+            <v-select label="name" placeholder="Which service are you looking for?" :options="searchStore.serviceValues" v-model="searchStore.serviceSearchValue"></v-select>
         </form>
         <div class="container-footer">
             <button class="bg-blue-700" @click="search">Search</button>
@@ -20,29 +16,30 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     import { useSearchStore } from '../../stores/searchStore';
-    import { SearchPayload } from '../../types/search';
+    import { useRouter } from 'vue-router';
 
+    const router = useRouter();
     const searchStore = useSearchStore();
 
-    const props = defineProps<{
-        searchHasError: boolean;
-        searchErrorMsg: string | undefined; 
-    }>();
+    const searchErrorMsg = ref<string>("");
+    const searchHasError = ref<boolean>(false);
 
     const emit = defineEmits<{
-        (e: 'search', payload: SearchPayload): void;
+        (e: 'searched'): void;
     }>();
 
-    const marinaSearchValue = ref<string>("");
-    const serviceSearchValue = ref<string>("");
+    function search() {
+        if (
+            (searchStore.marinaSearchValue === undefined || searchStore.marinaSearchValue === null || searchStore.marinaSearchValue === '') &&
+            (searchStore.serviceSearchValue === undefined || searchStore.serviceSearchValue=== null || searchStore.serviceSearchValue  === '')
+        ) {
+            searchErrorMsg.value = "Please provide one or more values";
+            searchHasError.value = true;
+            return;
+        }
 
-    const search = () => {
-        const payload: SearchPayload = {
-            marina: marinaSearchValue.value,
-            service: serviceSearchValue.value
-        };
-
-        emit("search", payload);
-    };
-
+        router.push("/results");
+        searchHasError.value = false;
+        emit("searched");
+    }
 </script>

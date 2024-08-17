@@ -1,7 +1,19 @@
 <template>
-    <!-- <button @click="showNearByShops">Show Nearby Shops - test</button> -->
     <div class="flex-1 min-h-0 h-[calc(100vh)] w-full ml-0  sm:w-[calc(100vw)]" style="overflow: hidden;">
-        <SearchBar style="position: absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')"></SearchBar>
+      <transition name="down">
+        <div id="searchForm" class="shadow-lg" v-if="searchBoxOpen">
+            <div class="flex justify-between text-lg">
+                <span class="hover:cursor-pointer" @click="searchBoxOpen = false">&cross;</span>
+                <h3 class="mb-2">Edit your search</h3>
+                <span></span>
+            </div>
+            <SearchForm :search-has-error="false" :search-error-msg="undefined" @searched="searchBoxOpen = false"></SearchForm>
+        </div>
+    </transition>
+
+    <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
+
+        <SearchBar style="position: absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')" @click="openSearchBox"></SearchBar>
         <!-- <div class="search-info-box-container">
             <div class="search-info-box">
                 <span class="back" @click="goBack">
@@ -27,6 +39,7 @@ import { useMapStore } from '../stores/mapStore';
 import { useNavStore } from '../stores/navStore';
 // import PopupContent from './PopupContent.vue';
 // import {currentLocation, location} from '../types/location';
+import SearchForm from '../components/experimental/SearchForm.vue';
 
 const router = useRouter();
 
@@ -37,6 +50,12 @@ const popup = ref<any>(null);
 
 mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
+
+const searchBoxOpen = ref<boolean>(false);
+
+const openSearchBox = () => {
+    searchBoxOpen.value = true;
+}
 
 onMounted(() => {
     document.getElementsByTagName("body")[0].style.overflow = "hidden";
