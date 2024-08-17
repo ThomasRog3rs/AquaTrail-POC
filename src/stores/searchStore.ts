@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { marina } from '@/types/location';
 
 export const useSearchStore = defineStore('searchStore', () => {
     // Define the type for each search type object
@@ -57,5 +58,13 @@ export const useSearchStore = defineStore('searchStore', () => {
         "Boat Yard and Dock Services"
     ]);
 
-    return { searchItems, serviceValues, marinaSearchValue, serviceSearchValue };
+    const marinaSearchResults = ref<Array<marina> | null>();
+
+    return { 
+        searchItems, 
+        serviceValues, 
+        marinaSearchValue, 
+        serviceSearchValue, 
+        marinaSearchResults 
+    };
 });
