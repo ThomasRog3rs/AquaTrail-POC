@@ -198,9 +198,6 @@ onMounted(() => {
   </script>
 
   <style>
-  body{
-    overflow: scroll;
-  }
     nav, section{
       padding: 20px;
     }

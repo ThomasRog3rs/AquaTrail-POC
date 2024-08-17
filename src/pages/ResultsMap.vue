@@ -105,37 +105,15 @@ onUnmounted(() => {
 </script>
 
 <style>
-    div.search-info-box-container{
-        position: absolute;
-        top: 0;
-        z-index: 9;
-        width: 100%;
-        padding: 20px;
-    }
 
-    div.search-info-box{
-        padding: 10px;
-        padding-top: 0px;
-        background-color: whitesmoke;
-        border: 5px solid #facc15;
-        border-radius: 8px;
-    }
-
-    div.search-info-box > span.back{
-    /* margin: 5px;s */
-    font-size: 40px;
-    margin-top: -15px;
-    margin-right: 15px;
-    /* width: 15%; */
-}
 
 div.search-info-box > span.back:hover{
     cursor: pointer;
 }
 
-    body{
+    /* body{
         overflow: hidden !important;
-    }
+    } */
 
   .mapboxgl-popup-close-button {
     display: none;
