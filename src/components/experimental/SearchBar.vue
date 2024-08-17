@@ -17,4 +17,14 @@ const emit = defineEmits<{
 const goBack = () => {
     emit('back'); 
 }
+
+const openSearchForm = () => {
+
+}
 </script>
+
+<style scoped>
+div#searchContainer:hover{
+    cursor: pointer;
+}
+</style>

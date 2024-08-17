@@ -1,6 +1,20 @@
 <template>
+    <transition name="down">
+        <div id="searchForm" class="shadow-lg" v-if="searchBoxOpen">
+            <div class="flex justify-between text-lg">
+                <span class="hover:cursor-pointer" @click="searchBoxOpen = false">&cross;</span>
+                <h3 class="mb-2">Edit your search</h3>
+                <span></span>
+            </div>
+            <SearchForm :search-has-error="false" :search-error-msg="undefined"></SearchForm>
+        </div>
+    </transition>
+
+    <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
+
     <div class="bg-blue-700" style="padding: 15px; padding-top: 0px; height: 80px;">
-        <SearchBar @back="goHome"></SearchBar>
+        <SearchBar @back="goHome" @click="openSearchBox"></SearchBar>
+         
         <!-- <div id="searchContainer">
             <div id="searchTerm">
                 <span class="back" @click="goHome">
@@ -183,14 +197,24 @@ import { useRouter } from 'vue-router';
 import FilterBox from '../components/experimental/FilterBox.vue';
 import { useSearchStore } from '../stores/searchStore';
 import SearchBar from '../components/experimental/SearchBar.vue';
+import SearchForm from '../components/experimental/SearchForm.vue';
 
 const router = useRouter();
 const searchStore = useSearchStore();
 
 const showAllServiceOptions = ref<boolean>(false);
 
+const searchBoxOpen = ref<boolean>(false);
 const sortResultsOpen = ref<boolean>(false);
 const filterResultsOpen = ref<boolean>(false);
+
+const openSearchBox = () => {
+    searchBoxOpen.value = true;
+}
+
+const closeSearchBox = () => {
+    searchBoxOpen.value = false;
+}
 
 const openSort = () => {
     sortResultsOpen.value = true;
@@ -224,6 +248,47 @@ function goHome(){
 </script>
 
 <style>
+div#searchForm{
+    /* transform: translateY(0); */
+  background-color: whitesmoke;
+  z-index: 9;
+  position: fixed;
+  padding: 20px;
+  width: 100%;
+  /* text-align: center; */
+}
+
+/* Animation for slide down */
+.down-enter-from{
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+.down-enter-to{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.down-enter-active{
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-out;
+}
+
+.down-leave-from{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.down-leave-to{
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+.down-leave-active{
+    transition: transform 0.3s ease-in-out, opacity 0.5s ease-out;
+
+}
+
+/* Animation for slide up */
 .slide-enter-from{
     opacity: 0;
     transform: translateY(100%);
