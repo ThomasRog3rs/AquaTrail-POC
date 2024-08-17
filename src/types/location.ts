@@ -2,7 +2,9 @@ export type savedLocation = {
     coordinates: Array<number>,
     layer: string,
     title: string,
-    id: string
+    id: string,
+    imageUrl: string | undefined
+
 }
 
 export type location = {

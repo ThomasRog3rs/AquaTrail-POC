@@ -14,3 +14,77 @@ body, html {
     display: flex;
     flex-direction: column;
 }
+
+div.v-select.vs--single.vs--searchable{
+    /* border-bottom: 1px solid rgb(186, 186, 186); */
+    /* padding: 20px; */
+}
+div.vs__dropdown-toggle{
+    padding: 20px;
+    padding-left: 10px !important;
+    border: none;
+}
+div.vs__selected-options{
+    /* width: 95%; */
+}
+
+input.vs__search{
+    color: rgb(143, 143, 143);
+    /* width: 100%;
+    padding: 20px;
+    background-color: whitesmoke; */
+}
+
+div.vs__selected-options{
+    /* display: inline-block; */
+}
+
+div.vs__actions{
+    /* display: inline-block; */
+    /* width: 5%; */
+    /* border: 1px solid red; */
+    /* border-bottom: none; */
+    /* height: 20px !important; */
+    /* margin: auto auto; */
+}
+
+div.vs__actions > *{
+    /* margin: 0 auto; */
+    /* border: 1px solid red; */
+}
+
+ul#vs1__listbox{
+    border: 1px solid rgb(186, 186, 186);
+    background-color: whitesmoke ;
+    border-radius:6px;
+}
+
+ul#vs2__listbox > li:hover{
+    background-color: #1d4ed8 !important;
+}
+
+input[type="radio"],
+input[type="checkbox"]{
+    margin-right: 10px;
+    margin-top: 10px;
+    width: 15px;
+    height: 15px;
+}
+
+fieldset > div{
+    padding: 3px;
+    padding-left: 0px;
+    font-size: 17px;
+    /* border: 1px solid red; */
+}
+
+fieldset{
+    border-bottom: 1px solid rgb(186, 186, 186);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+fieldset > div > input[type="number"]{
+    padding: 10px;
+    border-radius: 8px;
+}
