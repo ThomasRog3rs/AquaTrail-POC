@@ -5,7 +5,7 @@
                 &LeftArrow;
                 </span>
                 <span v-if="searchStore.marinaSearchValue" class="searchTerm mr-5">&#9873; {{ searchStore.marinaSearchValue }}</span>
-                <span v-if="searchStore.serviceSearchValue && !searchStore.marinaSearchValue">&#9733; {{searchStore.serviceSearchValue}}</span>
+                <span v-if="searchStore.serviceSearchValue && !searchStore.marinaSearchValue">&#9733; {{searchStore.serviceSearchValue.value}}</span>
             </div>
         </div>
 </template>

@@ -5,7 +5,7 @@
         </div>
         <form>            
             <input type="search" placeholder="Search Marina Name" v-model="searchStore.marinaSearchValue">
-            <v-select label="name" placeholder="Which service are you looking for?" :options="searchStore.serviceValues" v-model="searchStore.serviceSearchValue"></v-select>
+            <v-select label="value" placeholder="Which service are you looking for?" :options="serviceTypes" v-model="searchStore.serviceSearchValue"></v-select>
         </form>
         <div class="container-footer">
             <button class="bg-blue-700" @click="search">Search</button>
@@ -14,9 +14,12 @@
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
     import { useSearchStore } from '../../stores/searchStore';
     import { useRouter } from 'vue-router';
+    import {ServiceTypeModel, TypesApi} from '../../api-client';
+
+    const types = new TypesApi();
 
     const router = useRouter();
     const searchStore = useSearchStore();
@@ -31,7 +34,7 @@
     function search() {
         if (
             (searchStore.marinaSearchValue === undefined || searchStore.marinaSearchValue === null || searchStore.marinaSearchValue === '') &&
-            (searchStore.serviceSearchValue === undefined || searchStore.serviceSearchValue=== null || searchStore.serviceSearchValue  === '')
+            (searchStore.serviceSearchValue === undefined || searchStore.serviceSearchValue=== null)
         ) {
             searchErrorMsg.value = "Please provide one or more values";
             searchHasError.value = true;
@@ -42,4 +45,15 @@
         searchHasError.value = false;
         emit("searched");
     }
+
+    const serviceTypes = ref<Array<ServiceTypeModel> | undefined>();
+
+    onMounted(async () => {
+        try {
+        const response:any = await types.typesServiceTypesGet(); // Replace with your API method
+        serviceTypes.value = response;
+        console.log(serviceTypes.value);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }    })
 </script>

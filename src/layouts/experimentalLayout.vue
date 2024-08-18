@@ -172,12 +172,33 @@ const requestLocation = () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   activeOption.value = searchStore.searchItems.find((x:any) => x.active)!.title;
   requestLocation();
   // Log current state immediately after request
   console.log('Initial Location:', userLocation.value);
   console.log('Initial Error:', error.value);
+
+  // const url: string = `${import.meta.env.VITE_AQUA_API_ROOT}/Types/service-types`;
+
+  // try {
+  //       const response = await fetch(url);
+  //       // Make the HTTP GET request
+
+  //       // Check if the response is OK (status code 200-299)
+  //       if (!response.ok) {
+  //           throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+
+  //       // Parse the JSON from the response
+  //       const data = await response.json();
+
+  //       // Log the JSON data to the console
+  //       console.log(data);
+  //   } catch (error) {
+  //       // Log any errors that occur
+  //       console.error('Error fetching data:', error);
+  //   }
 });
   </script>
 

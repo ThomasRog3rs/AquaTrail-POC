@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { marina } from '@/types/location';
+import * as client from '../api-client';
+
 
 export const useSearchStore = defineStore('searchStore', () => {
     // Define the type for each search type object
@@ -18,7 +20,7 @@ export const useSearchStore = defineStore('searchStore', () => {
     ]);
 
     const marinaSearchValue = ref<string>("");
-    const serviceSearchValue =  ref<string>("");
+    const serviceSearchValue =  ref<client.ServiceTypeModel>();
 
 
     //get from API
