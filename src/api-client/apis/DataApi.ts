@@ -45,10 +45,14 @@ export interface DataMarinasIdGetRequest {
 
 export interface DataMarinasSearchGetRequest {
     name?: string;
+    limit?: number;
+    offset?: number;
 }
 
 export interface DataMarinasTypeTypeGetRequest {
     type: string;
+    limit?: number;
+    offset?: number;
 }
 
 export interface DataMooringsGetRequest {
@@ -64,10 +68,14 @@ export interface DataMooringsIdGetRequest {
 
 export interface DataMooringsSearchGetRequest {
     name?: string;
+    limit?: number;
+    offset?: number;
 }
 
 export interface DataMooringsTypeTypeGetRequest {
     type: string;
+    limit?: number;
+    offset?: number;
 }
 
 export interface DataServicesGetRequest {
@@ -83,10 +91,14 @@ export interface DataServicesIdGetRequest {
 
 export interface DataServicesSearchGetRequest {
     name?: string;
+    limit?: number;
+    offset?: number;
 }
 
 export interface DataServicesTypeTypeGetRequest {
     type: string;
+    limit?: number;
+    offset?: number;
 }
 
 /**
@@ -204,6 +216,14 @@ export class DataApi extends runtime.BaseAPI {
             queryParameters['name'] = requestParameters['name'];
         }
 
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
@@ -234,6 +254,14 @@ export class DataApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -327,11 +355,19 @@ export class DataApi extends runtime.BaseAPI {
 
     /**
      */
-    async dataMooringsSearchGetRaw(requestParameters: DataMooringsSearchGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<MarinaModel>>> {
+    async dataMooringsSearchGetRaw(requestParameters: DataMooringsSearchGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<MooringModel>>> {
         const queryParameters: any = {};
 
         if (requestParameters['name'] != null) {
             queryParameters['name'] = requestParameters['name'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -343,12 +379,12 @@ export class DataApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MarinaModelFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MooringModelFromJSON));
     }
 
     /**
      */
-    async dataMooringsSearchGet(requestParameters: DataMooringsSearchGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MarinaModel>> {
+    async dataMooringsSearchGet(requestParameters: DataMooringsSearchGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MooringModel>> {
         const response = await this.dataMooringsSearchGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -364,6 +400,14 @@ export class DataApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -464,6 +508,14 @@ export class DataApi extends runtime.BaseAPI {
             queryParameters['name'] = requestParameters['name'];
         }
 
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
@@ -494,6 +546,14 @@ export class DataApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

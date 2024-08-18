@@ -103,6 +103,10 @@
   import { useMapStore } from '../stores/mapStore';
   import SearchForm from '../components/experimental/SearchForm.vue';
   import { SearchPayload } from '../types/search';
+  import * as client from '../api-client';
+  import { DataApi } from '../api-client';
+
+  const dataApi = new DataApi();
 
   const mapStore = useMapStore();
   const searchStore = useSearchStore();
@@ -178,6 +182,14 @@ onMounted(async () => {
   // Log current state immediately after request
   console.log('Initial Location:', userLocation.value);
   console.log('Initial Error:', error.value);
+
+  // const params : client.DataMarinasSearchGetRequest = {
+  //   name: "Marina",
+  //   limit: 10,
+  //   offset: 0
+  // }
+  // const res = await dataApi.dataMarinasSearchGet(params);
+  // console.log(res);
 
   // const url: string = `${import.meta.env.VITE_AQUA_API_ROOT}/Types/service-types`;
 

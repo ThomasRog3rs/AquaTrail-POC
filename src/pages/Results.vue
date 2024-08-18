@@ -41,22 +41,30 @@
             </span>
         </div>
     </div>
-    <div id="searchResults">
+    <div id="searchResults" v-if="searchStore.marinaSearchResults?.length! > 0">
         <!-- <div class="resultsCard">
             <h1>Marina Name</h1>
             
         </div> -->
-        <span>12 results</span>
+        <span>{{ searchStore.marinaSearchResults?.length }} results</span>
 
-<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4 mt-2">
+<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4 mt-2" v-for="marina in searchStore.marinaSearchResults">
     <a href="#">
         <img class="rounded-t-lg" src="" alt="" />
     </a>
     <div class="p-5">
         <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Marina Name</h5>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ marina.name }}</h5>
         </a>
-        <p class="mb-3 font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+        <p class="mb-3 font-normal text-gray-700">{{marina.notes!}}</p>
+        <ul style="list-style: inside; margin-bottom: 15px;">
+            <!-- <li v-if="marina.address">Address: {{ marina.address }}</li> -->
+            <li v-if="marina.website"><a :href="marina.website" class="text-blue-700" target="_blank"> {{marina.website }}</a></li>
+            <li v-if="marina.phoneNumber">Phone: {{ marina.phoneNumber }}</li>
+            <li v-if="marina.canalName">Canal: {{ marina.canalName }}</li>
+            <li>{{ marina.services?.length }} service</li>
+        </ul>
+
         <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
             View more
              <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -65,57 +73,9 @@
         </a>
     </div>
 </div>
-<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4">
-    <a href="#">
-        <img class="rounded-t-lg" src="" alt="" />
-    </a>
-    <div class="p-5">
-        <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Marina Name</h5>
-        </a>
-        <p class="mb-3 font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-            View more
-             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-            </svg>
-        </a>
     </div>
-</div>
-<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4">
-    <a href="#">
-        <img class="rounded-t-lg" src="" alt="" />
-    </a>
-    <div class="p-5">
-        <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Marina Name</h5>
-        </a>
-        <p class="mb-3 font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-            View more
-             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-            </svg>
-        </a>
-    </div>
-</div>
-<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4">
-    <a href="#">
-        <img class="rounded-t-lg" src="" alt="" />
-    </a>
-    <div class="p-5">
-        <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Marina Name</h5>
-        </a>
-        <p class="mb-3 font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-            View more
-             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-            </svg>
-        </a>
-    </div>
-</div>
+    <div id="searchResults" v-else>
+        No results found, try adjusting your search
     </div>
 
     <transition name="slide">
@@ -146,12 +106,12 @@
             <fieldset>
                 <legend class="">Marinas with these services:</legend>
                 <div v-if="!showAllServiceOptions" v-for="index in 5">
-                    <input type="checkbox" :id="searchStore.serviceValues[index]" name="filter-services" :value="searchStore.serviceValues[index]" />
-                    <label :for="searchStore.serviceValues[index]">{{ searchStore.serviceValues[index] }}</label>
+                    <input type="checkbox" :id="searchStore.serviceTypes![index].key!" :value="searchStore.serviceTypes![index].value" name="filter-services"  />
+                    <label :for="searchStore.serviceTypes![index].key!">{{ searchStore.serviceTypes![index].value! }}</label>
                 </div>
-                <div v-for="service in searchStore.serviceValues" v-if="showAllServiceOptions">
-                    <input type="checkbox" :id="service" name="filter-services" :value="service" />
-                    <label :for="service">{{ service }}</label>
+                <div v-for="service in searchStore.serviceTypes" v-if="showAllServiceOptions">
+                    <input type="checkbox" :id="service.key!" name="filter-services" :value="service.value!" />
+                    <label :for="service.key!">{{ service.value }}</label>
                 </div>
 
                 <span>
@@ -198,6 +158,7 @@ import FilterBox from '../components/experimental/FilterBox.vue';
 import { useSearchStore } from '../stores/searchStore';
 import SearchBar from '../components/experimental/SearchBar.vue';
 import SearchForm from '../components/experimental/SearchForm.vue';
+import * as client from '../api-client';
 
 const router = useRouter();
 const searchStore = useSearchStore();

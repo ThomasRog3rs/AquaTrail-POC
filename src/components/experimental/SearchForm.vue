@@ -17,9 +17,11 @@
     import { ref, onMounted } from 'vue';
     import { useSearchStore } from '../../stores/searchStore';
     import { useRouter } from 'vue-router';
-    import {ServiceTypeModel, TypesApi} from '../../api-client';
+    import {ServiceTypeModel, TypesApi, DataApi} from '../../api-client';
+    import * as client from '../../api-client';
 
     const types = new TypesApi();
+    const dataApi = new DataApi();
 
     const router = useRouter();
     const searchStore = useSearchStore();
@@ -31,7 +33,7 @@
         (e: 'searched'): void;
     }>();
 
-    function search() {
+    async function search() {
         if (
             (searchStore.marinaSearchValue === undefined || searchStore.marinaSearchValue === null || searchStore.marinaSearchValue === '') &&
             (searchStore.serviceSearchValue === undefined || searchStore.serviceSearchValue=== null)
@@ -40,6 +42,24 @@
             searchHasError.value = true;
             return;
         }
+
+        const params : client.DataMarinasSearchGetRequest = {
+            name: searchStore.marinaSearchValue ?? null,
+            limit: 25,
+            offset: 0
+        }
+
+        try{
+            const res : Array<client.MarinaModel> = await dataApi.dataMarinasSearchGet(params);
+            searchStore.marinaSearchResults = res;
+            console.log(searchStore.marinaSearchResults);
+        }catch(err: any){
+            console.error("Search error: ",err);
+            searchErrorMsg.value = "Error with search";
+            searchHasError.value = true;
+            return;
+        }
+
 
         router.push("/results");
         searchHasError.value = false;
@@ -50,10 +70,11 @@
 
     onMounted(async () => {
         try {
-        const response:any = await types.typesServiceTypesGet(); // Replace with your API method
+        const response:Array<client.ServiceTypeModel> = await types.typesServiceTypesGet();
         serviceTypes.value = response;
+        searchStore.serviceTypes = response;
         console.log(serviceTypes.value);
       } catch (error) {
         console.error('Error fetching data:', error);
-      }    })
+      }    });
 </script>
