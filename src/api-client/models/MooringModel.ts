@@ -100,6 +100,12 @@ export interface MooringModel {
     phoneNumber?: string | null;
     /**
      * 
+     * @type {number}
+     * @memberof MooringModel
+     */
+    distance?: number | null;
+    /**
+     * 
      * @type {MooringTypeModel}
      * @memberof MooringModel
      */
@@ -140,6 +146,7 @@ export function MooringModelFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'canalName': json['canalName'] == null ? undefined : json['canalName'],
         'notes': json['notes'] == null ? undefined : json['notes'],
         'phoneNumber': json['phoneNumber'] == null ? undefined : json['phoneNumber'],
+        'distance': json['distance'] == null ? undefined : json['distance'],
         'mooringType': json['mooringType'] == null ? undefined : MooringTypeModelFromJSON(json['mooringType']),
         'services': json['services'] == null ? undefined : ((json['services'] as Array<any>).map(ServiceModelFromJSON)),
     };
@@ -162,6 +169,7 @@ export function MooringModelToJSON(value?: MooringModel | null): any {
         'canalName': value['canalName'],
         'notes': value['notes'],
         'phoneNumber': value['phoneNumber'],
+        'distance': value['distance'],
         'mooringType': MooringTypeModelToJSON(value['mooringType']),
         'services': value['services'] == null ? undefined : ((value['services'] as Array<any>).map(ServiceModelToJSON)),
     };

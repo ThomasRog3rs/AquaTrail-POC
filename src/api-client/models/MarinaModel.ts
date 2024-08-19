@@ -100,6 +100,12 @@ export interface MarinaModel {
     phoneNumber?: string | null;
     /**
      * 
+     * @type {number}
+     * @memberof MarinaModel
+     */
+    distance?: number | null;
+    /**
+     * 
      * @type {MarinaTypeModel}
      * @memberof MarinaModel
      */
@@ -140,6 +146,7 @@ export function MarinaModelFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'canalName': json['canalName'] == null ? undefined : json['canalName'],
         'notes': json['notes'] == null ? undefined : json['notes'],
         'phoneNumber': json['phoneNumber'] == null ? undefined : json['phoneNumber'],
+        'distance': json['distance'] == null ? undefined : json['distance'],
         'marinaType': json['marinaType'] == null ? undefined : MarinaTypeModelFromJSON(json['marinaType']),
         'services': json['services'] == null ? undefined : ((json['services'] as Array<any>).map(ServiceModelFromJSON)),
     };
@@ -162,6 +169,7 @@ export function MarinaModelToJSON(value?: MarinaModel | null): any {
         'canalName': value['canalName'],
         'notes': value['notes'],
         'phoneNumber': value['phoneNumber'],
+        'distance': value['distance'],
         'marinaType': MarinaTypeModelToJSON(value['marinaType']),
         'services': value['services'] == null ? undefined : ((value['services'] as Array<any>).map(ServiceModelToJSON)),
     };

@@ -64,6 +64,12 @@ export interface ServiceModel {
     mooringId?: string | null;
     /**
      * 
+     * @type {number}
+     * @memberof ServiceModel
+     */
+    distance?: number | null;
+    /**
+     * 
      * @type {ServiceTypeModel}
      * @memberof ServiceModel
      */
@@ -93,6 +99,7 @@ export function ServiceModelFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'coordinates': json['coordinates'] == null ? undefined : json['coordinates'],
         'marinaId': json['marinaId'] == null ? undefined : json['marinaId'],
         'mooringId': json['mooringId'] == null ? undefined : json['mooringId'],
+        'distance': json['distance'] == null ? undefined : json['distance'],
         'serviceType': json['serviceType'] == null ? undefined : ServiceTypeModelFromJSON(json['serviceType']),
     };
 }
@@ -109,6 +116,7 @@ export function ServiceModelToJSON(value?: ServiceModel | null): any {
         'coordinates': value['coordinates'],
         'marinaId': value['marinaId'],
         'mooringId': value['mooringId'],
+        'distance': value['distance'],
         'serviceType': ServiceTypeModelToJSON(value['serviceType']),
     };
 }

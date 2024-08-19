@@ -26,8 +26,8 @@ export const useSearchStore = defineStore('searchStore', () => {
         // { icon: "", title: "Services", active: false },
     ]);
 
-    const marinaSearchValue = ref<string>("");
-    const serviceSearchValue =  ref<client.ServiceTypeModel>();
+    const marinaSearchValue = ref<string | undefined>(undefined);
+    const serviceSearchValue =  ref<client.ServiceTypeModel | undefined>(undefined);
 
     const serviceTypes = ref<Array<client.ServiceTypeModel> | undefined>();
     

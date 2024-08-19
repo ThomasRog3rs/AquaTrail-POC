@@ -1,11 +1,15 @@
 <template>
     <div class="bg-blue-700" style="padding: 25px; height: 80px;">
         <div class="flex justify-between text-white">
-            <span class="back" @click="goBack">
+            <span class="back w-20" @click="goBack">
                 &LeftArrow;
             </span>
-            <span>{{ marina?.name }}</span>
-            <span class="save">&#9733;</span>
+            <span class="text-xl w-full" style="text-align: center;">Marina</span>
+            <span class="save w-20">
+                
+                <template v-if="false">&#9733;</template>
+                <template v-else> &#x2606;</template>
+            </span>
         </div>
     </div>
     <div id="serviceIcons" class="shadow-lg border" v-if="iconPaths?.length! > 0">
@@ -64,6 +68,9 @@ import mapboxgl, {Map} from 'mapbox-gl';
 // import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
+import { useSearchStore } from '../stores/searchStore';
+
+const searchStore = useSearchStore();
 
 mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
@@ -81,6 +88,8 @@ const map = ref<Map|null>(null);
   const router = useRouter();
 
   const DataApi = new client.DataApi();
+  const GeoApi = new client.GeoJsonApi();
+
   const loading = ref<boolean>(true);
   
   const props = defineProps({
@@ -93,6 +102,10 @@ const map = ref<Map|null>(null);
   const marina = ref<client.MarinaModel>();
 
   const goBack = () => {
+    if(searchStore.marinaSearchValue == undefined && searchStore.serviceSearchValue == undefined){
+        router.push("/");
+        return;
+    } 
     router.push("/Results");
   }
 
@@ -112,28 +125,38 @@ const map = ref<Map|null>(null);
 
     console.log(iconPaths.value);
 
-    const geoParams :  client.DataGeoJsonIdGetRequest = {
-        geoJsonId: marina.value.geoJsonId!
+    const geoParams :  client.GeoJsonGeoJsonByIdGetRequest = {
+        id: marina.value.geoJsonId!,
     };
     console.log(geoParams);
+    console.warn(marina.value.geoJsonId)
 
-    const location = await DataApi.dataGeoJsonIdGet(geoParams);
+    const location : client.GeoJsonModel = await GeoApi.geoJsonGeoJsonByIdGet(geoParams);
     console.log("location",location);
 
     mapStore.getDataSets();
     //console.log();
     mapStore.mapLoaded = false;
     if(map.value){
+        const theMarinaCoords = location.features![0].geometry?.coordinates!;
         map.value = new mapboxgl.Map({
             //@ts-ignore
             container: map.value as HTMLElement,
-            style: 'mapbox://styles/mr-thomas-rogers/clx7qe3r701pv01qs1dtoethy',
+            style: 'mapbox://styles/mapbox/streets-v12',
             // style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
             //style: 'mapbox://styles/mapbox/streets-v12',
-            center: [-1.474008, 52.155133], // starting center in [lng, lat]
+            center: theMarinaCoords, // starting center in [lng, lat]
             //bounds: [[-22.92826178066636, 47.677731905744565], [9.98024578066787, 50.887536758179465]],
-            zoom: 6
+            zoom: 14.2
         });
+
+        // const marker1 = new mapboxgl.Marker()
+        //     .setLngLat(center)
+        //     .addTo(map.value);
+
+        new mapboxgl.Marker({ color: '#1d4ed8' })
+        .setLngLat(theMarinaCoords)
+        .addTo(map.value);
         
 
         // //@ts-ignore
@@ -170,6 +193,19 @@ const map = ref<Map|null>(null);
 
         //@ts-ignore
         map.value.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+                // Add geolocate control to the map.
+        //@ts-ignore
+        map.value.addControl(
+          new mapboxgl.GeolocateControl({
+            positionOptions: {
+              enableHighAccuracy: true  
+            },
+            // When active the map will receive updates to the device's location as it changes.
+            trackUserLocation: true,
+            // Draw an arrow next to the location dot to indicate which direction the device is heading.
+            showUserHeading: false
+          })
+        );
 
     }
 
@@ -182,12 +218,13 @@ const map = ref<Map|null>(null);
     span.back{
         font-size: 40px;
         margin-top: -20px;
-        margin-right: 15px;
+        margin-right: -15px;
     }
 
     span.save{
         font-size: 30px;
         margin-top: -5px;
+        margin-right: -25px;
     }
 
     span.back:hover,
@@ -204,6 +241,7 @@ const map = ref<Map|null>(null);
     div#serviceIcons > div{
         display: flex;
         justify-content: center;
+        flex-wrap: nowrap;
         /* gap: 20px; */
         height: 100%;
         /* border: 1px solid orange; */

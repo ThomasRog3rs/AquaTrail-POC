@@ -44,7 +44,7 @@
         }
 
         const params : client.DataMarinasSearchGetRequest = {
-            name: searchStore.marinaSearchValue ?? null,
+            name: searchStore.marinaSearchValue ?? undefined,
             limit: undefined,
             offset: 0
         }
