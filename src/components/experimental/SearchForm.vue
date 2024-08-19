@@ -43,18 +43,30 @@
             return;
         }
 
+        let serviceTypesArray: Array<string> | undefined = 
+            searchStore.serviceSearchValue ? [searchStore.serviceSearchValue.key!] : undefined;
         const params : client.DataMarinasSearchGetRequest = {
             name: searchStore.marinaSearchValue ?? undefined,
-            limit: undefined,
-            offset: 0
+            coordinates: searchStore.userLocation ?? undefined,
+            distance: undefined,
+            serviceTypes: serviceTypesArray,
+            limit: undefined,   
+            offset: 0,
         }
+
+        console.warn(params.serviceTypes);
 
         try{
             const res : Array<client.MarinaModel> = await dataApi.dataMarinasSearchGet(params);
             searchStore.marinaSearchResults = res;
             console.log(searchStore.marinaSearchResults);
         }catch(err: any){
-            console.error("Search error: ",err);
+            if (err.response && err.response.status === 404) {
+                router.push("/results");
+                searchStore.marinaSearchResults = [] as Array<client.MarinaModel> ;
+                return;
+            }
+            console.error("Search error: ", err);
             searchErrorMsg.value = "Error with search";
             searchHasError.value = true;
             return;

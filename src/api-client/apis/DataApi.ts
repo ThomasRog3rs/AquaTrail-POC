@@ -37,6 +37,8 @@ export interface DataMarinasGetRequest {
     distance?: number;
     limit?: number;
     offset?: number;
+    serviceTypes?: Array<string>;
+    matchAllServices?: boolean;
 }
 
 export interface DataMarinasIdGetRequest {
@@ -49,6 +51,8 @@ export interface DataMarinasSearchGetRequest {
     distance?: number;
     limit?: number;
     offset?: number;
+    serviceTypes?: Array<string>;
+    matchAllServices?: boolean;
 }
 
 export interface DataMarinasTypeTypeGetRequest {
@@ -64,6 +68,8 @@ export interface DataMooringsGetRequest {
     distance?: number;
     limit?: number;
     offset?: number;
+    serviceTypes?: Array<string>;
+    matchAllServices?: boolean;
 }
 
 export interface DataMooringsIdGetRequest {
@@ -76,6 +82,8 @@ export interface DataMooringsSearchGetRequest {
     distance?: number;
     limit?: number;
     offset?: number;
+    serviceTypes?: Array<string>;
+    matchAllServices?: boolean;
 }
 
 export interface DataMooringsTypeTypeGetRequest {
@@ -91,6 +99,7 @@ export interface DataServicesGetRequest {
     distance?: number;
     limit?: number;
     offset?: number;
+    serviceTypes?: Array<string>;
 }
 
 export interface DataServicesIdGetRequest {
@@ -103,6 +112,7 @@ export interface DataServicesSearchGetRequest {
     distance?: number;
     limit?: number;
     offset?: number;
+    serviceTypes?: Array<string>;
 }
 
 export interface DataServicesTypeTypeGetRequest {
@@ -167,6 +177,14 @@ export class DataApi extends runtime.BaseAPI {
 
         if (requestParameters['offset'] != null) {
             queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['serviceTypes'] != null) {
+            queryParameters['serviceTypes'] = requestParameters['serviceTypes'];
+        }
+
+        if (requestParameters['matchAllServices'] != null) {
+            queryParameters['matchAllServices'] = requestParameters['matchAllServices'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -242,6 +260,14 @@ export class DataApi extends runtime.BaseAPI {
 
         if (requestParameters['offset'] != null) {
             queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['serviceTypes'] != null) {
+            queryParameters['serviceTypes'] = requestParameters['serviceTypes'];
+        }
+
+        if (requestParameters['matchAllServices'] != null) {
+            queryParameters['matchAllServices'] = requestParameters['matchAllServices'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -331,6 +357,14 @@ export class DataApi extends runtime.BaseAPI {
             queryParameters['offset'] = requestParameters['offset'];
         }
 
+        if (requestParameters['serviceTypes'] != null) {
+            queryParameters['serviceTypes'] = requestParameters['serviceTypes'];
+        }
+
+        if (requestParameters['matchAllServices'] != null) {
+            queryParameters['matchAllServices'] = requestParameters['matchAllServices'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
@@ -404,6 +438,14 @@ export class DataApi extends runtime.BaseAPI {
 
         if (requestParameters['offset'] != null) {
             queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['serviceTypes'] != null) {
+            queryParameters['serviceTypes'] = requestParameters['serviceTypes'];
+        }
+
+        if (requestParameters['matchAllServices'] != null) {
+            queryParameters['matchAllServices'] = requestParameters['matchAllServices'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -493,6 +535,10 @@ export class DataApi extends runtime.BaseAPI {
             queryParameters['offset'] = requestParameters['offset'];
         }
 
+        if (requestParameters['serviceTypes'] != null) {
+            queryParameters['serviceTypes'] = requestParameters['serviceTypes'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
@@ -566,6 +612,10 @@ export class DataApi extends runtime.BaseAPI {
 
         if (requestParameters['offset'] != null) {
             queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['serviceTypes'] != null) {
+            queryParameters['serviceTypes'] = requestParameters['serviceTypes'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

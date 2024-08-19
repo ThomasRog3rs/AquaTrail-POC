@@ -4,7 +4,7 @@
             <span class="back w-20" @click="goBack">
                 &LeftArrow;
             </span>
-            <span class="text-xl w-full" style="text-align: center;">Marina</span>
+            <span class="text-xl w-full" style="text-align: center;">{{marina?.type?.toLowerCase().charAt(0).toUpperCase() + marina?.type?.toLowerCase().slice(1)!}}</span>
             <span class="save w-20">
                 
                 <template v-if="false">&#9733;</template>

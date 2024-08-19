@@ -25,21 +25,17 @@
           </div>
         </div> -->
       </section>
-      <template v-if="userLocation">
+      <template v-if="userLocation && marinasClose != undefined">
       <div style="padding: 20px; padding-bottom: 0px;">
         <h2 class="mb-2">{{ activeOption }} close to you</h2>
       </div>
       <section id="close-by">
         <div class="close-items">
-          <Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="true" :distance="1.2"></Card>
-<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="false" :distance="1.2"></Card>
-<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="true" :distance="1.2"></Card>
+          <Card v-if="marinasClose != undefined" v-for="marina in marinasClose" :id="marina.id!" :name="marina.name!" :description="marina.notes!" image="" :has-image="false" :distance="(marina.distance!/1000).toFixed(2)"></Card>
         </div>
       </section>
     </template>
+    
     <template v-if="mapStore.savedLocations.length > 0">
       <div style="padding: 20px; padding-bottom: 0px;">
         <h2 class="mb-2">Your saved locations</h2>
@@ -151,6 +147,7 @@ const requestLocation = () => {
           longitude: position.coords.longitude,
         };
         console.log('Location:', userLocation.value);  // Log location when obtained
+        searchStore.userLocation = `${userLocation.value.latitude}, ${userLocation.value.longitude}`;
       },
       (err) => {
         switch (err.code) {
@@ -176,12 +173,27 @@ const requestLocation = () => {
   }
 };
 
+const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
+
 onMounted(async () => {
   activeOption.value = searchStore.searchItems.find((x:any) => x.active)!.title;
   requestLocation();
   // Log current state immediately after request
   console.log('Initial Location:', userLocation.value);
   console.log('Initial Error:', error.value);
+
+  //get marinas close
+  if(searchStore.userLocation != undefined){
+      const marinaParams : client.DataMarinasGetRequest = {
+      coordinates: searchStore.userLocation,
+      distance: 10000,
+      limit: 5
+    }
+
+    marinasClose.value = await dataApi.dataMarinasGet(marinaParams) ?? undefined;
+    console.warn(marinasClose.value)
+  }
+
 
   // const params : client.DataMarinasSearchGetRequest = {
   //   name: "Marina",

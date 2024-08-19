@@ -33,6 +33,8 @@ export const useSearchStore = defineStore('searchStore', () => {
     
     const marinaSearchResults = ref<Array<client.MarinaModel>>();
 
+    const userLocation = ref<string | undefined>(undefined);
+
     const sortOptions =  ref<Array<sortOption>>(); 
     sortOptions.value = [
         // {name: "Distance", active: true, id: 1},
@@ -42,9 +44,9 @@ export const useSearchStore = defineStore('searchStore', () => {
 
     function resetSortOptions(){
         sortOptions.value = [
-            // {name: "Distance", active: true, id: 1},
-            {name: "Alphabetically", active: true, id: 2},
-            {name: "Number Of Services", active: false, id: 3}
+            {name: "Alphabetically", active: true, id: 1},
+            {name: "Number Of Services", active: false, id: 2},
+            {name: "Distance", active: false, id: 3}
         ]
     }
 
@@ -60,7 +62,9 @@ export const useSearchStore = defineStore('searchStore', () => {
         if(marinaSearchResults.value === undefined) return;
         switch(sortItem.name){
             case "Distance":
-                alert("coming soon");
+                marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
+                    return  (a.distance || 0) - (b.distance || 0);
+                });
                 break;
             case "Alphabetically":
                 marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
@@ -88,6 +92,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         marinaSearchResults ,
         sortOptions,
         setSortOption,
-        resetSortOptions
+        resetSortOptions,
+        userLocation
     };
 });
