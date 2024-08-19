@@ -45,7 +45,7 @@
 
         const params : client.DataMarinasSearchGetRequest = {
             name: searchStore.marinaSearchValue ?? null,
-            limit: 25,
+            limit: undefined,
             offset: 0
         }
 
@@ -63,6 +63,7 @@
 
         router.push("/results");
         searchHasError.value = false;
+        searchStore.resetSortOptions();
         emit("searched");
     }
 

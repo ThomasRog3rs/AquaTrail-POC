@@ -62,15 +62,15 @@
             <li v-if="marina.website"><a :href="marina.website" class="text-blue-700" target="_blank"> {{marina.website }}</a></li>
             <li v-if="marina.phoneNumber">Phone: {{ marina.phoneNumber }}</li>
             <li v-if="marina.canalName">Canal: {{ marina.canalName }}</li>
-            <li>{{ marina.services?.length }} service</li>
+            <li>{{ marina.services?.length }} service(s)</li>
         </ul>
 
-        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+        <router-link :to="{name: 'Marina', params: {id: marina.id}}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
             View more
              <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
             </svg>
-        </a>
+        </router-link>
     </div>
 </div>
     </div>
@@ -82,20 +82,9 @@
         <FilterBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
             <fieldset>
             <legend class="sr-only">Select an option to sort the results:</legend>
-
-                <div>
-                    <input type="radio" id="Distance" name="filter" value="Distance" checked />
-                    <label for="Distance">Distance</label>
-                </div>
-
-                <div>
-                    <input type="radio" id="Alphabetically" name="filter" value="Alphabetically" />
-                    <label for="Alphabetically">Alphabetically</label>
-                </div>
-
-                <div>
-                    <input type="radio" id="Services" name="filter" value="Services" />
-                    <label for="Services">Number Of Services</label>
+                <div v-for="sortOption in searchStore.sortOptions" :key="sortOption.id">
+                    <input type="radio" :id="sortOption.id!.toString()" name="filter" :value="sortOption.id!" :checked="sortOption.active" @click="searchStore.setSortOption(sortOption.id)" />
+                    <label :for="sortOption.id!.toString()">{{sortOption.name}}</label>
                 </div>
             </fieldset>
         </FilterBox>
@@ -152,7 +141,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import { useRouter } from 'vue-router';
 import FilterBox from '../components/experimental/FilterBox.vue';
 import { useSearchStore } from '../stores/searchStore';
@@ -318,7 +307,7 @@ div#searchOptions{
     height: 80px;
 }
 
-div#searchOptions > div > *{
+div#searchOptions > div > span{
     /* border: 1px solid red; */
     width: 100%;
     text-align: center;

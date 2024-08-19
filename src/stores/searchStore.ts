@@ -12,6 +12,13 @@ export const useSearchStore = defineStore('searchStore', () => {
         active: boolean
     };
 
+    //Define the type for sort options
+    type sortOption = {
+        name: string,
+        active: boolean,
+        id: number
+    }
+
     // Initialize the searchTypes array with the correct structure
     const searchItems = ref<SearchType[]>([
         { icon: "", title: "Marinas", active: true },
@@ -26,11 +33,61 @@ export const useSearchStore = defineStore('searchStore', () => {
     
     const marinaSearchResults = ref<Array<client.MarinaModel>>();
 
+    const sortOptions =  ref<Array<sortOption>>(); 
+    sortOptions.value = [
+        // {name: "Distance", active: true, id: 1},
+        {name: "Alphabetically", active: true, id: 2},
+        {name: "Number Of Services", active: false, id: 3}
+    ]
+
+    function resetSortOptions(){
+        sortOptions.value = [
+            // {name: "Distance", active: true, id: 1},
+            {name: "Alphabetically", active: true, id: 2},
+            {name: "Number Of Services", active: false, id: 3}
+        ]
+    }
+
+    function setSortOption(id:number){
+        const sortItem : sortOption | undefined = sortOptions.value?.find(x => x.id === id);
+        if(sortItem === undefined) return;
+        sortOptions.value?.forEach(o => o.active = false);
+        sortItem.active = true;
+        filterBy(sortItem);
+    }
+
+    function filterBy(sortItem:sortOption){
+        if(marinaSearchResults.value === undefined) return;
+        switch(sortItem.name){
+            case "Distance":
+                alert("coming soon");
+                break;
+            case "Alphabetically":
+                marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
+                    return a?.name!.localeCompare(b?.name!);
+                });
+                // alert("sorting abc")
+                break;
+            case "Number Of Services":
+                marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
+                    return  (b.services?.length || 0) - (a.services?.length || 0);
+                });
+                // alert("sorting #services");
+
+                break;
+            default:
+                break;
+        }
+    }
+
     return { 
         searchItems,
         serviceTypes,
         marinaSearchValue, 
         serviceSearchValue, 
-        marinaSearchResults 
+        marinaSearchResults ,
+        sortOptions,
+        setSortOption,
+        resetSortOptions
     };
 });
