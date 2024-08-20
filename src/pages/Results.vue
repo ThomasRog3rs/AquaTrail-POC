@@ -83,10 +83,12 @@
         <FilterBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
             <fieldset>
             <legend class="sr-only">Select an option to sort the results:</legend>
-                <div v-for="sortOption in searchStore.sortOptions" :key="sortOption.id">
-                    <input type="radio" :id="sortOption.id!.toString()" name="filter" :value="sortOption.id!" :checked="sortOption.active" @click="searchStore.setSortOption(sortOption.id)" />
-                    <label :for="sortOption.id!.toString()">{{sortOption.name}}</label>
-                </div>
+                <template v-for="sortOption in searchStore.sortOptions" :key="sortOption.id">
+                    <div v-if="sortOption.enabled === true">
+                        <input type="radio" :id="sortOption.id!.toString()" name="filter" :value="sortOption.id!" :checked="sortOption.active" @click="searchStore.setSortOption(sortOption.id)" />
+                        <label :for="sortOption.id!.toString()">{{sortOption.name}}</label>
+                    </div>
+                </template>
             </fieldset>
         </FilterBox>
     </transition>
@@ -142,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
+import {onBeforeMount, onMounted, ref} from 'vue';
 import { useRouter } from 'vue-router';
 import FilterBox from '../components/experimental/FilterBox.vue';
 import { useSearchStore } from '../stores/searchStore';
@@ -196,6 +198,16 @@ const hideAllServiceOptions = () => {
 function goHome(){
     router.push("/");
 }
+
+onMounted(() => {
+    searchStore.setSortOption(1);
+})
+
+onBeforeMount(() => {
+    if(searchStore.userLocation){
+        searchStore.sortOptions!.find(x => x.name === "Distance")!.enabled = true;
+    }
+})
 </script>
 
 <style>

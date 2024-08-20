@@ -16,7 +16,8 @@ export const useSearchStore = defineStore('searchStore', () => {
     type sortOption = {
         name: string,
         active: boolean,
-        id: number
+        id: number,
+        enabled: boolean
     }
 
     // Initialize the searchTypes array with the correct structure
@@ -37,16 +38,17 @@ export const useSearchStore = defineStore('searchStore', () => {
 
     const sortOptions =  ref<Array<sortOption>>(); 
     sortOptions.value = [
-        // {name: "Distance", active: true, id: 1},
-        {name: "Alphabetically", active: true, id: 2},
-        {name: "Number Of Services", active: false, id: 3}
+        {name: "Alphabetically", active: true, enabled: true, id: 1},
+        {name: "Number Of Services", active: false, enabled: true, id: 2},
+        {name: "Distance", active: true, enabled: false, id: 3},
+
     ]
 
     function resetSortOptions(){
         sortOptions.value = [
-            {name: "Alphabetically", active: true, id: 1},
-            {name: "Number Of Services", active: false, id: 2},
-            {name: "Distance", active: false, id: 3}
+            {name: "Alphabetically", active: true, enabled: true, id: 1},
+            {name: "Number Of Services", active: false, enabled: true, id: 2},
+            {name: "Distance", active: false, enabled: false, id: 3}
         ]
     }
 
@@ -55,10 +57,10 @@ export const useSearchStore = defineStore('searchStore', () => {
         if(sortItem === undefined) return;
         sortOptions.value?.forEach(o => o.active = false);
         sortItem.active = true;
-        filterBy(sortItem);
+        sortrBy(sortItem);
     }
 
-    function filterBy(sortItem:sortOption){
+    function sortrBy(sortItem:sortOption){
         if(marinaSearchResults.value === undefined) return;
         switch(sortItem.name){
             case "Distance":

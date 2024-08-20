@@ -2,7 +2,8 @@
       <nav class="bg-blue-700">
         <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
         <h1 class="logo">Mooring Pin</h1>
-        <p v-if="userLocation">Your location: {{ userLocation.latitude }}, {{ userLocation.longitude }}</p>        <div class="search-types">
+        <!-- <p v-if="userLocation">Your location: {{ userLocation.latitude }}, {{ userLocation.longitude }}</p>         -->
+        <div class="search-types">
           <template v-if="searchStore.searchItems.length > 1" v-for="type in searchStore.searchItems">
               <div class="search-type" :class="{ active: type.active }" @click="setActive(type.title)">
                 {{ type.title }}
@@ -35,7 +36,7 @@
         </div>
       </section>
     </template>
-    
+
     <template v-if="mapStore.savedLocations.length > 0">
       <div style="padding: 20px; padding-bottom: 0px;">
         <h2 class="mb-2">Your saved locations</h2>
@@ -49,7 +50,7 @@
 " image="" :has-image="true" :distance="1.2"></Card>
 <Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
 " image="" :has-image="false" :distance="1.2"></Card>
-<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
+<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sithttp://localhost:5173/ amet, consectetur adipisicing elit. Assumenda, quam?
 " image="" :has-image="true" :distance="1.2"></Card> -->
         </div>
       </section>
@@ -92,7 +93,7 @@
   </template>
   <script setup lang="ts">
   import 'vue-select/dist/vue-select.css';
-  import {ref, onMounted} from 'vue';
+  import {ref, onMounted, watchEffect} from 'vue';
   import {useRouter} from 'vue-router';
   import Card from '../components/experimental/Card.vue';
   import { useSearchStore } from '../stores/searchStore';
@@ -175,25 +176,26 @@ const requestLocation = () => {
 
 const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
 
+  watchEffect(async () =>{
+      if(searchStore.userLocation != undefined){
+        console.log("get close")!
+        const marinaParams : client.DataMarinasGetRequest = {
+        coordinates: searchStore.userLocation,
+        distance: 10000,
+        limit: 5
+      }
+
+      marinasClose.value = await dataApi.dataMarinasGet(marinaParams) ?? undefined;
+      console.warn(marinasClose.value)
+    }
+  });
+
 onMounted(async () => {
   activeOption.value = searchStore.searchItems.find((x:any) => x.active)!.title;
   requestLocation();
   // Log current state immediately after request
   console.log('Initial Location:', userLocation.value);
   console.log('Initial Error:', error.value);
-
-  //get marinas close
-  if(searchStore.userLocation != undefined){
-      const marinaParams : client.DataMarinasGetRequest = {
-      coordinates: searchStore.userLocation,
-      distance: 10000,
-      limit: 5
-    }
-
-    marinasClose.value = await dataApi.dataMarinasGet(marinaParams) ?? undefined;
-    console.warn(marinasClose.value)
-  }
-
 
   // const params : client.DataMarinasSearchGetRequest = {
   //   name: "Marina",
