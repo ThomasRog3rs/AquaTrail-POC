@@ -37,7 +37,7 @@
       </section>
     </template>
 
-    <template v-if="mapStore.savedLocations.length > 0">
+    <!-- <template v-if="mapStore.savedLocations.length > 0">
       <div style="padding: 20px; padding-bottom: 0px;">
         <h2 class="mb-2">Your saved locations</h2>
       </div>
@@ -46,15 +46,9 @@
           <template v-for="location in mapStore.savedLocations" :key="location.id">
                <Card :name="location.title!" :description="undefined" image="" :has-image="false" :distance="1.2"></Card>
             </template>
-          <!-- <Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="true" :distance="1.2"></Card>
-<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="false" :distance="1.2"></Card>
-<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sithttp://localhost:5173/ amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="true" :distance="1.2"></Card> -->
         </div>
       </section>
-    </template>
+    </template> -->
 
 
 <footer class="bg-blue-700 rounded-lg shadow m-4">
