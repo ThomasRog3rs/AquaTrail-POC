@@ -10,7 +10,7 @@
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ props.name }}</h5>
         </a>
         <p class="mb-3 font-normal text-gray-700">{{props.description}}</p>
-        <p>{{ props.distance }}km</p>
+        <p>{{ props.distance }} miles</p>
     </div>
 </router-link>
 </div>

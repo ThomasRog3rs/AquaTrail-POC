@@ -63,7 +63,7 @@
             <li v-if="marina.phoneNumber">Phone: {{ marina.phoneNumber }}</li>
             <li v-if="marina.canalName">Canal: {{ marina.canalName }}</li>
             <li>{{ marina.services?.length }} service(s)</li>
-            <li v-if="marina.distance! > 0">Distance: {{ (marina.distance! / 100).toFixed(2) }} km</li>
+            <li v-if="marina.distance! > 0">Distance: {{ (marina.distance!).toFixed(2) }} miles</li>
         </ul>
 
         <router-link :to="{name: 'Marina', params: {id: marina.id}}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
@@ -80,7 +80,7 @@
     </div>
 
     <transition name="slide">
-        <FilterBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
+        <SortBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
             <fieldset>
             <legend class="sr-only">Select an option to sort the results:</legend>
                 <template v-for="sortOption in searchStore.sortOptions" :key="sortOption.id">
@@ -90,55 +90,14 @@
                     </div>
                 </template>
             </fieldset>
-        </FilterBox>
+        </SortBox>
     </transition>
+    <!-- <FilterBox :open="filterResultsOpen" @close="closeFilter">
+    </FilterBox> -->
 
     <transition name="slide">
-        <FilterBox :open="filterResultsOpen" title="Filter By" @close="closeFilter">
-            <fieldset>
-                <legend class="">Marinas with these services:</legend>
-                <div v-if="!showAllServiceOptions" v-for="index in 5">
-                    <input type="checkbox" :id="searchStore.serviceTypes![index].key!" :value="searchStore.serviceTypes![index].value" name="filter-services"  />
-                    <label :for="searchStore.serviceTypes![index].key!">{{ searchStore.serviceTypes![index].value! }}</label>
-                </div>
-                <div v-for="service in searchStore.serviceTypes" v-if="showAllServiceOptions">
-                    <input type="checkbox" :id="service.key!" name="filter-services" :value="service.value!" />
-                    <label :for="service.key!">{{ service.value }}</label>
-                </div>
-
-                <span>
-                    <span v-if="!showAllServiceOptions" @click="displayAllServiceOptions" class="text-blue-700 cursor-auto hover:cursor-pointer">View More</span>
-                    <span v-if="showAllServiceOptions" @click="hideAllServiceOptions" class="text-blue-700 cursor-auto hover:cursor-pointer">View Less</span>
-                </span>
-            </fieldset>
-            <fieldset>
-            <legend class="">Distance:</legend>
-                <div>
-                    <input type="checkbox" id="Distance" name="filter" value="Distance" checked />
-                    <label for="Distance">Filter by distance</label>
-                </div>
-                <div>
-                    <input class="shadow" type="number" id="Distance" name="filter" value="Distance" placeholder="distance (km)" /> &ThickSpace; km
-                    <!-- <label for="Distance">Filter by distance</label> -->
-                </div>
-            </fieldset>
-            <fieldset>
-            <legend class="">Marinas with these close by:</legend>
-                <div>
-                    <input type="checkbox" id="Pubs" name="filter-close" value="Pubs" checked />
-                    <label for="Pubs">Pubs</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="Supermarkets" name="filter-shop" value="Supermarkets" />
-                    <label for="Supermarkets">Supermarkets</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="Transport" name="filter-transport" value="Transport" />
-                    <label for="Transport">Public transport</label>
-                </div>
-            </fieldset>
+        <FilterBox :open="filterResultsOpen" @close="closeFilter">
+            <h1>test</h1>
         </FilterBox>
     </transition>
 </template>
@@ -146,6 +105,7 @@
 <script setup lang="ts">
 import {onBeforeMount, onMounted, ref} from 'vue';
 import { useRouter } from 'vue-router';
+import SortBox from '../components/experimental/SortBox.vue';
 import FilterBox from '../components/experimental/FilterBox.vue';
 import { useSearchStore } from '../stores/searchStore';
 import SearchBar from '../components/experimental/SearchBar.vue';
@@ -187,20 +147,14 @@ const closeFilter = () => {
     filterResultsOpen.value = false;
 }
 
-const displayAllServiceOptions = () => {
-    showAllServiceOptions.value = true;
-}
-
-const hideAllServiceOptions = () => {
-    showAllServiceOptions.value = false;
-}
-
 function goHome(){
     router.push("/");
 }
 
-onMounted(() => {
+onMounted(async () => {
     searchStore.setSortOption(1);
+    await searchStore.resetServiceFilterOptions();
+    searchStore.setServiceFilterOptionActive(searchStore?.serviceSearchValue?.key!);
 })
 
 onBeforeMount(() => {

@@ -32,7 +32,7 @@
       </div>
       <section id="close-by">
         <div class="close-items">
-          <Card v-if="marinasClose != undefined" v-for="marina in marinasClose" :id="marina.id!" :name="marina.name!" :description="marina.notes!" image="" :has-image="false" :distance="(marina.distance!/1000).toFixed(2)"></Card>
+          <Card v-if="marinasClose != undefined" v-for="marina in marinasClose" :id="marina.id!" :name="marina.name!" :description="marina.notes!" image="" :has-image="false" :distance="(marina.distance!.toFixed(2))"></Card>
         </div>
       </section>
     </template>
@@ -142,7 +142,7 @@ const requestLocation = () => {
           longitude: position.coords.longitude,
         };
         console.log('Location:', userLocation.value);  // Log location when obtained
-        searchStore.userLocation = `${userLocation.value.latitude}, ${userLocation.value.longitude}`;
+        searchStore.userLocation = `${userLocation.value.longitude}, ${userLocation.value.latitude}`;
       },
       (err) => {
         switch (err.code) {
@@ -172,14 +172,17 @@ const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
 
   watchEffect(async () =>{
       if(searchStore.userLocation != undefined){
-        console.log("get close")!
+        console.log("get close", searchStore.userLocation);
         const marinaParams : client.DataMarinasGetRequest = {
         coordinates: searchStore.userLocation,
-        distance: 10000,
-        limit: 5
+        distance: 8,
+        limit: 20
       }
 
       marinasClose.value = await dataApi.dataMarinasGet(marinaParams) ?? undefined;
+      marinasClose.value = marinasClose.value.sort((a : client.MarinaModel,b : client.MarinaModel) => {
+       return a?.distance! - b?.distance!
+      });
       console.warn(marinasClose.value)
     }
   });

@@ -76,6 +76,8 @@
         router.push("/results");
         searchHasError.value = false;
         searchStore.resetSortOptions();
+        searchStore.resetServiceFilterOptions();
+        // searchStore.setServiceFilterOptionActive(searchStore?.serviceSearchValue?.key!); // moved to Results on mounted
         emit("searched");
     }
 

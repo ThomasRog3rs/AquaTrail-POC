@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { marina } from '@/types/location';
 import * as client from '../api-client';
+import { TypesApi } from '../api-client';
 
 
 export const useSearchStore = defineStore('searchStore', () => {
+    const types = new TypesApi();
     // Define the type for each search type object
     type SearchType = {
         icon: string,
@@ -18,6 +19,11 @@ export const useSearchStore = defineStore('searchStore', () => {
         active: boolean,
         id: number,
         enabled: boolean
+    }
+
+    type filterOption = {
+        serviceType: client.ServiceTypeModel,
+        active: boolean
     }
 
     // Initialize the searchTypes array with the correct structure
@@ -43,6 +49,39 @@ export const useSearchStore = defineStore('searchStore', () => {
         {name: "Distance", active: true, enabled: false, id: 3},
 
     ]
+
+    const serviceFilterOptions = ref<Array<filterOption>>();
+
+    async function getServiceTypes(){
+        try {
+            const response:Array<client.ServiceTypeModel> = await types.typesServiceTypesGet();
+            serviceTypes.value = response;
+            console.log(serviceTypes.value);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+    }
+
+    async function resetServiceFilterOptions(){
+        await getServiceTypes();
+        serviceFilterOptions.value = serviceTypes.value?.map(x => {
+            const filterOption : filterOption = {
+                serviceType: x,
+                active: false
+            }
+            return filterOption;
+        }).sort((a:filterOption, b:filterOption) => {
+            return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
+        });
+    }
+
+    function setServiceFilterOptionActive(key: string){
+        const option = serviceFilterOptions.value?.find(x => x.serviceType.key === key);
+        if(option){
+            option.active = true;
+        }
+
+    }
 
     function resetSortOptions(){
         sortOptions.value = [
@@ -95,6 +134,8 @@ export const useSearchStore = defineStore('searchStore', () => {
         sortOptions,
         setSortOption,
         resetSortOptions,
-        userLocation
+        userLocation,
+        resetServiceFilterOptions,
+        serviceFilterOptions,setServiceFilterOptionActive
     };
 });
