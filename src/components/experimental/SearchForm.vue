@@ -47,13 +47,15 @@
         // }
 
         if (
-            (searchStore.searchLocationValue === undefined || searchStore.searchLocationValue === null || searchStore.searchLocationValue === '') &&
+            (searchStore.searchLocationValue === undefined || searchStore.searchLocationValue === null || searchStore.searchLocationValue === '') ||
             (searchStore.searchRadiusValue === undefined || searchStore.searchRadiusValue=== null)
         ) {
-            searchErrorMsg.value = "Please provide one or more values";
+            searchErrorMsg.value = "Please complete the search form";
             searchHasError.value = true;
             return;
         }
+
+        // alert(searchStore.searchRadiusValue);
 
         //get Location
         const locationParams : client.LocationSearchGetRequest = {
