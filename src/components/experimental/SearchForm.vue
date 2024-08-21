@@ -36,6 +36,20 @@
         (e: 'searched'): void;
     }>();
 
+    function truncateLocation(response: string): string {
+    // Split the response string by commas
+    const parts = response.split(',');
+
+    // Check if there are at least two commas in the response
+    if (parts.length >= 2) {
+        // Join the first two parts and return the result
+        return parts.slice(0, 2).join(',');
+    }
+
+    // If there are fewer than two parts, return the original string
+    return response;
+}
+
     async function search() {
         // if (
         //     (searchStore.marinaSearchValue === undefined || searchStore.marinaSearchValue === null || searchStore.marinaSearchValue === '') &&
@@ -66,6 +80,7 @@
         try{
             const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
             locationCoordinates = loactionResponse[0].coordinates!;
+            searchStore.searchLocationValue = truncateLocation(loactionResponse[0].name!);
         }catch(err: any){
             console.error("Location error: ", err);
             console.warn(err.response.statusText);
