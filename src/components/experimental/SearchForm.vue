@@ -1,11 +1,13 @@
 <template>
-    <div class="search-container">
+    <div class="search-container shadow-xl">
         <div class="container-header">
             <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
         </div>
-        <form>            
-            <input type="search" placeholder="Search Marina Name" v-model="searchStore.marinaSearchValue">
-            <v-select label="value" placeholder="Which service are you looking for?" :options="serviceTypes" v-model="searchStore.serviceSearchValue"></v-select>
+        <form>
+            <input  type="text" placeholder="Location" v-model="searchStore.searchLocationValue">     
+            <input type="number" placeholder="Radius (miles)" v-model="searchStore.searchRadiusValue">       
+            <!-- <input type="search" placeholder="Search Marina Name" v-model="searchStore.marinaSearchValue"> -->
+            <!-- <v-select label="value" placeholder="Which service are you looking for?" :options="serviceTypes" v-model="searchStore.serviceSearchValue"></v-select> -->
         </form>
         <div class="container-footer">
             <button class="bg-blue-700" @click="search">Search</button>
@@ -17,11 +19,12 @@
     import { ref, onMounted } from 'vue';
     import { useSearchStore } from '../../stores/searchStore';
     import { useRouter } from 'vue-router';
-    import {ServiceTypeModel, TypesApi, DataApi} from '../../api-client';
+    import {ServiceTypeModel, TypesApi, DataApi, LocationApi} from '../../api-client';
     import * as client from '../../api-client';
 
     const types = new TypesApi();
     const dataApi = new DataApi();
+    const locationApi = new LocationApi();
 
     const router = useRouter();
     const searchStore = useSearchStore();
@@ -34,27 +37,57 @@
     }>();
 
     async function search() {
+        // if (
+        //     (searchStore.marinaSearchValue === undefined || searchStore.marinaSearchValue === null || searchStore.marinaSearchValue === '') &&
+        //     (searchStore.serviceSearchValue === undefined || searchStore.serviceSearchValue=== null)
+        // ) {
+        //     searchErrorMsg.value = "Please provide one or more values";
+        //     searchHasError.value = true;
+        //     return;
+        // }
+
         if (
-            (searchStore.marinaSearchValue === undefined || searchStore.marinaSearchValue === null || searchStore.marinaSearchValue === '') &&
-            (searchStore.serviceSearchValue === undefined || searchStore.serviceSearchValue=== null)
+            (searchStore.searchLocationValue === undefined || searchStore.searchLocationValue === null || searchStore.searchLocationValue === '') &&
+            (searchStore.searchRadiusValue === undefined || searchStore.searchRadiusValue=== null)
         ) {
             searchErrorMsg.value = "Please provide one or more values";
             searchHasError.value = true;
             return;
         }
 
-        let serviceTypesArray: Array<string> | undefined = 
-            searchStore.serviceSearchValue ? [searchStore.serviceSearchValue.key!] : undefined;
+        //get Location
+        const locationParams : client.LocationSearchGetRequest = {
+            query: searchStore.searchLocationValue
+        }
+
+        let locationCoordinates : string | undefined = undefined;
+        try{
+            const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
+            locationCoordinates = loactionResponse[0].coordinates!;
+        }catch(err: any){
+            console.error("Location error: ", err);
+            console.warn(err.response.statusText);
+            searchErrorMsg.value = "Error with location search";
+            searchHasError.value = true;
+            return;
+        }
+
+        if(locationCoordinates === undefined){
+            console.warn("something wrong with location searhc")
+        }
+
+        // let serviceTypesArray: Array<string> | undefined = 
+        //     searchStore.serviceSearchValue ? [searchStore.serviceSearchValue.key!] : undefined;
         const params : client.DataMarinasSearchGetRequest = {
-            name: searchStore.marinaSearchValue ?? undefined,
-            coordinates: searchStore.userLocation ?? undefined,
-            distance: undefined,
-            serviceTypes: serviceTypesArray,
+            name: undefined,
+            coordinates: locationCoordinates,
+            distance: searchStore.searchRadiusValue,
+            serviceTypes: undefined,
             limit: undefined,   
             offset: 0,
         }
 
-        console.warn(params.serviceTypes);
+        console.warn(params);
 
         try{
             const res : Array<client.MarinaModel> = await dataApi.dataMarinasSearchGet(params);
@@ -67,6 +100,7 @@
                 return;
             }
             console.error("Search error: ", err);
+            console.warn(err.response.statusText);
             searchErrorMsg.value = "Error with search";
             searchHasError.value = true;
             return;

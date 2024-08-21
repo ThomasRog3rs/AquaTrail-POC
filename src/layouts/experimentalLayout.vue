@@ -1,8 +1,9 @@
 <template>
-      <nav class="bg-blue-700">
+      <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px ">
         <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
-        <h1 class="logo">Mooring Pin</h1>
-        <!-- <p v-if="userLocation">Your location: {{ userLocation.latitude }}, {{ userLocation.longitude }}</p>         -->
+        <!-- <h1 class="logo">Mooring Pin</h1> -->
+        <img style="margin: 0px auto" src="../assets/logo.png" width="50%" alt="">
+        <!-- <p v-if="userLocation">Your location: {{ userLocation.longitude }}, {{ userLocation.latitude }}</p>         -->
         <div class="search-types">
           <template v-if="searchStore.searchItems.length > 1" v-for="type in searchStore.searchItems">
               <div class="search-type" :class="{ active: type.active }" @click="setActive(type.title)">
@@ -28,7 +29,7 @@
       </section>
       <template v-if="userLocation && marinasClose != undefined">
       <div style="padding: 20px; padding-bottom: 0px;">
-        <h2 class="mb-2">{{ activeOption }} close to you</h2>
+        <h2 class="mb-2">{{ activeOption }} closest to you</h2>
       </div>
       <section id="close-by">
         <div class="close-items">
@@ -173,13 +174,13 @@ const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
   watchEffect(async () =>{
       if(searchStore.userLocation != undefined){
         console.log("get close", searchStore.userLocation);
-        const marinaParams : client.DataMarinasGetRequest = {
+        const marinaParams : client.DataMarinasSearchGetRequest = {
         coordinates: searchStore.userLocation,
         distance: 8,
         limit: 20
       }
 
-      marinasClose.value = await dataApi.dataMarinasGet(marinaParams) ?? undefined;
+      marinasClose.value = await dataApi.dataMarinasSearchGet(marinaParams) ?? undefined;
       marinasClose.value = marinasClose.value.sort((a : client.MarinaModel,b : client.MarinaModel) => {
        return a?.distance! - b?.distance!
       });

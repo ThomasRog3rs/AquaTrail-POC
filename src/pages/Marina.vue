@@ -110,11 +110,11 @@ const map = ref<Map|null>(null);
   }
 
   onMounted(async () => {
-    const params : client.DataMarinasIdGetRequest = {
+    const params : client.DataMarinaIdGetRequest = {
         id: props.id
     }
-
-    marina.value = await DataApi.dataMarinasIdGet(params);
+    
+    marina.value = await DataApi.dataMarinaIdGet(params);
 
     iconPaths.value = marina.value.services?.map((x : client.ServiceModel) =>{
         return {

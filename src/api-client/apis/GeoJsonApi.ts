@@ -31,6 +31,10 @@ export interface GeoJsonGeoJsonByIdGetRequest {
     id?: number;
 }
 
+export interface GeoJsonGeoJsonByIdsGetRequest {
+    ids?: Array<number>;
+}
+
 export interface GeoJsonMarinasGetRequest {
     coordinates?: string;
     distance?: number;
@@ -108,6 +112,34 @@ export class GeoJsonApi extends runtime.BaseAPI {
      */
     async geoJsonGeoJsonByIdGet(requestParameters: GeoJsonGeoJsonByIdGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeoJsonModel> {
         const response = await this.geoJsonGeoJsonByIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async geoJsonGeoJsonByIdsGetRaw(requestParameters: GeoJsonGeoJsonByIdsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeoJsonModel>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['ids'] != null) {
+            queryParameters['ids'] = requestParameters['ids'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/GeoJson/geoJsonByIds`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GeoJsonModelFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async geoJsonGeoJsonByIdsGet(requestParameters: GeoJsonGeoJsonByIdsGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeoJsonModel> {
+        const response = await this.geoJsonGeoJsonByIdsGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

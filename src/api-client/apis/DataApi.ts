@@ -32,17 +32,13 @@ export interface DataGeoJsonIdGetRequest {
     geoJsonId: number;
 }
 
-export interface DataMarinasGetRequest {
-    coordinates?: string;
-    distance?: number;
-    limit?: number;
-    offset?: number;
-    serviceTypes?: Array<string>;
-    matchAllServices?: boolean;
+export interface DataMarinaIdGetRequest {
+    id: string;
 }
 
-export interface DataMarinasIdGetRequest {
-    id: string;
+export interface DataMarinasClosestGetRequest {
+    coordinates?: string;
+    numberOfMarinas?: number;
 }
 
 export interface DataMarinasSearchGetRequest {
@@ -61,15 +57,6 @@ export interface DataMarinasTypeTypeGetRequest {
     distance?: number;
     limit?: number;
     offset?: number;
-}
-
-export interface DataMooringsGetRequest {
-    coordinates?: string;
-    distance?: number;
-    limit?: number;
-    offset?: number;
-    serviceTypes?: Array<string>;
-    matchAllServices?: boolean;
 }
 
 export interface DataMooringsIdGetRequest {
@@ -92,14 +79,6 @@ export interface DataMooringsTypeTypeGetRequest {
     distance?: number;
     limit?: number;
     offset?: number;
-}
-
-export interface DataServicesGetRequest {
-    coordinates?: string;
-    distance?: number;
-    limit?: number;
-    offset?: number;
-    serviceTypes?: Array<string>;
 }
 
 export interface DataServicesIdGetRequest {
@@ -130,7 +109,7 @@ export class DataApi extends runtime.BaseAPI {
 
     /**
      */
-    async dataGeoJsonIdGetRaw(requestParameters: DataGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async dataGeoJsonIdGetRaw(requestParameters: DataGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarinaModel>> {
         if (requestParameters['geoJsonId'] == null) {
             throw new runtime.RequiredError(
                 'geoJsonId',
@@ -149,70 +128,23 @@ export class DataApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => MarinaModelFromJSON(jsonValue));
     }
 
     /**
      */
-    async dataGeoJsonIdGet(requestParameters: DataGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.dataGeoJsonIdGetRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     */
-    async dataMarinasGetRaw(requestParameters: DataMarinasGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<MarinaModel>>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
-        }
-
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
-        }
-
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
-        }
-
-        if (requestParameters['offset'] != null) {
-            queryParameters['offset'] = requestParameters['offset'];
-        }
-
-        if (requestParameters['serviceTypes'] != null) {
-            queryParameters['serviceTypes'] = requestParameters['serviceTypes'];
-        }
-
-        if (requestParameters['matchAllServices'] != null) {
-            queryParameters['matchAllServices'] = requestParameters['matchAllServices'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/Data/marinas`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MarinaModelFromJSON));
-    }
-
-    /**
-     */
-    async dataMarinasGet(requestParameters: DataMarinasGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MarinaModel>> {
-        const response = await this.dataMarinasGetRaw(requestParameters, initOverrides);
+    async dataGeoJsonIdGet(requestParameters: DataGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarinaModel> {
+        const response = await this.dataGeoJsonIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async dataMarinasIdGetRaw(requestParameters: DataMarinasIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarinaModel>> {
+    async dataMarinaIdGetRaw(requestParameters: DataMarinaIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarinaModel>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling dataMarinasIdGet().'
+                'Required parameter "id" was null or undefined when calling dataMarinaIdGet().'
             );
         }
 
@@ -221,7 +153,7 @@ export class DataApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/Data/marinas/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/Data/marina/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -232,8 +164,40 @@ export class DataApi extends runtime.BaseAPI {
 
     /**
      */
-    async dataMarinasIdGet(requestParameters: DataMarinasIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarinaModel> {
-        const response = await this.dataMarinasIdGetRaw(requestParameters, initOverrides);
+    async dataMarinaIdGet(requestParameters: DataMarinaIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarinaModel> {
+        const response = await this.dataMarinaIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async dataMarinasClosestGetRaw(requestParameters: DataMarinasClosestGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<MarinaModel>>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['coordinates'] != null) {
+            queryParameters['coordinates'] = requestParameters['coordinates'];
+        }
+
+        if (requestParameters['numberOfMarinas'] != null) {
+            queryParameters['numberOfMarinas'] = requestParameters['numberOfMarinas'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Data/marinas/closest`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MarinaModelFromJSON));
+    }
+
+    /**
+     */
+    async dataMarinasClosestGet(requestParameters: DataMarinasClosestGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MarinaModel>> {
+        const response = await this.dataMarinasClosestGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -333,54 +297,6 @@ export class DataApi extends runtime.BaseAPI {
      */
     async dataMarinasTypeTypeGet(requestParameters: DataMarinasTypeTypeGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MarinaModel>> {
         const response = await this.dataMarinasTypeTypeGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async dataMooringsGetRaw(requestParameters: DataMooringsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<MooringModel>>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
-        }
-
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
-        }
-
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
-        }
-
-        if (requestParameters['offset'] != null) {
-            queryParameters['offset'] = requestParameters['offset'];
-        }
-
-        if (requestParameters['serviceTypes'] != null) {
-            queryParameters['serviceTypes'] = requestParameters['serviceTypes'];
-        }
-
-        if (requestParameters['matchAllServices'] != null) {
-            queryParameters['matchAllServices'] = requestParameters['matchAllServices'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/Data/moorings`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MooringModelFromJSON));
-    }
-
-    /**
-     */
-    async dataMooringsGet(requestParameters: DataMooringsGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MooringModel>> {
-        const response = await this.dataMooringsGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -511,50 +427,6 @@ export class DataApi extends runtime.BaseAPI {
      */
     async dataMooringsTypeTypeGet(requestParameters: DataMooringsTypeTypeGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MooringModel>> {
         const response = await this.dataMooringsTypeTypeGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async dataServicesGetRaw(requestParameters: DataServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ServiceModel>>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
-        }
-
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
-        }
-
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
-        }
-
-        if (requestParameters['offset'] != null) {
-            queryParameters['offset'] = requestParameters['offset'];
-        }
-
-        if (requestParameters['serviceTypes'] != null) {
-            queryParameters['serviceTypes'] = requestParameters['serviceTypes'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/Data/services`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ServiceModelFromJSON));
-    }
-
-    /**
-     */
-    async dataServicesGet(requestParameters: DataServicesGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ServiceModel>> {
-        const response = await this.dataServicesGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
