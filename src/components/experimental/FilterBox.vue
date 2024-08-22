@@ -139,9 +139,9 @@ if(filtersToSearch.length == 0){
 
 const params : client.DataMarinasSearchGetRequest = {
     name: searchStore.marinaSearchValue ?? undefined,
-    coordinates: searchStore.userLocation ?? undefined,
-    distance: undefined,
-    serviceTypes: filtersToSearch,
+    coordinates: searchStore.searchLocationCoordinatesValue ?? undefined,
+    distance: searchStore.searchRadiusValue ?? 4,
+    serviceTypes: filtersToSearch ?? undefined,
     limit: undefined,   
     offset: 0,
 }

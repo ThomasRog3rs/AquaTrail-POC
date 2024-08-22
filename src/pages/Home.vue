@@ -64,18 +64,18 @@ onUnmounted(() => {
 
 .loading {
   position: relative;
-  width: 110px;
+  width: 10px;
   display: flex;
   align-items: center;
-  margin-top: 50px; /* Adjust margin-top to create space between h1 and loading */
+  margin-top: 20px; /* Adjust margin-top to create space between h1 and loading */
 }
 
 .loading span {
     display: inline-block;
-    width: 30px;
-    height: 30px;
-    background-color: rgb(22 163 74);
-    border-radius: 30px;
+    width: 10px;
+    height: 10px;
+    background-color: #1d4ed8;
+    border-radius: 10px;
     position: absolute;
 }
 
@@ -86,62 +86,62 @@ onUnmounted(() => {
 
 .loading span:nth-child(2) {
     animation: loading-span2 1.3s infinite;
-    left: 40px;
+    left: 15px;
 }
 
 .loading span:nth-child(3){
     animation: loading-span3 1.3s infinite;
-    left: 80px;
+    left: 30px;
 }
 
 @keyframes loading-span1 {
     0% {
-        height: 30px;
+        height: 10px;
     }
     25% {
-        height: 60px;
+        height: 20px;
     }
     50% {
-        height: 30px;
+        height: 10px;
     }
     100% {
-        height: 30px;
+        height: 10px;
     }
 }
 
 @keyframes loading-span2 {
     0% {
-        height: 30px;
+        height: 10px;
     }
     25% {
-        height: 30px;
+        height: 10px;
     }
     50% {
-        height: 60px;
+        height: 20px;
     }
     75% {
-        height: 30px;
+        height: 10px;
     }
     100% {
-        height: 30px;
+        height: 10px;
     }
 }
 
 @keyframes loading-span3 {
     0% {
-        height: 30px;
+        height: 10px;
     }
     25% {
-        height: 30px;
+        height: 10px;
     }
     50% {
-        height: 30px;
+        height: 10px;
     }
     75% {
-        height: 60px;
+        height: 20px;
     }
     100% {
-        height: 30px;
+        height: 10px;
     }
 }
 

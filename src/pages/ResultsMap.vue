@@ -13,8 +13,15 @@
 
     <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
 
-        <SearchBar style="position: absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')" @click="openSearchBox"></SearchBar>
-        <!-- <div class="search-info-box-container">
+    <SearchBar style="position: absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')" @click="openSearchBox">
+          <span class="mt-2 mr-9" style="" v-if="!mapStore.mapLoaded">
+            <div class="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </span>
+        </SearchBar>        <!-- <div class="search-info-box-container">
             <div class="search-info-box">
                 <span class="back" @click="goBack">
                 &LeftArrow;
@@ -22,6 +29,14 @@
                 <span class="searchTerm">"Search Term here"</span>
             </div>
         </div> -->
+        <!-- <div v-if="!mapStore.mapLoaded" class="overlay">
+<h1>Loading...</h1>
+<div class="loading">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+</div> -->
         <div ref="map" class="map-container w-1/1 h-full" id="map-container"></div>
     </div>
 </template> 
@@ -137,6 +152,7 @@ onMounted(async () => {
         console.log("geoData", geojsonData)
         //@ts-ignore
         map.value.on('load', () => {
+          
   /* Add the data to your map as a layer */
   //@ts-ignore
       // map.value.addLayer({

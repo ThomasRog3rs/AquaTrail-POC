@@ -5,11 +5,12 @@
                 &LeftArrow;
             </span>
             <span class="text-xl w-full" style="text-align: center;">{{marina?.type?.toLowerCase().charAt(0).toUpperCase() + marina?.type?.toLowerCase().slice(1)!}}</span>
-            <span class="save w-20">
+            <!-- <span class="save w-20">
                 
                 <template v-if="false">&#9733;</template>
                 <template v-else> &#x2606;</template>
-            </span>
+            </span> -->
+            <span class="w-20"></span>
         </div>
     </div>
     <div id="serviceIcons" class="shadow-lg border" v-if="iconPaths?.length! > 0">
@@ -102,7 +103,8 @@ const map = ref<Map|null>(null);
   const marina = ref<client.MarinaModel>();
 
   const goBack = () => {
-    if(searchStore.marinaSearchValue == undefined && searchStore.serviceSearchValue == undefined){
+    // alert(searchStore.searchLocationValue)
+    if(searchStore.searchLocationValue == undefined){
         router.push("/");
         return;
     } 

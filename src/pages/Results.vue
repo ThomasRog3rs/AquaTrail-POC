@@ -84,7 +84,7 @@
             <fieldset>
             <legend class="sr-only">Select an option to sort the results:</legend>
                 <template v-for="sortOption in searchStore.sortOptions" :key="sortOption.id">
-                    <div v-if="sortOption.enabled === true">
+                    <div v-if="sortOption.enabled === true" @click="closeSort">
                         <input type="radio" :id="sortOption.id!.toString()" name="filter" :value="sortOption.id!" :checked="sortOption.active" @click="searchStore.setSortOption(sortOption.id)" />
                         <label :for="sortOption.id!.toString()">{{sortOption.name}}</label>
                     </div>
@@ -255,7 +255,7 @@ div#searchForm{
     opacity: 1 !important;
 } */
 
-div#searchTerm{
+div#searchTermContainer{
     background-color: whitesmoke;
     padding: 15px;
     
