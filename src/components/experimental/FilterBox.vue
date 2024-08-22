@@ -91,14 +91,14 @@
 
         const params : client.DataMarinasSearchGetRequest = {
             name: searchStore.marinaSearchValue ?? undefined,
-            coordinates: searchStore.userLocation ?? undefined,
-            distance: undefined,
+            coordinates: searchStore.searchLocationCoordinatesValue ?? undefined,
+            distance: searchStore.searchRadiusValue,
             serviceTypes: filtersToSearch ?? undefined,
             limit: undefined,   
             offset: 0,
         }
 
-        console.warn(params.serviceTypes);
+        console.warn(params);
 
         try{
             const res : Array<client.MarinaModel> = await dataApi.dataMarinasSearchGet(params);

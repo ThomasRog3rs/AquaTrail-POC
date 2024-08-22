@@ -34,7 +34,8 @@ export const useSearchStore = defineStore('searchStore', () => {
     ]);
 
     const searchLocationValue = ref<string |undefined>(undefined);
-    const searchRadiusValue = ref<number | undefined>(undefined);
+    const searchLocationCoordinatesValue = ref<string | undefined>(undefined);
+    const searchRadiusValue = ref<number | undefined>(4);
 
     const marinaSearchValue = ref<string | undefined>(undefined);
     const serviceSearchValue =  ref<client.ServiceTypeModel | undefined>(undefined);
@@ -134,6 +135,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         marinaSearchValue, 
         serviceSearchValue,
         searchLocationValue,
+        searchLocationCoordinatesValue,
         searchRadiusValue,
         marinaSearchResults ,
         sortOptions,

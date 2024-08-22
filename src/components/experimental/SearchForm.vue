@@ -4,8 +4,12 @@
             <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
         </div>
         <form>
-            <input  type="text" placeholder="Location" v-model="searchStore.searchLocationValue">     
-            <input type="number" placeholder="Radius (miles)" v-model="searchStore.searchRadiusValue">       
+            <input  type="text" placeholder="Location" v-model="searchStore.searchLocationValue" style="text-align: left;">  
+            <div style="width: 100%;">
+                <label for="" style="text-align: left; display: block; width: 90%; margin: 0px auto; margin-top: 20px;">Search Radius: {{ searchStore.searchRadiusValue }} Miles</label>
+                <input type="range" placeholder="Radius (miles)" v-model="searchStore.searchRadiusValue" max=30 min=1 value="1" style="display: block; width: 90%; margin: 0px auto; margin-bottom: 12px; margin-top: 12px;"> 
+            </div>   
+      
             <!-- <input type="search" placeholder="Search Marina Name" v-model="searchStore.marinaSearchValue"> -->
             <!-- <v-select label="value" placeholder="Which service are you looking for?" :options="serviceTypes" v-model="searchStore.serviceSearchValue"></v-select> -->
         </form>
@@ -70,6 +74,9 @@
         }
 
         // alert(searchStore.searchRadiusValue);
+        if(searchStore.searchRadiusValue > 30){
+            searchStore.searchRadiusValue = 30;
+        }
 
         //get Location
         const locationParams : client.LocationSearchGetRequest = {
@@ -81,10 +88,11 @@
             const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
             locationCoordinates = loactionResponse[0].coordinates!;
             searchStore.searchLocationValue = truncateLocation(loactionResponse[0].name!);
+            searchStore.searchLocationCoordinatesValue = loactionResponse[0].coordinates!;
         }catch(err: any){
             console.error("Location error: ", err);
             console.warn(err.response.statusText);
-            searchErrorMsg.value = "Error with location search";
+            searchErrorMsg.value = "Can't find that location";
             searchHasError.value = true;
             return;
         }
