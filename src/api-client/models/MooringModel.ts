@@ -91,19 +91,19 @@ export interface MooringModel {
      * @type {string}
      * @memberof MooringModel
      */
-    notes?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof MooringModel
-     */
     phoneNumber?: string | null;
     /**
      * 
      * @type {number}
      * @memberof MooringModel
      */
-    distance?: number | null;
+    distanceFromSearch?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MooringModel
+     */
+    distanceFromUser?: number | null;
     /**
      * 
      * @type {MooringTypeModel}
@@ -144,9 +144,9 @@ export function MooringModelFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'website': json['website'] == null ? undefined : json['website'],
         'address': json['address'] == null ? undefined : json['address'],
         'canalName': json['canalName'] == null ? undefined : json['canalName'],
-        'notes': json['notes'] == null ? undefined : json['notes'],
         'phoneNumber': json['phoneNumber'] == null ? undefined : json['phoneNumber'],
-        'distance': json['distance'] == null ? undefined : json['distance'],
+        'distanceFromSearch': json['distanceFromSearch'] == null ? undefined : json['distanceFromSearch'],
+        'distanceFromUser': json['distanceFromUser'] == null ? undefined : json['distanceFromUser'],
         'mooringType': json['mooringType'] == null ? undefined : MooringTypeModelFromJSON(json['mooringType']),
         'services': json['services'] == null ? undefined : ((json['services'] as Array<any>).map(ServiceModelFromJSON)),
     };
@@ -167,9 +167,9 @@ export function MooringModelToJSON(value?: MooringModel | null): any {
         'website': value['website'],
         'address': value['address'],
         'canalName': value['canalName'],
-        'notes': value['notes'],
         'phoneNumber': value['phoneNumber'],
-        'distance': value['distance'],
+        'distanceFromSearch': value['distanceFromSearch'],
+        'distanceFromUser': value['distanceFromUser'],
         'mooringType': MooringTypeModelToJSON(value['mooringType']),
         'services': value['services'] == null ? undefined : ((value['services'] as Array<any>).map(ServiceModelToJSON)),
     };

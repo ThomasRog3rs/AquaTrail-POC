@@ -33,7 +33,7 @@
         </div>
         <hr>
         <section>
-            <div id="marina-notes" class="mb-2 p-4 border-4 rounded-lg" v-if="marina?.notes != undefined">
+            <div id="marina-notes" class="mb-2 p-4 border-4 rounded-lg" v-if="marina?.address != undefined">
                 <h4 class="mr-2 font-medium">Address:</h4>
                 <p v-if="marina?.address != undefined">{{ marina?.address }}</p>
             </div>
@@ -41,10 +41,10 @@
                 <h4 class="mr-2 font-medium">Phone Number:</h4>
                 <p style="display: inline-block;" class="text-base">{{ marina?.phoneNumber }}</p>
             </div>
-            <div id="marina-notes" class="mb-2 p-4 border-4 rounded-lg" v-if="marina?.notes != undefined">
+            <!-- <div id="marina-notes" class="mb-2 p-4 border-4 rounded-lg" v-if="marina?.notes != undefined">
                 <h4 class="mr-2 font-medium">Notes:</h4>
                 <p style="display: inline-block;" class="text-base">{{ marina?.notes }}</p>
-            </div>
+            </div> -->
             <div id="marina-notes" class="mb-2 p-4 border-4 rounded-lg" v-if="marina?.services?.length! > 0">
                 <h4 class="mr-2 font-medium">Services:</h4>
                 <ul style="list-style: inside; margin-bottom: 15px;">

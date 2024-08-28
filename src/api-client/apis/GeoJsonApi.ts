@@ -23,8 +23,8 @@ import {
 } from '../models/index';
 
 export interface GeoJsonAllGetRequest {
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    searchDistance?: number;
 }
 
 export interface GeoJsonGeoJsonByIdGetRequest {
@@ -36,18 +36,18 @@ export interface GeoJsonGeoJsonByIdsGetRequest {
 }
 
 export interface GeoJsonMarinasGetRequest {
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    searchDistance?: number;
 }
 
 export interface GeoJsonMooringsGetRequest {
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    searchDistance?: number;
 }
 
 export interface GeoJsonServicesGetRequest {
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    searchDistance?: number;
 }
 
 /**
@@ -60,12 +60,12 @@ export class GeoJsonApi extends runtime.BaseAPI {
     async geoJsonAllGetRaw(requestParameters: GeoJsonAllGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeoJsonModel>> {
         const queryParameters: any = {};
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -148,12 +148,12 @@ export class GeoJsonApi extends runtime.BaseAPI {
     async geoJsonMarinasGetRaw(requestParameters: GeoJsonMarinasGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeoJsonModel>> {
         const queryParameters: any = {};
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -180,12 +180,12 @@ export class GeoJsonApi extends runtime.BaseAPI {
     async geoJsonMooringsGetRaw(requestParameters: GeoJsonMooringsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeoJsonModel>> {
         const queryParameters: any = {};
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -212,12 +212,12 @@ export class GeoJsonApi extends runtime.BaseAPI {
     async geoJsonServicesGetRaw(requestParameters: GeoJsonServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeoJsonModel>> {
         const queryParameters: any = {};
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

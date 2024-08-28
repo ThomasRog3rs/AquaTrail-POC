@@ -88,11 +88,18 @@ async function addPopup(location: popUpProps){
   const marianProps: client.DataGeoJsonIdGetRequest = {
     geoJsonId: location.geoJsonId
   }
-  const marina : client.MarinaModel = await dataApi.dataGeoJsonIdGet(marianProps);
+  let marina : any;
+  try{
+    marina = await dataApi.dataGeoJsonIdGet(marianProps);
+  }catch(err:any){
+    console.error(err)
+  }
+  console.log("The marian:", marina);
+
   new mapboxgl.Popup({ offset: [0, -15] })  
       //@ts-ignore
       .setLngLat(location.coordinates)
-      .setHTML(`<span class="${marina.type}"><h3>${marina.name}</h3><a href="${marina.website}" target="_blank">Website</a><br/><a href="/marina/${marina.id}" class="save">View Location</button></span>`)
+      .setHTML(`<span><h3>${marina.name}</h3><a href="${marina.website}" target="_blank">Website</a><br/><a href="/marina/${marina.id}" class="save">View Location</button></span>`)
       .addTo(map.value!);
 }
 
@@ -177,7 +184,7 @@ onMounted(async () => {
     /* Create a div element for the marker. */
     const el = document.createElement('div');
     /* Assign a unique `id` to the marker. */
-    el.id = `marker-${marker.properties?.cpId!}`;
+    el.id = `marker-${marker.properties?.mooringPinId!}`;
     /* Assign the `marker` class to each marker for styling. */
     el.className = 'marker';
 
@@ -204,7 +211,7 @@ onMounted(async () => {
   if (activeItem[0]) {
     activeItem[0].classList.remove('active');
   }
-  const listing = document.getElementById(`listing-${marker.properties?.cpId}`);
+  const listing = document.getElementById(`listing-${marker.properties?.mooringPinId}`);
   listing?.classList.add('active');
 });
     }

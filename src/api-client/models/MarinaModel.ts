@@ -91,19 +91,19 @@ export interface MarinaModel {
      * @type {string}
      * @memberof MarinaModel
      */
-    notes?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof MarinaModel
-     */
     phoneNumber?: string | null;
     /**
      * 
      * @type {number}
      * @memberof MarinaModel
      */
-    distance?: number | null;
+    distanceFromSearch?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MarinaModel
+     */
+    distanceFromUser?: number | null;
     /**
      * 
      * @type {MarinaTypeModel}
@@ -144,9 +144,9 @@ export function MarinaModelFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'website': json['website'] == null ? undefined : json['website'],
         'address': json['address'] == null ? undefined : json['address'],
         'canalName': json['canalName'] == null ? undefined : json['canalName'],
-        'notes': json['notes'] == null ? undefined : json['notes'],
         'phoneNumber': json['phoneNumber'] == null ? undefined : json['phoneNumber'],
-        'distance': json['distance'] == null ? undefined : json['distance'],
+        'distanceFromSearch': json['distanceFromSearch'] == null ? undefined : json['distanceFromSearch'],
+        'distanceFromUser': json['distanceFromUser'] == null ? undefined : json['distanceFromUser'],
         'marinaType': json['marinaType'] == null ? undefined : MarinaTypeModelFromJSON(json['marinaType']),
         'services': json['services'] == null ? undefined : ((json['services'] as Array<any>).map(ServiceModelFromJSON)),
     };
@@ -167,9 +167,9 @@ export function MarinaModelToJSON(value?: MarinaModel | null): any {
         'website': value['website'],
         'address': value['address'],
         'canalName': value['canalName'],
-        'notes': value['notes'],
         'phoneNumber': value['phoneNumber'],
-        'distance': value['distance'],
+        'distanceFromSearch': value['distanceFromSearch'],
+        'distanceFromUser': value['distanceFromUser'],
         'marinaType': MarinaTypeModelToJSON(value['marinaType']),
         'services': value['services'] == null ? undefined : ((value['services'] as Array<any>).map(ServiceModelToJSON)),
     };

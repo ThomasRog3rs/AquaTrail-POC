@@ -91,7 +91,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         sortOptions.value = [
             {name: "Alphabetically", active: true, enabled: true, id: 1},
             {name: "Number Of Services", active: false, enabled: true, id: 2},
-            {name: "Distance", active: false, enabled: false, id: 3}
+            {name: "Distance", active: false, enabled: true, id: 3}
         ]
     }
 
@@ -108,7 +108,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         switch(sortItem.name){
             case "Distance":
                 marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
-                    return  (a.distance || 0) - (b.distance || 0);
+                    return  (a.distanceFromUser || 0) - (b.distanceFromUser || 0);
                 });
                 break;
             case "Alphabetically":

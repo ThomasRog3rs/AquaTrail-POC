@@ -33,7 +33,7 @@
       </div>
       <section id="close-by">
         <div class="close-items">
-          <Card v-if="marinasClose != undefined" v-for="marina in marinasClose" :id="marina.id!" :name="marina.name!" :description="marina.notes!" image="" :has-image="false" :distance="(marina.distance!.toFixed(2))" @click="searchStore.searchLocationValue = undefined"></Card>
+          <Card v-if="marinasClose != undefined" v-for="marina in marinasClose" :id="marina.id!" :name="marina.name!" description="" image="" :has-image="false" :distance="(marina.distanceFromUser!.toFixed(2))" @click="searchStore.searchLocationValue = undefined"></Card>
         </div>
       </section>
     </template>
@@ -175,14 +175,15 @@ const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
       if(searchStore.userLocation != undefined){
         console.log("get close", searchStore.userLocation);
         const marinaParams : client.DataMarinasSearchGetRequest = {
-        coordinates: searchStore.userLocation,
-        distance: 8,
+        searchCoordinates: searchStore.userLocation,
+        userCoordinates: searchStore.userLocation,
+        searchDistance: 8,
         limit: 20
       }
 
       marinasClose.value = await dataApi.dataMarinasSearchGet(marinaParams) ?? undefined;
       marinasClose.value = marinasClose.value.sort((a : client.MarinaModel,b : client.MarinaModel) => {
-       return a?.distance! - b?.distance!
+       return a?.distanceFromUser! - b?.distanceFromUser!
       });
       console.warn(marinasClose.value)
     }

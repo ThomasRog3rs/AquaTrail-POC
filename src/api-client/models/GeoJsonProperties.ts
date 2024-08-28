@@ -30,7 +30,7 @@ export interface GeoJsonProperties {
      * @type {string}
      * @memberof GeoJsonProperties
      */
-    cpId?: string | null;
+    mooringPinId?: string | null;
     /**
      * 
      * @type {string}
@@ -48,7 +48,7 @@ export interface GeoJsonProperties {
      * @type {number}
      * @memberof GeoJsonProperties
      */
-    cpRotate?: number;
+    rotate?: number;
 }
 
 /**
@@ -69,10 +69,10 @@ export function GeoJsonPropertiesFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'title': json['title'] == null ? undefined : json['title'],
-        'cpId': json['cpId'] == null ? undefined : json['cpId'],
+        'mooringPinId': json['mooringPinId'] == null ? undefined : json['mooringPinId'],
         'icon': json['icon'] == null ? undefined : json['icon'],
         'layer': json['layer'] == null ? undefined : json['layer'],
-        'cpRotate': json['cpRotate'] == null ? undefined : json['cpRotate'],
+        'rotate': json['rotate'] == null ? undefined : json['rotate'],
     };
 }
 
@@ -83,10 +83,10 @@ export function GeoJsonPropertiesToJSON(value?: GeoJsonProperties | null): any {
     return {
         
         'title': value['title'],
-        'cpId': value['cpId'],
+        'mooringPinId': value['mooringPinId'],
         'icon': value['icon'],
         'layer': value['layer'],
-        'cpRotate': value['cpRotate'],
+        'rotate': value['rotate'],
     };
 }
 

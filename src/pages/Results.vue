@@ -56,14 +56,15 @@
         <a href="#">
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ marina.name }}</h5>
         </a>
-        <p class="mb-3 font-normal text-gray-700">{{marina.notes!}}</p>
+        <!-- <p class="mb-3 font-normal text-gray-700">{{marina.notes!}}</p> -->
         <ul style="list-style: inside; margin-bottom: 15px;">
             <!-- <li v-if="marina.address">Address: {{ marina.address }}</li> -->
             <li v-if="marina.website"><a :href="marina.website" class="text-blue-700" target="_blank"> {{marina.website }}</a></li>
             <li v-if="marina.phoneNumber">Phone: {{ marina.phoneNumber }}</li>
             <li v-if="marina.canalName">Canal: {{ marina.canalName }}</li>
             <li>{{ marina.services?.length }} service(s)</li>
-            <li v-if="marina.distance! > 0">Distance: {{ (marina.distance!).toFixed(2) }} miles</li>
+            <li v-if="marina.distanceFromUser! > 0">Distance from you: {{ (marina.distanceFromUser!).toFixed(2) }} miles</li>
+            <li v-if="marina.distanceFromSearch! > 0">Distance from search: {{ (marina.distanceFromSearch!).toFixed(2) }} miles</li>
         </ul>
 
         <router-link :to="{name: 'Marina', params: {id: marina.id}}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">

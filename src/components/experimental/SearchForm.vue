@@ -105,8 +105,9 @@
         //     searchStore.serviceSearchValue ? [searchStore.serviceSearchValue.key!] : undefined;
         const params : client.DataMarinasSearchGetRequest = {
             name: undefined,
-            coordinates: locationCoordinates,
-            distance: searchStore.searchRadiusValue,
+            searchCoordinates: locationCoordinates,
+            searchDistance: searchStore.searchRadiusValue,
+            userCoordinates: searchStore.userLocation ?? undefined,
             serviceTypes: undefined,
             limit: undefined,   
             offset: 0,

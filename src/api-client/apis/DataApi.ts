@@ -37,14 +37,15 @@ export interface DataMarinaIdGetRequest {
 }
 
 export interface DataMarinasClosestGetRequest {
-    coordinates?: string;
+    userCoordinates?: string;
     numberOfMarinas?: number;
 }
 
 export interface DataMarinasSearchGetRequest {
     name?: string;
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    userCoordinates?: string;
+    searchDistance?: number;
     limit?: number;
     offset?: number;
     serviceTypes?: Array<string>;
@@ -53,8 +54,9 @@ export interface DataMarinasSearchGetRequest {
 
 export interface DataMarinasTypeTypeGetRequest {
     type: string;
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    userCoordinates?: string;
+    searchDistance?: number;
     limit?: number;
     offset?: number;
 }
@@ -65,8 +67,9 @@ export interface DataMooringsIdGetRequest {
 
 export interface DataMooringsSearchGetRequest {
     name?: string;
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    userCoordinates?: string;
+    searchDistance?: number;
     limit?: number;
     offset?: number;
     serviceTypes?: Array<string>;
@@ -75,8 +78,9 @@ export interface DataMooringsSearchGetRequest {
 
 export interface DataMooringsTypeTypeGetRequest {
     type: string;
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    userCoordinates?: string;
+    searchDistance?: number;
     limit?: number;
     offset?: number;
 }
@@ -87,8 +91,9 @@ export interface DataServicesIdGetRequest {
 
 export interface DataServicesSearchGetRequest {
     name?: string;
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    userCoordinates?: string;
+    searchDistance?: number;
     limit?: number;
     offset?: number;
     serviceTypes?: Array<string>;
@@ -96,8 +101,9 @@ export interface DataServicesSearchGetRequest {
 
 export interface DataServicesTypeTypeGetRequest {
     type: string;
-    coordinates?: string;
-    distance?: number;
+    searchCoordinates?: string;
+    userCoordinates?: string;
+    searchDistance?: number;
     limit?: number;
     offset?: number;
 }
@@ -174,8 +180,8 @@ export class DataApi extends runtime.BaseAPI {
     async dataMarinasClosestGetRaw(requestParameters: DataMarinasClosestGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<MarinaModel>>> {
         const queryParameters: any = {};
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['userCoordinates'] != null) {
+            queryParameters['userCoordinates'] = requestParameters['userCoordinates'];
         }
 
         if (requestParameters['numberOfMarinas'] != null) {
@@ -210,12 +216,16 @@ export class DataApi extends runtime.BaseAPI {
             queryParameters['name'] = requestParameters['name'];
         }
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['userCoordinates'] != null) {
+            queryParameters['userCoordinates'] = requestParameters['userCoordinates'];
+        }
+
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         if (requestParameters['limit'] != null) {
@@ -265,12 +275,16 @@ export class DataApi extends runtime.BaseAPI {
 
         const queryParameters: any = {};
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['userCoordinates'] != null) {
+            queryParameters['userCoordinates'] = requestParameters['userCoordinates'];
+        }
+
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         if (requestParameters['limit'] != null) {
@@ -340,12 +354,16 @@ export class DataApi extends runtime.BaseAPI {
             queryParameters['name'] = requestParameters['name'];
         }
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['userCoordinates'] != null) {
+            queryParameters['userCoordinates'] = requestParameters['userCoordinates'];
+        }
+
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         if (requestParameters['limit'] != null) {
@@ -395,12 +413,16 @@ export class DataApi extends runtime.BaseAPI {
 
         const queryParameters: any = {};
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['userCoordinates'] != null) {
+            queryParameters['userCoordinates'] = requestParameters['userCoordinates'];
+        }
+
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         if (requestParameters['limit'] != null) {
@@ -470,12 +492,16 @@ export class DataApi extends runtime.BaseAPI {
             queryParameters['name'] = requestParameters['name'];
         }
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['userCoordinates'] != null) {
+            queryParameters['userCoordinates'] = requestParameters['userCoordinates'];
+        }
+
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         if (requestParameters['limit'] != null) {
@@ -521,12 +547,16 @@ export class DataApi extends runtime.BaseAPI {
 
         const queryParameters: any = {};
 
-        if (requestParameters['coordinates'] != null) {
-            queryParameters['coordinates'] = requestParameters['coordinates'];
+        if (requestParameters['searchCoordinates'] != null) {
+            queryParameters['searchCoordinates'] = requestParameters['searchCoordinates'];
         }
 
-        if (requestParameters['distance'] != null) {
-            queryParameters['distance'] = requestParameters['distance'];
+        if (requestParameters['userCoordinates'] != null) {
+            queryParameters['userCoordinates'] = requestParameters['userCoordinates'];
+        }
+
+        if (requestParameters['searchDistance'] != null) {
+            queryParameters['searchDistance'] = requestParameters['searchDistance'];
         }
 
         if (requestParameters['limit'] != null) {
