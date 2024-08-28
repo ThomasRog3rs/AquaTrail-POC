@@ -21,3 +21,26 @@ export type currentLocation = {
     bearing: number,
     zoom: number
 }
+
+export type coordinate = {
+    lat: number,
+    long: number
+}
+
+export type service = {
+    
+}
+
+//id, name, type, coordinates, canalplan_link, website, address, canal_name, notes, phone_number
+export type marina = {
+    id: string,
+    name: string,
+    type: string,
+    coordinates: coordinate,
+    website: string | undefined,
+    address: string | undefined,
+    canal_name: string | undefined,
+    notes: string,
+    phoneNumber: string
+    services: Array<service>
+}

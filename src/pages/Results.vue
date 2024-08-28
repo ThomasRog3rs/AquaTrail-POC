@@ -1,6 +1,20 @@
 <template>
+    <transition name="down">
+        <div id="searchForm" class="shadow-lg" v-if="searchBoxOpen">
+            <div class="flex justify-between text-lg">
+                <span class="hover:cursor-pointer" @click="searchBoxOpen = false">&cross;</span>
+                <h3 class="mb-2">Edit your search</h3>
+                <span></span>
+            </div>
+            <SearchForm :search-has-error="false" :search-error-msg="undefined" @searched="searchBoxOpen = false"></SearchForm>
+        </div>
+    </transition>
+
+    <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
+
     <div class="bg-blue-700" style="padding: 15px; padding-top: 0px; height: 80px;">
-        <SearchBar @back="goHome"></SearchBar>
+        <SearchBar @back="goHome" @click="openSearchBox"></SearchBar>
+         
         <!-- <div id="searchContainer">
             <div id="searchTerm">
                 <span class="back" @click="goHome">
@@ -27,170 +41,94 @@
             </span>
         </div>
     </div>
-    <div id="searchResults">
+    <div id="searchResults" v-if="searchStore.marinaSearchResults?.length! > 0">
         <!-- <div class="resultsCard">
             <h1>Marina Name</h1>
             
         </div> -->
-        <span>12 results</span>
+        <span>{{ searchStore.marinaSearchResults?.length }} results</span>
 
-<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4 mt-2">
+<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4 mt-2" v-for="marina in searchStore.marinaSearchResults">
     <a href="#">
         <img class="rounded-t-lg" src="" alt="" />
     </a>
     <div class="p-5">
         <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Marina Name</h5>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ marina.name }}</h5>
         </a>
-        <p class="mb-3 font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+        <!-- <p class="mb-3 font-normal text-gray-700">{{marina.notes!}}</p> -->
+        <ul style="list-style: inside; margin-bottom: 15px;">
+            <!-- <li v-if="marina.address">Address: {{ marina.address }}</li> -->
+            <li v-if="marina.website"><a :href="marina.website" class="text-blue-700" target="_blank"> {{marina.website }}</a></li>
+            <li v-if="marina.phoneNumber">Phone: {{ marina.phoneNumber }}</li>
+            <li v-if="marina.canalName">Canal: {{ marina.canalName }}</li>
+            <li>{{ marina.services?.length }} service(s)</li>
+            <li v-if="marina.distanceFromUser! > 0">Distance from you: {{ (marina.distanceFromUser!).toFixed(2) }} miles</li>
+            <li v-if="marina.distanceFromSearch! > 0">Distance from search: {{ (marina.distanceFromSearch!).toFixed(2) }} miles</li>
+        </ul>
+
+        <router-link :to="{name: 'Marina', params: {id: marina.id}}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
             View more
              <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
             </svg>
-        </a>
+        </router-link>
     </div>
 </div>
-<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4">
-    <a href="#">
-        <img class="rounded-t-lg" src="" alt="" />
-    </a>
-    <div class="p-5">
-        <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Marina Name</h5>
-        </a>
-        <p class="mb-3 font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-            View more
-             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-            </svg>
-        </a>
     </div>
-</div>
-<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4">
-    <a href="#">
-        <img class="rounded-t-lg" src="" alt="" />
-    </a>
-    <div class="p-5">
-        <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Marina Name</h5>
-        </a>
-        <p class="mb-3 font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-            View more
-             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-            </svg>
-        </a>
-    </div>
-</div>
-<div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4">
-    <a href="#">
-        <img class="rounded-t-lg" src="" alt="" />
-    </a>
-    <div class="p-5">
-        <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Marina Name</h5>
-        </a>
-        <p class="mb-3 font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-            View more
-             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-            </svg>
-        </a>
-    </div>
-</div>
+    <div id="searchResults" v-else>
+        No results found, try adjusting your search
     </div>
 
     <transition name="slide">
-        <FilterBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
+        <SortBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
             <fieldset>
             <legend class="sr-only">Select an option to sort the results:</legend>
-
-                <div>
-                    <input type="radio" id="Distance" name="filter" value="Distance" checked />
-                    <label for="Distance">Distance</label>
-                </div>
-
-                <div>
-                    <input type="radio" id="Alphabetically" name="filter" value="Alphabetically" />
-                    <label for="Alphabetically">Alphabetically</label>
-                </div>
-
-                <div>
-                    <input type="radio" id="Services" name="filter" value="Services" />
-                    <label for="Services">Number Of Services</label>
-                </div>
+                <template v-for="sortOption in searchStore.sortOptions" :key="sortOption.id">
+                    <div v-if="sortOption.enabled === true" @click="closeSort">
+                        <input type="radio" :id="sortOption.id!.toString()" name="filter" :value="sortOption.id!" :checked="sortOption.active" @click="searchStore.setSortOption(sortOption.id)" />
+                        <label :for="sortOption.id!.toString()">{{sortOption.name}}</label>
+                    </div>
+                </template>
             </fieldset>
-        </FilterBox>
+        </SortBox>
     </transition>
+    <!-- <FilterBox :open="filterResultsOpen" @close="closeFilter">
+    </FilterBox> -->
 
     <transition name="slide">
-        <FilterBox :open="filterResultsOpen" title="Filter By" @close="closeFilter">
-            <fieldset>
-                <legend class="">Marinas with these services:</legend>
-                <div v-if="!showAllServiceOptions" v-for="index in 5">
-                    <input type="checkbox" :id="searchStore.serviceValues[index]" name="filter-services" :value="searchStore.serviceValues[index]" />
-                    <label :for="searchStore.serviceValues[index]">{{ searchStore.serviceValues[index] }}</label>
-                </div>
-                <div v-for="service in searchStore.serviceValues" v-if="showAllServiceOptions">
-                    <input type="checkbox" :id="service" name="filter-services" :value="service" />
-                    <label :for="service">{{ service }}</label>
-                </div>
-
-                <span>
-                    <span v-if="!showAllServiceOptions" @click="displayAllServiceOptions" class="text-blue-700 cursor-auto hover:cursor-pointer">View More</span>
-                    <span v-if="showAllServiceOptions" @click="hideAllServiceOptions" class="text-blue-700 cursor-auto hover:cursor-pointer">View Less</span>
-                </span>
-            </fieldset>
-            <fieldset>
-            <legend class="">Distance:</legend>
-                <div>
-                    <input type="checkbox" id="Distance" name="filter" value="Distance" checked />
-                    <label for="Distance">Filter by distance</label>
-                </div>
-                <div>
-                    <input class="shadow" type="number" id="Distance" name="filter" value="Distance" placeholder="distance (km)" /> &ThickSpace; km
-                    <!-- <label for="Distance">Filter by distance</label> -->
-                </div>
-            </fieldset>
-            <fieldset>
-            <legend class="">Marinas with these close by:</legend>
-                <div>
-                    <input type="checkbox" id="Pubs" name="filter-close" value="Pubs" checked />
-                    <label for="Pubs">Pubs</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="Supermarkets" name="filter-shop" value="Supermarkets" />
-                    <label for="Supermarkets">Supermarkets</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="Transport" name="filter-transport" value="Transport" />
-                    <label for="Transport">Public transport</label>
-                </div>
-            </fieldset>
+        <FilterBox :open="filterResultsOpen" @close="closeFilter">
+            <h1>test</h1>
         </FilterBox>
     </transition>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {onBeforeMount, onMounted, ref} from 'vue';
 import { useRouter } from 'vue-router';
+import SortBox from '../components/experimental/SortBox.vue';
 import FilterBox from '../components/experimental/FilterBox.vue';
 import { useSearchStore } from '../stores/searchStore';
 import SearchBar from '../components/experimental/SearchBar.vue';
+import SearchForm from '../components/experimental/SearchForm.vue';
+import * as client from '../api-client';
 
 const router = useRouter();
 const searchStore = useSearchStore();
 
 const showAllServiceOptions = ref<boolean>(false);
 
+const searchBoxOpen = ref<boolean>(false);
 const sortResultsOpen = ref<boolean>(false);
 const filterResultsOpen = ref<boolean>(false);
+
+const openSearchBox = () => {
+    searchBoxOpen.value = true;
+}
+
+const closeSearchBox = () => {
+    searchBoxOpen.value = false;
+}
 
 const openSort = () => {
     sortResultsOpen.value = true;
@@ -210,20 +148,65 @@ const closeFilter = () => {
     filterResultsOpen.value = false;
 }
 
-const displayAllServiceOptions = () => {
-    showAllServiceOptions.value = true;
-}
-
-const hideAllServiceOptions = () => {
-    showAllServiceOptions.value = false;
-}
-
 function goHome(){
     router.push("/");
 }
+
+onMounted(async () => {
+    searchStore.setSortOption(1);
+    await searchStore.resetServiceFilterOptions();
+    searchStore.setServiceFilterOptionActive(searchStore?.serviceSearchValue?.key!);
+})
+
+onBeforeMount(() => {
+    if(searchStore.userLocation){
+        searchStore.sortOptions!.find(x => x.name === "Distance")!.enabled = true;
+    }
+})
 </script>
 
 <style>
+div#searchForm{
+    /* transform: translateY(0); */
+  background-color: whitesmoke;
+  z-index: 9;
+  position: fixed;
+  padding: 20px;
+  width: 100%;
+  /* text-align: center; */
+}
+
+/* Animation for slide down */
+.down-enter-from{
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+.down-enter-to{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.down-enter-active{
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-out;
+}
+
+.down-leave-from{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.down-leave-to{
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+.down-leave-active{
+    transition: transform 0.3s ease-in-out, opacity 0.5s ease-out;
+
+}
+
+/* Animation for slide up */
 .slide-enter-from{
     opacity: 0;
     transform: translateY(100%);
@@ -273,7 +256,7 @@ function goHome(){
     opacity: 1 !important;
 } */
 
-div#searchTerm{
+div#searchTermContainer{
     background-color: whitesmoke;
     padding: 15px;
     
@@ -292,7 +275,7 @@ div#searchOptions{
     height: 80px;
 }
 
-div#searchOptions > div > *{
+div#searchOptions > div > span{
     /* border: 1px solid red; */
     width: 100%;
     text-align: center;

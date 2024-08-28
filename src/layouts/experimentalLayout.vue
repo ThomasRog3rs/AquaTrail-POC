@@ -1,8 +1,10 @@
 <template>
-      <nav class="bg-blue-700">
+      <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px ">
         <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
-        <h1 class="logo">Mooring Pin</h1>
-        <p v-if="userLocation">Your location: {{ userLocation.latitude }}, {{ userLocation.longitude }}</p>        <div class="search-types">
+        <!-- <h1 class="logo">Mooring Pin</h1> -->
+        <img style="margin: 0px auto" src="../assets/logo.png" width="50%" alt="">
+        <!-- <p v-if="userLocation">Your location: {{ userLocation.longitude }}, {{ userLocation.latitude }}</p>         -->
+        <div class="search-types">
           <template v-if="searchStore.searchItems.length > 1" v-for="type in searchStore.searchItems">
               <div class="search-type" :class="{ active: type.active }" @click="setActive(type.title)">
                 {{ type.title }}
@@ -11,39 +13,32 @@
         </div>
       </nav>
       <section id="search">
-        <div class="search-container">
+        <SearchForm></SearchForm>
+        <!-- <div class="search-container">
           <div class="container-header">
               <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
             </div>
           <form>            
             <input type="search" placeholder="Search Marina Name" v-model="marinaSearchValue">
             <v-select label="name" placeholder="Which service are you looking for?" :options="searchStore.serviceValues" v-model="serviceSearchValue"></v-select>
-            <!-- <select>
-              <option value="" disabled selected>Select Services (optional)</option>
-            </select> -->
-            <!-- <input type="number" placeholder="Distance from current location (km)"> -->
           </form>
           <div class="container-footer">
               <button class="bg-blue-700" @click="search">Search</button>
           </div>
-        </div>
+        </div> -->
       </section>
-      <template v-if="userLocation">
+      <template v-if="userLocation && marinasClose != undefined">
       <div style="padding: 20px; padding-bottom: 0px;">
-        <h2 class="mb-2">{{ activeOption }} close to you</h2>
+        <h2 class="mb-2">{{ activeOption }} closest to you</h2>
       </div>
       <section id="close-by">
         <div class="close-items">
-          <Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="true" :distance="1.2"></Card>
-<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="false" :distance="1.2"></Card>
-<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="true" :distance="1.2"></Card>
+          <Card v-if="marinasClose != undefined" v-for="marina in marinasClose" :id="marina.id!" :name="marina.name!" description="" image="" :has-image="false" :distance="(marina.distanceFromUser!.toFixed(2))" @click="searchStore.searchLocationValue = undefined"></Card>
         </div>
       </section>
     </template>
-    <template v-if="mapStore.savedLocations.length > 0">
+
+    <!-- <template v-if="mapStore.savedLocations.length > 0">
       <div style="padding: 20px; padding-bottom: 0px;">
         <h2 class="mb-2">Your saved locations</h2>
       </div>
@@ -52,21 +47,15 @@
           <template v-for="location in mapStore.savedLocations" :key="location.id">
                <Card :name="location.title!" :description="undefined" image="" :has-image="false" :distance="1.2"></Card>
             </template>
-          <!-- <Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="true" :distance="1.2"></Card>
-<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="false" :distance="1.2"></Card>
-<Card name="Cotton Field Wharf" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quam?
-" image="" :has-image="true" :distance="1.2"></Card> -->
         </div>
       </section>
-    </template>
+    </template> -->
 
 
-<footer class="bg-blue-700 rounded-lg shadow m-4">
+<!-- <footer class="bg-blue-700 rounded-lg shadow m-4">
     <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
         <div class="sm:flex sm:items-center sm:justify-between">
-            <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+            <a href="/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
                 <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Mooring Pin</span>
             </a>
             <ul class="flex flex-wrap items-center mb-6 text-sm font-medium sm:mb-0 text-white">
@@ -87,7 +76,7 @@
         <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-400 lg:my-8" />
         <span class="block text-sm text-gray-200 sm:text-center dark:text-gray-200">© 2024 <a href="https://flowbite.com/" class="hover:underline">Mooring Pin</a>. All Rights Reserved.</span>
     </div>
-</footer>
+</footer> -->
       <footer>
       </footer>
       <!-- <div id="ad-space" v-if="adOpen">
@@ -99,11 +88,17 @@
   </template>
   <script setup lang="ts">
   import 'vue-select/dist/vue-select.css';
-  import {ref, onMounted} from 'vue';
+  import {ref, onMounted, watchEffect} from 'vue';
   import {useRouter} from 'vue-router';
   import Card from '../components/experimental/Card.vue';
   import { useSearchStore } from '../stores/searchStore';
-  import { useMapStore } from '../stores/mapStore'
+  import { useMapStore } from '../stores/mapStore';
+  import SearchForm from '../components/experimental/SearchForm.vue';
+  import { SearchPayload } from '../types/search';
+  import * as client from '../api-client';
+  import { DataApi } from '../api-client';
+
+  const dataApi = new DataApi();
 
   const mapStore = useMapStore();
   const searchStore = useSearchStore();
@@ -113,28 +108,13 @@
   const adOpen = ref<boolean>(true);
 
   const router = useRouter();
-  const marinaSearchValue = ref<string | undefined>();
-  const serviceSearchValue = ref<string | undefined>();
+  // const marinaSearchValue = ref<string | undefined>();
+  // const serviceSearchValue = ref<string | undefined>();
   const searchErrorMsg = ref<string>("");
   const searchHasError = ref<boolean>(false);
 
-  function search() {
-  if (
-    (marinaSearchValue.value === undefined || marinaSearchValue.value === null || marinaSearchValue.value === '') &&
-    (serviceSearchValue.value === undefined || serviceSearchValue.value === null || serviceSearchValue.value === '')
-  ) {
-    searchErrorMsg.value = "Please provide one or more values";
-    searchHasError.value = true;
-    return;
-  }
-
-  router.push("/results");
-
-  searchHasError.value = false;
-
   //Call the API
   //alert(`Searching: ${marinaSearchValue.value}, ${serviceSearchValue.value}`);
-}
 
   function closeAd(){
     adOpen.value = false;
@@ -163,6 +143,7 @@ const requestLocation = () => {
           longitude: position.coords.longitude,
         };
         console.log('Location:', userLocation.value);  // Log location when obtained
+        searchStore.userLocation = `${userLocation.value.longitude}, ${userLocation.value.latitude}`;
       },
       (err) => {
         switch (err.code) {
@@ -188,12 +169,61 @@ const requestLocation = () => {
   }
 };
 
-onMounted(() => {
+const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
+
+  watchEffect(async () =>{
+      if(searchStore.userLocation != undefined){
+        console.log("get close", searchStore.userLocation);
+        const marinaParams : client.DataMarinasSearchGetRequest = {
+        searchCoordinates: searchStore.userLocation,
+        userCoordinates: searchStore.userLocation,
+        searchDistance: 8,
+        limit: 20
+      }
+
+      marinasClose.value = await dataApi.dataMarinasSearchGet(marinaParams) ?? undefined;
+      marinasClose.value = marinasClose.value.sort((a : client.MarinaModel,b : client.MarinaModel) => {
+       return a?.distanceFromUser! - b?.distanceFromUser!
+      });
+      console.warn(marinasClose.value)
+    }
+  });
+
+onMounted(async () => {
   activeOption.value = searchStore.searchItems.find((x:any) => x.active)!.title;
   requestLocation();
   // Log current state immediately after request
   console.log('Initial Location:', userLocation.value);
   console.log('Initial Error:', error.value);
+
+  // const params : client.DataMarinasSearchGetRequest = {
+  //   name: "Marina",
+  //   limit: 10,
+  //   offset: 0
+  // }
+  // const res = await dataApi.dataMarinasSearchGet(params);
+  // console.log(res);
+
+  // const url: string = `${import.meta.env.VITE_AQUA_API_ROOT}/Types/service-types`;
+
+  // try {
+  //       const response = await fetch(url);
+  //       // Make the HTTP GET request
+
+  //       // Check if the response is OK (status code 200-299)
+  //       if (!response.ok) {
+  //           throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+
+  //       // Parse the JSON from the response
+  //       const data = await response.json();
+
+  //       // Log the JSON data to the console
+  //       console.log(data);
+  //   } catch (error) {
+  //       // Log any errors that occur
+  //       console.error('Error fetching data:', error);
+  //   }
 });
   </script>
 
