@@ -24,6 +24,7 @@
             </div>
         </div> -->
     </div>
+    <!-- Icons: https://www.freepik.com/icon/sort_4511377 -->
     <div id="searchOptions" class="shadow-lg p-4">
         <div class="mt-6 flex justify-between">
             <span @click="openSort">
