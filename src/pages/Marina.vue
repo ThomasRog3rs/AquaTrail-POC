@@ -15,7 +15,10 @@
     </div>
     <div id="serviceIcons" class="shadow-lg border" v-if="iconPaths?.length! > 0">
         <div>
-            <span v-for="icon in iconPaths">
+            <!-- <span v-for="icon in iconPaths">
+                <img :src="icon.path" :alt="icon.name" :title="icon.name" class=""/>
+            </span> -->
+            <span v-for="icon in iconPaths" :key="icon.name">
                 <img :src="icon.path" :alt="icon.name" :title="icon.name" class=""/>
             </span>
         </div>
@@ -111,6 +114,8 @@ const map = ref<Map|null>(null);
     router.push("/Results");
   }
 
+  
+
   onMounted(async () => {
     const params : client.DataMarinaIdGetRequest = {
         id: props.id
@@ -119,9 +124,11 @@ const map = ref<Map|null>(null);
     marina.value = await DataApi.dataMarinaIdGet(params);
 
     iconPaths.value = marina.value.services?.map((x : client.ServiceModel) =>{
+        const iconKey = x.serviceType?.iconKey?.toLowerCase();
+        const iconPath = iconKey ? require(`@/assets/icons/cp-${iconKey}.svg`) : '';
         return {
             name: x.serviceType?.value ?? '',
-            path: `/src/assets/icons/cp-${x.serviceType?.iconKey?.toLowerCase()}.svg` ?? ''
+            path: iconPath
         }
     }) || [];
 
