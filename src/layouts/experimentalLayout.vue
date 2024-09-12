@@ -289,7 +289,8 @@ onMounted(async () => {
     }
 
     .search-container > form > input:not(:last-child),
-    .search-container > form > select:not(:last-child) {
+    .search-container > form > select:not(:last-child),
+    .form-border-bottom {
       border-bottom: 1px solid rgb(186, 186, 186);
     }
 
