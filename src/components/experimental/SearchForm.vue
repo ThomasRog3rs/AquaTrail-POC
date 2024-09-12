@@ -3,8 +3,17 @@
         <div class="container-header">
             <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
         </div>
-        <form>
-            <input  type="text" placeholder="Location" v-model="searchStore.searchLocationValue" style="text-align: left;">  
+        <form class="mx-w-md mx-auto">
+            <label for="search-location" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+            <div class="relative bg-transparent">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input type="search" id="search-location" class="form-border-bottom block w-full p-6 ps-11 text-lg text-gray-900 bg-transparent" placeholder="Search Location" required v-model="searchStore.searchLocationValue" />
+             </div>
+            <!-- <input  type="text" placeholder="Search Location"  style="text-align: left;">   -->
             <div style="width: 100%;">
                 <label for="" style="text-align: left; display: block; width: 90%; margin: 0px auto; margin-top: 20px;">Search Radius: {{ searchStore.searchRadiusValue }} Miles</label>
                 <input type="range" placeholder="Radius (miles)" v-model="searchStore.searchRadiusValue" max=30 min=1 value="1" style="display: block; width: 90%; margin: 0px auto; margin-bottom: 12px; margin-top: 12px;"> 
@@ -131,8 +140,7 @@
             searchHasError.value = true;
             return;
         }
-
-
+        
         router.push("/results");
         searchHasError.value = false;
         searchStore.resetSortOptions();
