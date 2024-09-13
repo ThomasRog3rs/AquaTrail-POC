@@ -34,7 +34,8 @@
       </section>
       <template v-if="userLocation && marinasClose != undefined">
       <div style="padding: 20px; padding-bottom: 0px;">
-        <h2 class="mb-2">{{ activeOption }} closest to you</h2>
+        <h1 class="mb-2 text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl"> <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">Marinas</span> closest to you</h1>
+        <!-- <h2 class="mb-2">{{ activeOption }} closest to you</h2> -->
       </div>
       <section id="close-by">
         <div class="close-items">
