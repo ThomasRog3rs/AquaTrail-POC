@@ -15,7 +15,7 @@
       <section id="search">
         <div class="mb-4">
 
-<h1 class="mb-2 text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">Find <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">Marinas</span> Near You</h1>
+<h1 class="mb-2 text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">Find <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">Marinas</span></h1>
 <p class="text-md font-normal text-gray-500 lg:text-xl dark:text-gray-600">Enter a location and adjust the radius to find nearby marinas.</p>
         </div>
         <SearchForm></SearchForm>
@@ -34,7 +34,8 @@
       </section>
       <template v-if="userLocation && marinasClose != undefined">
       <div style="padding: 20px; padding-bottom: 0px;">
-        <h2 class="mb-2">{{ activeOption }} closest to you</h2>
+        <h1 class="mb-2 text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl"> <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">Marinas</span> closest to you</h1>
+        <!-- <h2 class="mb-2">{{ activeOption }} closest to you</h2> -->
       </div>
       <section id="close-by">
         <div class="close-items">

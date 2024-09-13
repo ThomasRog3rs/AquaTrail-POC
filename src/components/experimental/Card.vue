@@ -7,12 +7,14 @@
 
     <div class="p-5">
         <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ props.name }}</h5>
+            <h2 class="mb-2 text-2xl font-bold text-gray-700 md:text-2xl lg:text-3xl"> {{ props.name }}</h2>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900"></h5>
         </a>
-        <p class="mb-3 font-normal text-gray-700">{{props.description}}</p>
-        <p>{{ props.distance }} miles</p>
+        <p class="text-md font-normal text-gray-500 lg:text-xl">{{props.description}}</p>
+        <p class="text-md font-normal text-gray-800 lg:text-xl">{{ props.distance }} miles</p>
+
     </div>
-</router-link>
+    </router-link>
 </div>
 
 </template>
