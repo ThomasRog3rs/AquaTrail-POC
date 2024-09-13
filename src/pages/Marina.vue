@@ -26,9 +26,9 @@
     <div>
     <main id="marina-details">
         <section class="marina-heading flex justify-between">
-            <h1 class="font-bold text-lg mb-2">{{ marina?.name }}</h1>
-            <a v-if="marina?.website != undefined" :href="marina?.website" target="_blank" class="text-blue-700">Website</a>
-            <a v-else href="#" class="text-gray-600 hover:cursor-not-allowed">Website</a>
+            <h1 class="mb-2 text-2xl font-extrabold text-gray-800 md:text-5xl lg:text-6xl">{{ marina?.name }}</h1>
+            <a v-if="marina?.website != undefined" :href="marina?.website" target="_blank" class="text-blue-700 text-xl">Website</a>
+            <!-- <a v-else href="#" class="text-gray-600 hover:cursor-not-allowed">Website</a> -->
         </section>      
         <hr>  
         <div class="marina-map-conatiner">
