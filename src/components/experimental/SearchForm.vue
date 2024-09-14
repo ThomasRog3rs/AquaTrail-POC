@@ -3,25 +3,74 @@
         <div class="container-header">
             <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
         </div>
+        
         <form class="mx-w-md mx-auto">
-            <label for="search-location" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
-            <div class="relative bg-transparent">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                    </svg>
-                </div>
-                <input type="search" id="search-location" class="form-border-bottom block w-full p-6 ps-11 text-lg text-gray-900 bg-transparent" placeholder="Search Location" required v-model="searchStore.searchLocationValue" />
-             </div>
-            <!-- <input  type="text" placeholder="Search Location"  style="text-align: left;">   -->
-            <div style="width: 100%;">
-                <label for="" style="text-align: left; display: block; width: 90%; margin: 0px auto; margin-top: 20px;">Search Radius: {{ searchStore.searchRadiusValue }} Miles</label>
-                <input type="range" placeholder="Radius (miles)" v-model="searchStore.searchRadiusValue" max=30 min=1 value="1" style="display: block; width: 90%; margin: 0px auto; margin-bottom: 12px; margin-top: 12px;"> 
-            </div>   
-      
-            <!-- <input type="search" placeholder="Search Marina Name" v-model="searchStore.marinaSearchValue"> -->
-            <!-- <v-select label="value" placeholder="Which service are you looking for?" :options="serviceTypes" v-model="searchStore.serviceSearchValue"></v-select> -->
-        </form>
+    <label for="search-location" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+    <div class="relative bg-transparent">
+      <!-- Icon inside input field -->
+      <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
+        <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+        </svg>
+      </div>
+      <!-- Input field -->
+      <input
+        type="search"
+        autocomplete="off"
+        id="search-location"
+        class="form-border-bottom block w-full p-6 ps-11 text-lg text-gray-900 bg-transparent"
+        placeholder="Search Location"
+        required
+        v-model="searchStore.searchLocationValue"
+        @focus="suggestionsActive = true"
+        @blur="handleBlur"
+        @keyup="getSuggestions(searchStore.searchLocationValue ?? '')"
+      />
+      <!-- Suggestions box -->
+      <div
+        id="suggestions"
+        ref="suggestionsBox"
+        v-if="suggestionsActive"
+        class="absolute w-full mt-1 bg-white shadow-xl z-10 p-4"
+        :style="{ top: '100%', left: '0' }"
+      >
+        <ul>
+          <li v-if="searchStore.userLocation" class="flex p-2 border-b border-grey-100 cursor-pointer text-blue-700 hover:bg-gray-100 hover:text-blue-900" @click="searchUserLocation"><svg class="mr-2 w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+  <path fill-rule="evenodd" d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z" clip-rule="evenodd"/>
+</svg><span>Search My Current Location</span> 
+</li>
+          
+          <li v-if="!suggestions" class="p-2 text-gray-700">
+            Start typing for suggestions
+          </li>
+          <li v-if="suggestions && suggestions!.length == 0" class="p-2 text-gray-700">
+            No results found
+          </li>
+          <template v-for="suggestion in suggestions" :key="suggestion.name">
+            <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900" @click="searchStore.searchLocationValue = suggestion.name!">{{ suggestion.name }}</li>
+          </template>
+
+          <!-- <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">123</li>
+          <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">123</li>
+          <li class="p-2 cursor-pointer hover:bg-gray-100 hover:text-gray-900">123</li> -->
+        </ul>
+      </div>
+    </div>
+    <div style="width: 100%;">
+      <label for="" style="text-align: left; display: block; width: 90%; margin: 0 auto; margin-top: 20px;">
+        Search Radius: {{ searchStore.searchRadiusValue }} Miles
+      </label>
+      <input
+        type="range"
+        placeholder="Radius (miles)"
+        v-model="searchStore.searchRadiusValue"
+        max="30"
+        min="1"
+        value="1"
+        style="display: block; width: 90%; margin: 0 auto; margin-bottom: 12px; margin-top: 12px;"
+      />
+    </div>
+  </form>
         <div class="container-footer">
             <button class="bg-blue-700" @click="search">Search</button>
         </div>
@@ -29,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, watchEffect } from 'vue';
     import { useSearchStore } from '../../stores/searchStore';
     import { useRouter } from 'vue-router';
     import {ServiceTypeModel, TypesApi, DataApi, LocationApi} from '../../api-client';
@@ -39,11 +88,21 @@
     const dataApi = new DataApi();
     const locationApi = new LocationApi();
 
+    const suggestionsBox = ref<HTMLElement | undefined>();
+
+    const handleBlur = (event : FocusEvent) => {
+      setTimeout(() => {
+        suggestionsActive.value = false;
+      }, 200); // Slight delay so click event actually works
+    }
+
     const router = useRouter();
     const searchStore = useSearchStore();
 
     const searchErrorMsg = ref<string>("");
     const searchHasError = ref<boolean>(false);
+
+    const suggestionsActive = ref<boolean>(false);
 
     const emit = defineEmits<{
         (e: 'searched'): void;
@@ -62,6 +121,101 @@
     // If there are fewer than two parts, return the original string
     return response;
 }
+
+const searchUserLocation = async () => {
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const baseURL = 'https://api.mapbox.com/search/geocode/v6/reverse';
+  const userCoordinates = searchStore.userLocation?.split(",");
+  try {
+        // Default parameters for the query
+        const params = {
+          longitude: userCoordinates![0],
+          latitude: userCoordinates![1],
+          access_token: apiKey,
+        };
+        const queryString = buildQueryString(params);
+        const response = await fetch(`${baseURL}?${queryString}`);
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("USER LOCATION SEARCH REVERSE: ", data)
+        searchStore.searchLocationValue = data.features[0].properties.place_formatted;
+        // suggestions.value = data.features.map((x:any) => {
+        //   return{
+        //     name: x.properties.place_formatted ?? "NOPE",
+        //     coordinates: `${x.properties.coordinates.latitude},${x.properties.coordinates.longitude}`
+        //   }
+        // });
+        return data;
+      } catch (error) {
+        console.error('Error fetching geocoding data:', error);
+        suggestions.value = [];
+        throw error;
+      }
+}
+
+const buildQueryString = (params: Record<string, string | number>) => {
+  return Object.keys(params)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    .join('&');
+};
+    const suggestions = ref<Array<client.LocationModel>>();
+    async function getSuggestions(currentSearchValue : string) {
+      currentSearchValue = currentSearchValue.trim();
+      const apiKey = import.meta.env.VITE_API_KEY;
+      const baseURL = 'https://api.mapbox.com/search/geocode/v6/forward';
+
+      try {
+        // Default parameters for the query
+        const params = {
+          q: currentSearchValue,
+          access_token: apiKey,
+          autocomplete: "true",
+          country: 'GB'
+        };
+        const queryString = buildQueryString(params);
+        const response = await fetch(`${baseURL}?${queryString}`);
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("LOCATION SEARCH: ", data)
+        suggestions.value = data.features.map((x:any) => {
+          return{
+            name: x.properties.place_formatted ?? "NOPE",
+            coordinates: `${x.properties.coordinates.latitude},${x.properties.coordinates.longitude}`
+          }
+        });
+        return data;
+      } catch (error) {
+        console.error('Error fetching geocoding data:', error);
+        suggestions.value = [];
+        throw error;
+      }
+
+
+
+      // if(currentSearchValue === ""){
+      //   suggestions.value = [];
+      //   return;
+      // }
+      // const locationParams : client.LocationSearchGetRequest = {
+      //   query: currentSearchValue
+      // }
+
+      // try{
+      //   const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
+      //   suggestions.value = loactionResponse;
+      // }catch(err){
+      //   suggestions.value = [];
+      // }
+
+    }
 
     async function search() {
         // if (
@@ -150,6 +304,22 @@
     }
 
     const serviceTypes = ref<Array<ServiceTypeModel> | undefined>();
+
+      //TO DO: handle arrow keys to navigate options
+    // const handleKeydown = (e:KeyboardEvent) => {
+    //   if (e.key === 'ArrowDown') {
+    //     e.preventDefault();
+    //     alert("down");
+    //   }
+    // }
+
+    // watchEffect(() => {
+    //   if (suggestionsActive.value === true) {
+    //     document.addEventListener('keydown', handleKeydown);
+    //   } else {
+    //     document.removeEventListener('keydown', handleKeydown);
+    //   }
+    // })
 
     onMounted(async () => {
         try {

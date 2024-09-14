@@ -179,15 +179,14 @@ const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
 
   watchEffect(async () =>{
       if(searchStore.userLocation != undefined){
-        console.log("get close", searchStore.userLocation);
-        const marinaParams : client.DataMarinasSearchGetRequest = {
-        searchCoordinates: searchStore.userLocation,
+      const closeMarinaParams : client.DataMarinasClosestGetRequest = {
         userCoordinates: searchStore.userLocation,
-        searchDistance: 8,
-        limit: 20
+        numberOfMarinas: 8
       }
 
-      marinasClose.value = await dataApi.dataMarinasSearchGet(marinaParams) ?? undefined;
+      marinasClose.value = await dataApi.dataMarinasClosestGet(closeMarinaParams) ?? undefined;
+
+      // /marinasClose.value = await dataApi.dataMarinasSearchGet(marinaParams) ?? undefined;
       marinasClose.value = marinasClose.value.sort((a : client.MarinaModel,b : client.MarinaModel) => {
        return a?.distanceFromUser! - b?.distanceFromUser!
       });
