@@ -60,6 +60,7 @@
 
   </section>
   <button
+  v-if="!hideScrollButton"
       class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
       @click="scrollCloseItems"
     >
@@ -168,22 +169,36 @@ const error = ref<string | null>(null);
 
 const closeItemsContainer = ref<HTMLElement | null>(null);
 const closeItemsScroll = ref<HTMLElement | null>(null);
+const hideScrollButton = ref<boolean>(false);
+let currentScrollPos = 0;
 function scrollCloseItems(){
   const container = closeItemsContainer.value;
   const content = closeItemsScroll.value
   if (container && content) {
-    const scrollAmount = 565; // Scroll by 1/5 of the container's visible width
-    const maxScrollLeft = container.scrollWidth - container.clientWidth;
-    
+    const scrollAmount = container.scrollWidth / 5; // Scroll by 1/5 of the container's visible width
+    //const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    //alert(maxScrollLeft)
+    const futurePos = currentScrollPos + scrollAmount
+    alert("current pos: " + currentScrollPos)
+    alert("Next current pos: " + futurePos)
+    alert("Max width" + container.scrollWidth);
+
     // Determine the new scroll position
-    const newScrollLeft = container.scrollLeft + scrollAmount;
+    // const newScrollLeft = container.scrollLeft + scrollAmount;
     
     // Ensure the new scroll position does not exceed the maximum scrollable position
-    const finalScrollLeft = Math.min(newScrollLeft, maxScrollLeft);
+    // const finalScrollLeft = Math.min(newScrollLeft, maxScrollLeft);
     container.scrollBy({
-      left: finalScrollLeft, // Scroll horizontally
+      left: scrollAmount, // Scroll horizontally
       behavior: 'smooth', // Smooth scrolling effect
     });
+
+    if((futurePos + scrollAmount) >= container.scrollWidth){
+      hideScrollButton.value = true;
+      return;
+    }
+
+    currentScrollPos += scrollAmount;
   }
 }
 
