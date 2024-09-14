@@ -187,7 +187,14 @@ const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
         limit: 20
       }
 
-      marinasClose.value = await dataApi.dataMarinasSearchGet(marinaParams) ?? undefined;
+      const closeMarinaParams : client.DataMarinasClosestGetRequest = {
+        userCoordinates: searchStore.userLocation,
+        numberOfMarinas: 8
+      }
+
+      marinasClose.value = await dataApi.dataMarinasClosestGet(closeMarinaParams) ?? undefined;
+
+      // /marinasClose.value = await dataApi.dataMarinasSearchGet(marinaParams) ?? undefined;
       marinasClose.value = marinasClose.value.sort((a : client.MarinaModel,b : client.MarinaModel) => {
        return a?.distanceFromUser! - b?.distanceFromUser!
       });
