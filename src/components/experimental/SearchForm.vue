@@ -37,7 +37,7 @@
         <ul>
           <!-- <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">Search My Current Location</li> -->
           <li v-if="!suggestions" class="p-2 text-gray-700">
-            Start typing to see suggestions
+            Start typing for suggestions
           </li>
           <li v-if="suggestions && suggestions!.length == 0" class="p-2 text-gray-700">
             No results found
@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, watchEffect } from 'vue';
     import { useSearchStore } from '../../stores/searchStore';
     import { useRouter } from 'vue-router';
     import {ServiceTypeModel, TypesApi, DataApi, LocationApi} from '../../api-client';
@@ -265,6 +265,22 @@ const buildQueryString = (params: Record<string, string | number>) => {
     }
 
     const serviceTypes = ref<Array<ServiceTypeModel> | undefined>();
+
+      //TO DO: handle arrow keys to navigate options
+    // const handleKeydown = (e:KeyboardEvent) => {
+    //   if (e.key === 'ArrowDown') {
+    //     e.preventDefault();
+    //     alert("down");
+    //   }
+    // }
+
+    // watchEffect(() => {
+    //   if (suggestionsActive.value === true) {
+    //     document.addEventListener('keydown', handleKeydown);
+    //   } else {
+    //     document.removeEventListener('keydown', handleKeydown);
+    //   }
+    // })
 
     onMounted(async () => {
         try {
