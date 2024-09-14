@@ -35,7 +35,11 @@
         :style="{ top: '100%', left: '0' }"
       >
         <ul>
-          <!-- <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">Search My Current Location</li> -->
+          <li v-if="searchStore.userLocation" class="flex p-2 border-b border-grey-100 cursor-pointer text-blue-700 hover:bg-gray-100 hover:text-blue-900" @click="searchUserLocation"><svg class="mr-2 w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+  <path fill-rule="evenodd" d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z" clip-rule="evenodd"/>
+</svg><span>Search My Current Location</span> 
+</li>
+          
           <li v-if="!suggestions" class="p-2 text-gray-700">
             Start typing for suggestions
           </li>
@@ -116,6 +120,41 @@
 
     // If there are fewer than two parts, return the original string
     return response;
+}
+
+const searchUserLocation = async () => {
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const baseURL = 'https://api.mapbox.com/search/geocode/v6/reverse';
+  const userCoordinates = searchStore.userLocation?.split(",");
+  try {
+        // Default parameters for the query
+        const params = {
+          longitude: userCoordinates![0],
+          latitude: userCoordinates![1],
+          access_token: apiKey,
+        };
+        const queryString = buildQueryString(params);
+        const response = await fetch(`${baseURL}?${queryString}`);
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("USER LOCATION SEARCH REVERSE: ", data)
+        searchStore.searchLocationValue = data.features[0].properties.place_formatted;
+        // suggestions.value = data.features.map((x:any) => {
+        //   return{
+        //     name: x.properties.place_formatted ?? "NOPE",
+        //     coordinates: `${x.properties.coordinates.latitude},${x.properties.coordinates.longitude}`
+        //   }
+        // });
+        return data;
+      } catch (error) {
+        console.error('Error fetching geocoding data:', error);
+        suggestions.value = [];
+        throw error;
+      }
 }
 
 const buildQueryString = (params: Record<string, string | number>) => {
