@@ -172,7 +172,7 @@ function scrollCloseItems(){
   const container = closeItemsContainer.value;
   const content = closeItemsScroll.value
   if (container && content) {
-    const scrollAmount = container.scrollWidth / 3; // Scroll by 1/4 of the container's visible width
+    const scrollAmount = container.scrollWidth / 5; // Scroll by 1/4 of the container's visible width
     container.scrollBy({
       left: scrollAmount, // Scroll horizontally
       behavior: 'smooth', // Smooth scrolling effect
