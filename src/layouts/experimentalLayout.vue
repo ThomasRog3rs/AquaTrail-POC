@@ -1,5 +1,19 @@
 <template>
-      <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px ">
+<div class="fixed top-0 left-0 w-full bg-blue-100 p-4 z-50">
+  <div class="flex justify-center items-center">
+    <p class="text-center">
+      <strong class="text-blue-600 font-semibold">
+        Alpha
+      </strong>
+      <span class="text-gray-700 mx-2">
+        This is a new service. Help us improve it and <a class="text-blue-700 underline" href="mailto:matthewajc@outlook.com">give your feedback by email</a>.
+      </span>
+    </p>
+  </div>
+</div>
+
+
+      <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px; margin-top: 57px ">
         <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
         <!-- <h1 class="logo">Mooring Pin</h1> -->
         <img style="margin: 0px auto" src="../assets/logo.png" width="50%" alt="">
