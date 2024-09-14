@@ -24,7 +24,7 @@
 
     <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
 
-    <div class="bg-blue-700" style="padding: 15px; padding-top: 0px; height: 80px;margin-top: 57px">
+    <div class="bg-blue-700" style="padding: 15px; padding-top: 0px; height: 80px;margin-top: 80px">
         <SearchBar @back="goHome" @click="openSearchBox"></SearchBar>
          
         <!-- <div id="searchContainer">
