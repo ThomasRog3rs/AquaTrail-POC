@@ -11,7 +11,7 @@
     </p>
   </div>
 </div>
-    <div class="bg-blue-700" style="padding: 25px; height: 80px;margin-top: 57px">
+    <div class="bg-blue-700" style="padding: 25px; height: 80px;margin-top: 80px">
         <div class="flex justify-between text-white">
             <span class="back w-20" @click="goBack">
                 <svg class="w-6 h-6 text-white-800 inline-block mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

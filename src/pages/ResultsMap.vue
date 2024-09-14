@@ -11,7 +11,7 @@
     </p>
   </div>
 </div>
-    <div class="flex-1 min-h-0 h-[calc(100vh)] w-full ml-0  sm:w-[calc(100vw)]" style="margin-top: 57px; overflow: hidden;">
+    <div class="flex-1 min-h-0 h-[calc(100vh)] w-full ml-0  sm:w-[calc(100vw)]" style="margin-top: 80px; overflow: hidden;">
       <transition name="down">
         <div id="searchForm" class="shadow-lg" v-if="searchBoxOpen">
             <div class="flex justify-between text-lg">
@@ -25,7 +25,7 @@
 
     <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
 
-    <SearchBar style="margin-top: 57px; position: absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')" @click="openSearchBox">
+    <SearchBar style="margin-top: 80px; position: absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')" @click="openSearchBox">
           <span class="mt-2 mr-9" style="" v-if="!mapStore.mapLoaded">
             <div class="loading">
               <span></span>

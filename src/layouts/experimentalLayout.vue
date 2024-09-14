@@ -13,7 +13,7 @@
 </div>
 
 
-      <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px; margin-top: 57px ">
+      <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px; margin-top: 80px ">
         <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
         <!-- <h1 class="logo">Mooring Pin</h1> -->
         <img style="margin: 0px auto" src="../assets/logo.png" width="50%" alt="">

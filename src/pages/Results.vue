@@ -12,7 +12,7 @@
   </div>
 </div>
     <transition name="down">
-        <div id="searchForm" class="shadow-lg" v-if="searchBoxOpen" style="margin-top: 57px">
+        <div id="searchForm" class="shadow-lg" v-if="searchBoxOpen" style="margin-top: 80px">
             <div class="flex justify-between text-lg">
                 <span class="hover:cursor-pointer" @click="searchBoxOpen = false">&cross;</span>
                 <h3 class="mb-2">Edit your search</h3>
