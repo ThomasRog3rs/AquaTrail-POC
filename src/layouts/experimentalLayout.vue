@@ -179,9 +179,9 @@ function scrollCloseItems(){
     //const maxScrollLeft = container.scrollWidth - container.clientWidth;
     //alert(maxScrollLeft)
     const futurePos = currentScrollPos + scrollAmount
-    alert("current pos: " + currentScrollPos)
-    alert("Next current pos: " + futurePos)
-    alert("Max width" + container.scrollWidth);
+    // alert("current pos: " + currentScrollPos)
+    // alert("Next current pos: " + futurePos)
+    // alert("Max width" + container.scrollWidth);
 
     // Determine the new scroll position
     // const newScrollLeft = container.scrollLeft + scrollAmount;
