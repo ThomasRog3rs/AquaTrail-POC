@@ -172,9 +172,16 @@ function scrollCloseItems(){
   const container = closeItemsContainer.value;
   const content = closeItemsScroll.value
   if (container && content) {
-    const scrollAmount = container.scrollWidth / 5; // Scroll by 1/4 of the container's visible width
+    const scrollAmount = 565; // Scroll by 1/5 of the container's visible width
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    
+    // Determine the new scroll position
+    const newScrollLeft = container.scrollLeft + scrollAmount;
+    
+    // Ensure the new scroll position does not exceed the maximum scrollable position
+    const finalScrollLeft = Math.min(newScrollLeft, maxScrollLeft);
     container.scrollBy({
-      left: scrollAmount, // Scroll horizontally
+      left: finalScrollLeft, // Scroll horizontally
       behavior: 'smooth', // Smooth scrolling effect
     });
   }
