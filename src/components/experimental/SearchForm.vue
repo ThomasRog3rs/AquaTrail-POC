@@ -16,26 +16,34 @@
       <!-- Input field -->
       <input
         type="search"
+        autocomplete="off"
         id="search-location"
         class="form-border-bottom block w-full p-6 ps-11 text-lg text-gray-900 bg-transparent"
         placeholder="Search Location"
         required
         v-model="searchStore.searchLocationValue"
         @focus="suggestionsActive = true"
-        @blur="suggestionsActive = false"
-        @keydown="getSuggestions('man')"
+        @blur="handleBlur"
+        @keyup="getSuggestions(searchStore.searchLocationValue ?? '')"
       />
       <!-- Suggestions box -->
       <div
         id="suggestions"
+        ref="suggestionsBox"
         v-if="suggestionsActive"
         class="absolute w-full mt-1 bg-white shadow-xl z-10 p-4"
         :style="{ top: '100%', left: '0' }"
       >
         <ul>
-          <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">Search Current Location</li>
-          <template v-for="suggestion in suggestions">
-            <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900" @click="test()">{{ suggestion.name }}</li>
+          <!-- <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">Search My Current Location</li> -->
+          <li v-if="!suggestions" class="p-2 text-gray-700">
+            Start typing to see suggestions
+          </li>
+          <li v-if="suggestions && suggestions!.length == 0" class="p-2 text-gray-700">
+            No results found
+          </li>
+          <template v-for="suggestion in suggestions" :key="suggestion.name">
+            <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900" @click="searchStore.searchLocationValue = suggestion.name!">{{ suggestion.name }}</li>
           </template>
 
           <!-- <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">123</li>
@@ -76,8 +84,12 @@
     const dataApi = new DataApi();
     const locationApi = new LocationApi();
 
-    const test = () => {
-      alert("test");
+    const suggestionsBox = ref<HTMLElement | undefined>();
+
+    const handleBlur = (event : FocusEvent) => {
+      setTimeout(() => {
+        suggestionsActive.value = false;
+      }, 200); // Slight delay so click event actually works
     }
 
     const router = useRouter();
@@ -106,16 +118,65 @@
     return response;
 }
 
-const suggestions = ref<Array<client.LocationModel>>();
-async function getSuggestions(currentSearchValue : string) {
-  const locationParams : client.LocationSearchGetRequest = {
-    query: currentSearchValue
-  }
+const buildQueryString = (params: Record<string, string | number>) => {
+  return Object.keys(params)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    .join('&');
+};
+    const suggestions = ref<Array<client.LocationModel>>();
+    async function getSuggestions(currentSearchValue : string) {
+      currentSearchValue = currentSearchValue.trim();
+      const apiKey = import.meta.env.VITE_API_KEY;
+      const baseURL = 'https://api.mapbox.com/search/geocode/v6/forward';
 
-  // let locationCoordinates : string | undefined = undefined;
-  const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
-  suggestions.value = loactionResponse
-}
+      try {
+        // Default parameters for the query
+        const params = {
+          q: currentSearchValue,
+          access_token: apiKey,
+          autocomplete: "true",
+          country: 'GB'
+        };
+        const queryString = buildQueryString(params);
+        const response = await fetch(`${baseURL}?${queryString}`);
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("LOCATION SEARCH: ", data)
+        suggestions.value = data.features.map((x:any) => {
+          return{
+            name: x.properties.place_formatted ?? "NOPE",
+            coordinates: `${x.properties.coordinates.latitude},${x.properties.coordinates.longitude}`
+          }
+        });
+        return data;
+      } catch (error) {
+        console.error('Error fetching geocoding data:', error);
+        suggestions.value = [];
+        throw error;
+      }
+
+
+
+      // if(currentSearchValue === ""){
+      //   suggestions.value = [];
+      //   return;
+      // }
+      // const locationParams : client.LocationSearchGetRequest = {
+      //   query: currentSearchValue
+      // }
+
+      // try{
+      //   const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
+      //   suggestions.value = loactionResponse;
+      // }catch(err){
+      //   suggestions.value = [];
+      // }
+
+    }
 
     async function search() {
         // if (
