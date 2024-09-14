@@ -3,25 +3,62 @@
         <div class="container-header">
             <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
         </div>
+        
         <form class="mx-w-md mx-auto">
-            <label for="search-location" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
-            <div class="relative bg-transparent">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                    </svg>
-                </div>
-                <input type="search" id="search-location" class="form-border-bottom block w-full p-6 ps-11 text-lg text-gray-900 bg-transparent" placeholder="Search Location" required v-model="searchStore.searchLocationValue" />
-             </div>
-            <!-- <input  type="text" placeholder="Search Location"  style="text-align: left;">   -->
-            <div style="width: 100%;">
-                <label for="" style="text-align: left; display: block; width: 90%; margin: 0px auto; margin-top: 20px;">Search Radius: {{ searchStore.searchRadiusValue }} Miles</label>
-                <input type="range" placeholder="Radius (miles)" v-model="searchStore.searchRadiusValue" max=30 min=1 value="1" style="display: block; width: 90%; margin: 0px auto; margin-bottom: 12px; margin-top: 12px;"> 
-            </div>   
-      
-            <!-- <input type="search" placeholder="Search Marina Name" v-model="searchStore.marinaSearchValue"> -->
-            <!-- <v-select label="value" placeholder="Which service are you looking for?" :options="serviceTypes" v-model="searchStore.serviceSearchValue"></v-select> -->
-        </form>
+    <label for="search-location" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+    <div class="relative bg-transparent">
+      <!-- Icon inside input field -->
+      <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
+        <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+        </svg>
+      </div>
+      <!-- Input field -->
+      <input
+        type="search"
+        id="search-location"
+        class="form-border-bottom block w-full p-6 ps-11 text-lg text-gray-900 bg-transparent"
+        placeholder="Search Location"
+        required
+        v-model="searchStore.searchLocationValue"
+        @focus="suggestionsActive = true"
+        @blur="suggestionsActive = false"
+        @keydown="getSuggestions('man')"
+      />
+      <!-- Suggestions box -->
+      <div
+        id="suggestions"
+        v-if="suggestionsActive"
+        class="absolute w-full mt-1 bg-white shadow-xl z-10 p-4"
+        :style="{ top: '100%', left: '0' }"
+      >
+        <ul>
+          <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">Search Current Location</li>
+          <template v-for="suggestion in suggestions">
+            <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900" @click="test()">{{ suggestion.name }}</li>
+          </template>
+
+          <!-- <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">123</li>
+          <li class="p-2 border-b border-grey-100 cursor-pointer hover:bg-gray-100 hover:text-gray-900">123</li>
+          <li class="p-2 cursor-pointer hover:bg-gray-100 hover:text-gray-900">123</li> -->
+        </ul>
+      </div>
+    </div>
+    <div style="width: 100%;">
+      <label for="" style="text-align: left; display: block; width: 90%; margin: 0 auto; margin-top: 20px;">
+        Search Radius: {{ searchStore.searchRadiusValue }} Miles
+      </label>
+      <input
+        type="range"
+        placeholder="Radius (miles)"
+        v-model="searchStore.searchRadiusValue"
+        max="30"
+        min="1"
+        value="1"
+        style="display: block; width: 90%; margin: 0 auto; margin-bottom: 12px; margin-top: 12px;"
+      />
+    </div>
+  </form>
         <div class="container-footer">
             <button class="bg-blue-700" @click="search">Search</button>
         </div>
@@ -39,11 +76,17 @@
     const dataApi = new DataApi();
     const locationApi = new LocationApi();
 
+    const test = () => {
+      alert("test");
+    }
+
     const router = useRouter();
     const searchStore = useSearchStore();
 
     const searchErrorMsg = ref<string>("");
     const searchHasError = ref<boolean>(false);
+
+    const suggestionsActive = ref<boolean>(false);
 
     const emit = defineEmits<{
         (e: 'searched'): void;
@@ -61,6 +104,17 @@
 
     // If there are fewer than two parts, return the original string
     return response;
+}
+
+const suggestions = ref<Array<client.LocationModel>>();
+async function getSuggestions(currentSearchValue : string) {
+  const locationParams : client.LocationSearchGetRequest = {
+    query: currentSearchValue
+  }
+
+  // let locationCoordinates : string | undefined = undefined;
+  const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
+  suggestions.value = loactionResponse
 }
 
     async function search() {
