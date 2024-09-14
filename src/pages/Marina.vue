@@ -2,7 +2,10 @@
     <div class="bg-blue-700" style="padding: 25px; height: 80px;">
         <div class="flex justify-between text-white">
             <span class="back w-20" @click="goBack">
-                &LeftArrow;
+                <svg class="w-6 h-6 text-white-800 inline-block mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
+</svg>
+
             </span>
             <span class="text-xl w-full" style="text-align: center;">{{marina?.type?.toLowerCase().charAt(0).toUpperCase() + marina?.type?.toLowerCase().slice(1)!}}</span>
             <!-- <span class="save w-20">

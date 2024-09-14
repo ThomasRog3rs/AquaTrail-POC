@@ -32,17 +32,44 @@
           </div>
         </div> -->
       </section>
-      <template v-if="userLocation && marinasClose != undefined">
-      <div style="padding: 20px; padding-bottom: 0px;">
-        <h1 class="mb-2 text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl"> <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">Marinas</span> closest to you</h1>
-        <!-- <h2 class="mb-2">{{ activeOption }} closest to you</h2> -->
-      </div>
-      <section id="close-by">
-        <div class="close-items">
-          <Card v-if="marinasClose != undefined" v-for="marina in marinasClose" :id="marina.id!" :name="marina.name!" description="" image="" :has-image="false" :distance="(marina.distanceFromUser!.toFixed(2))" @click="searchStore.searchLocationValue = undefined"></Card>
-        </div>
-      </section>
-    </template>
+      <span v-if="userLocation && marinasClose != undefined" style="display: block;" class="relative">
+  <div style="padding: 20px; padding-bottom: 0px;">
+    <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
+        Marinas
+      </span> closest to you
+    </h1>
+  </div>
+
+  <section id="close-by" class="relative" ref="closeItemsContainer">
+    <div class="close-items" ref="closeItemsScroll">
+      <span style="width: 2000px;"></span>
+      <Card
+        v-if="marinasClose != undefined"
+        v-for="marina in marinasClose"
+        :key="marina.id"
+        :id="marina.id!"
+        :name="marina.name!"
+        description=""
+        image=""
+        :has-image="false"
+        :distance="(marina.distanceFromUser!.toFixed(2))"
+        @click="searchStore.searchLocationValue = undefined"
+      ></Card>
+    </div>
+
+  </section>
+  <button
+  v-if="!hideScrollButton"
+      class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
+      @click="scrollCloseItems"
+    >
+      <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+      </svg>
+    </button>
+</span>
+
 
     <!-- <template v-if="mapStore.savedLocations.length > 0">
       <div style="padding: 20px; padding-bottom: 0px;">
@@ -139,6 +166,30 @@
 
 const userLocation = ref<userLocation | null>(null);
 const error = ref<string | null>(null);
+
+const closeItemsContainer = ref<HTMLElement | null>(null);
+const closeItemsScroll = ref<HTMLElement | null>(null);
+const hideScrollButton = ref<boolean>(false);
+let currentScrollPos = 0;
+function scrollCloseItems(){
+  const container = closeItemsContainer.value;
+  const content = closeItemsScroll.value
+  if (container && content) {
+    const scrollAmount = container.scrollWidth / 5; 
+    const futurePos = currentScrollPos + scrollAmount
+    container.scrollBy({
+      left: scrollAmount, // Scroll horizontally
+      behavior: 'smooth', // Smooth scrolling effect
+    });
+
+    if((futurePos + scrollAmount) >= container.scrollWidth){
+      hideScrollButton.value = true;
+      return;
+    }
+
+    currentScrollPos += scrollAmount;
+  }
+}
 
 const requestLocation = () => {
   if (navigator.geolocation) {
@@ -353,5 +404,13 @@ onMounted(async () => {
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
       text-align: center;
+    }
+
+    button.scroll-right-button{
+      padding: 10px;
+      border-radius: 100%;
+      z-index: 9999;
+      top: 50%;
+      right: 20px;
     }
   </style>
