@@ -32,31 +32,43 @@
           </div>
         </div> -->
       </section>
-      <template v-if="userLocation && marinasClose != undefined">
-      <div style="padding: 20px; padding-bottom: 0px;">
-        <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl"> <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">Marinas</span> closest to you</h1>
-        <!-- <h2 class="mb-2">{{ activeOption }} closest to you</h2> -->
-      </div>
+      <span v-if="userLocation && marinasClose != undefined" style="display: block;" class="relative">
+  <div style="padding: 20px; padding-bottom: 0px;">
+    <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
+        Marinas
+      </span> closest to you
+    </h1>
+  </div>
 
-      <span class="relative">
-        <section id="close-by" class="relative" ref="closeItemsContainer">
-          <div class="close-items" ref="closeItemsScroll">
-            <Card v-if="marinasClose != undefined" v-for="marina in marinasClose" :id="marina.id!" :name="marina.name!" description="" image="" :has-image="false" :distance="(marina.distanceFromUser!.toFixed(2))" @click="searchStore.searchLocationValue = undefined"></Card>
-          </div>
-        </section>
+  <section id="close-by" class="relative" ref="closeItemsContainer">
+    <div class="close-items" ref="closeItemsScroll">
+      <span style="width: 2000px;"></span>
+      <Card
+        v-if="marinasClose != undefined"
+        v-for="marina in marinasClose"
+        :key="marina.id"
+        :id="marina.id!"
+        :name="marina.name!"
+        description=""
+        image=""
+        :has-image="false"
+        :distance="(marina.distanceFromUser!.toFixed(2))"
+        @click="searchStore.searchLocationValue = undefined"
+      ></Card>
+    </div>
 
-        <button
-        class="absolute right-4 top-1/2 transform -translate-y-1/2 border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
-        @click="scrollCloseItems"
-        >
-        <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
-</svg>
+  </section>
+  <button
+      class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
+      @click="scrollCloseItems"
+    >
+      <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+      </svg>
+    </button>
+</span>
 
-        </button>
-      </span>
-      
-    </template>
 
     <!-- <template v-if="mapStore.savedLocations.length > 0">
       <div style="padding: 20px; padding-bottom: 0px;">
@@ -386,6 +398,8 @@ onMounted(async () => {
     button.scroll-right-button{
       padding: 10px;
       border-radius: 100%;
-      margin-right: 10px
+      z-index: 9999;
+      top: 50%;
+      right: 20px;
     }
   </style>
