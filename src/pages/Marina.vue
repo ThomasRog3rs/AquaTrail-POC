@@ -1,19 +1,34 @@
 <template>
-    <div class="bg-blue-700" style="padding: 25px; height: 80px;">
+  <div v-if="loading" class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="loading">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+    <div v-else class="bg-blue-700" style="padding: 25px; height: 80px;">
         <div class="flex justify-between text-white">
             <span class="back w-20" @click="goBack">
                 <svg class="w-6 h-6 text-white-800 inline-block mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
+                </svg>
+            </span>
+          
+            <span class="text-xl w-full" style="text-align: center;">
+              {{marina?.type?.toLowerCase().charAt(0).toUpperCase() + marina?.type?.toLowerCase().slice(1)!}}
+            </span>
+            <span class="save w-20">
+                <template v-if="marinaIsSaved"><svg class="w-6 h-6 mt-2 ml-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+  <path d="M7.833 2c-.507 0-.98.216-1.318.576A1.92 1.92 0 0 0 6 3.89V21a1 1 0 0 0 1.625.78L12 18.28l4.375 3.5A1 1 0 0 0 18 21V3.889c0-.481-.178-.954-.515-1.313A1.808 1.808 0 0 0 16.167 2H7.833Z"/>
 </svg>
 
+</template>
+                <template v-else> <svg @click="saveMarina" class="w-6 h-6 mt-2 ml-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
+</svg>
+</template>
             </span>
-            <span class="text-xl w-full" style="text-align: center;">{{marina?.type?.toLowerCase().charAt(0).toUpperCase() + marina?.type?.toLowerCase().slice(1)!}}</span>
-            <!-- <span class="save w-20">
-                
-                <template v-if="false">&#9733;</template>
-                <template v-else> &#x2606;</template>
-            </span> -->
-            <span class="w-20"></span>
+            <!--<span class="w-20"></span>-->
         </div>
     </div>
     <!-- <div id="serviceIcons" class="shadow-lg border" v-if="iconPaths?.length! > 0">
@@ -65,7 +80,7 @@
   </template>
   
   <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import * as client from '../api-client';
   import { useRouter } from 'vue-router';
 //   import cpBarIcon from '../assets/icons/cp-bar.svg'; // Import the SVG
@@ -76,8 +91,13 @@ import mapboxgl, {Map} from 'mapbox-gl';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useMapStore } from '../stores/mapStore';
 import { useSearchStore } from '../stores/searchStore';
+import {useSavedMarinasStore} from "../stores/savedMarinasStore";
 
-const searchStore = useSearchStore();
+  const savedMarinasStore = useSavedMarinasStore();
+  const searchStore = useSearchStore();
+
+const saving = ref<boolean>(true);
+const marinaIsSaved = ref<boolean>(false);
 
 mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
 const map = ref<Map|null>(null);
@@ -117,6 +137,13 @@ const map = ref<Map|null>(null);
     router.push("/Results");
   }
 
+  function saveMarina() {
+    if(marina.value === undefined) return;
+    alert(`Save marina wiht name of ${marina.value!.name}`);
+    savedMarinasStore.savedMarinas?.push(marina.value);
+    marinaIsSaved.value = savedMarinasStore.savedMarinas?.some(x => x.id === marina.value!.id)!;
+    alert(marinaIsSaved.value)
+  }
   
 
   onMounted(async () => {
@@ -125,6 +152,11 @@ const map = ref<Map|null>(null);
     }
     
     marina.value = await DataApi.dataMarinaIdGet(params);
+
+    if (savedMarinasStore.savedMarinas && marina.value !== undefined) {
+      marinaIsSaved.value = savedMarinasStore.savedMarinas.some(x => x.id === marina.value!.id);
+    }
+
 
     // iconPaths.value = marina.value.services?.map((x : client.ServiceModel) =>{
     //     const iconKey = x.serviceType?.iconKey?.toLowerCase();
@@ -220,7 +252,6 @@ const map = ref<Map|null>(null);
         );
 
     }
-
 
     loading.value = false;
   })

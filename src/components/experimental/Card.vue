@@ -11,7 +11,7 @@
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900"></h5>
         </a>
         <p class="text-md font-normal text-gray-500 lg:text-xl">{{props.description}}</p>
-        <p class="text-md font-normal text-gray-800 lg:text-xl">{{ props.distance }} miles</p>
+        <p v-if="props.distance" class="text-md font-normal text-gray-800 lg:text-xl">{{ props.distance }} miles</p>
 
     </div>
     </router-link>
@@ -30,7 +30,7 @@ const props = defineProps<{
   description: string | undefined;
   image: string;
   hasImage: boolean;
-  distance: number | string;
+  distance: number | string | undefined;
 }>();
 </script>
 
