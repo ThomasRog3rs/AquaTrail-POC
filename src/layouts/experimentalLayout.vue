@@ -96,9 +96,9 @@
       
         </section>
         <button
-            v-if="!hideScrollButton"
+            v-if="!hideSavedScrollButton"
             class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
-            @click="scrollCloseItems"
+            @click="scrollSearchItems"
         >
             <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
@@ -229,6 +229,30 @@ function scrollCloseItems(){
   }
 }
 
+  // scrollSearchItems
+  const savedItemsContainer = ref<HTMLElement | null>(null);
+  const savedItemsScroll = ref<HTMLElement | null>(null);
+  const hideSavedScrollButton = ref<boolean>(false);
+  let currentSavedScrollPos = 0;
+  function scrollSearchItems(){
+    const container = savedItemsContainer.value;
+    const content = savedItemsScroll.value
+    if (container && content) {
+      const scrollAmount = container.scrollWidth / 5;
+      const futurePos = currentSavedScrollPos + scrollAmount
+      container.scrollBy({
+        left: scrollAmount, // Scroll horizontally
+        behavior: 'smooth', // Smooth scrolling effect
+      });
+
+      if((futurePos + scrollAmount) >= container.scrollWidth){
+        hideSavedScrollButton.value = true;
+        return;
+      }
+
+      currentSavedScrollPos += scrollAmount;
+    }
+  }
 const requestLocation = () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
