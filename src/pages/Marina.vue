@@ -18,7 +18,7 @@
               {{marina?.type?.toLowerCase().charAt(0).toUpperCase() + marina?.type?.toLowerCase().slice(1)!}}
             </span>
             <span class="save w-20">
-                <template v-if="marinaIsSaved"><svg class="w-6 h-6 mt-2 ml-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <template v-if="marinaIsSaved"><svg @click="unsaveMarina" class="w-6 h-6 mt-2 ml-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
   <path d="M7.833 2c-.507 0-.98.216-1.318.576A1.92 1.92 0 0 0 6 3.89V21a1 1 0 0 0 1.625.78L12 18.28l4.375 3.5A1 1 0 0 0 18 21V3.889c0-.481-.178-.954-.515-1.313A1.808 1.808 0 0 0 16.167 2H7.833Z"/>
 </svg>
 
@@ -45,7 +45,9 @@
     <main id="marina-details">
         <section class="marina-heading flex justify-between">
             <h1 class="mb-2 text-2xl font-extrabold text-gray-800 md:text-5xl lg:text-6xl">{{ marina?.name }}</h1>
-            <a v-if="marina?.website != undefined" :href="marina?.website" target="_blank" class="text-blue-700 text-xl">Website</a>
+<!--          <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">ave</button>-->
+
+          <!--            <a v-if="marina?.website != undefined" :href="marina?.website" target="_blank" class="text-blue-700 text-xl">Website</a>-->
             <!-- <a v-else href="#" class="text-gray-600 hover:cursor-not-allowed">Website</a> -->
         </section>      
         <hr>  
@@ -54,9 +56,16 @@
         </div>
         <hr>
         <section>
-            <div id="marina-notes" class="mb-2 p-4 border-4 rounded-lg" v-if="marina?.address != undefined">
+            <div id="marina-notes" class="mb-2 p-4 border-4 rounded-lg" v-if="marina?.address != undefined || marina?.website != undefined">
+              <template v-if="marina?.address != undefined"> 
                 <h4 class="mr-2 font-medium">Address:</h4>
                 <p v-if="marina?.address != undefined">{{ marina?.address }}</p>
+              </template>
+
+              <template v-if="marina?.website != undefined">
+                <h4 class="mt-2 mr-2 font-medium">Website:</h4>
+                <a v-if="marina?.website != undefined" :href="marina?.website" target="_blank" class="underline text-blue-600">{{ marina?.website }}</a>
+              </template>
             </div>
             <div id="marina-notes" class="mb-2 p-4 border-4 rounded-lg" v-if="marina?.phoneNumber != undefined">
                 <h4 class="mr-2 font-medium">Phone Number:</h4>
@@ -139,10 +148,14 @@ const map = ref<Map|null>(null);
 
   function saveMarina() {
     if(marina.value === undefined) return;
-    alert(`Save marina wiht name of ${marina.value!.name}`);
     savedMarinasStore.savedMarinas?.push(marina.value);
     marinaIsSaved.value = savedMarinasStore.savedMarinas?.some(x => x.id === marina.value!.id)!;
-    alert(marinaIsSaved.value)
+  }
+  
+  function unsaveMarina(){
+    if(marina.value === undefined) return;
+    savedMarinasStore.savedMarinas = savedMarinasStore.savedMarinas?.filter(x => x.id !== marina.value!.id)!;
+    marinaIsSaved.value = savedMarinasStore.savedMarinas?.some(x => x.id === marina.value!.id)!;
   }
   
 
