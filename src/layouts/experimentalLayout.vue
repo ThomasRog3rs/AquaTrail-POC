@@ -1,5 +1,5 @@
 <template>
-      <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px ">
+      <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px;">
         <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
         <!-- <h1 class="logo">Mooring Pin</h1> -->
         <img style="margin: 0px auto" src="../assets/logo.png" width="50%" alt="">
@@ -33,43 +33,78 @@
         </div> -->
       </section>
       <span v-if="userLocation && marinasClose != undefined" style="display: block;" class="relative">
-  <div style="padding: 20px; padding-bottom: 0px;">
-    <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
-      <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
-        Marinas
-      </span> closest to you
-    </h1>
-  </div>
+        <div style="padding: 20px; padding-bottom: 0px;">
+          <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
+              Marinas
+            </span> Closest To You
+          </h1>
+        </div>
 
-  <section id="close-by" class="relative" ref="closeItemsContainer">
-    <div class="close-items" ref="closeItemsScroll">
-      <span style="width: 2000px;"></span>
-      <Card
-        v-if="marinasClose != undefined"
-        v-for="marina in marinasClose"
-        :key="marina.id"
-        :id="marina.id!"
-        :name="marina.name!"
-        description=""
-        image=""
-        :has-image="false"
-        :distance="(marina.distanceFromUser!.toFixed(2))"
-        @click="searchStore.searchLocationValue = undefined"
-      ></Card>
-    </div>
+        <section id="close-by" class="relative" ref="closeItemsContainer">
+          <div class="close-items" ref="closeItemsScroll">
+            <Card
+              v-if="marinasClose != undefined"
+              v-for="marina in marinasClose"
+              :key="marina.id"
+              :id="marina.id!"
+              :name="marina.name!"
+              description=""
+              image=""
+              :has-image="false"
+              :distance="(marina.distanceFromUser!.toFixed(2))"
+              @click="searchStore.searchLocationValue = undefined"
+            ></Card>
+          </div>
+      
+        </section>
+        <button
+        v-if="!hideScrollButton"
+            class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
+            @click="scrollCloseItems"
+          >
+            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+            </svg>
+          </button>
+      </span>
 
-  </section>
-  <button
-  v-if="!hideScrollButton"
-      class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
-      @click="scrollCloseItems"
-    >
-      <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
-      </svg>
-    </button>
-</span>
+      <span v-if="savedMarinasStore.savedMarinas && savedMarinasStore.savedMarinas.length > 0" style="display: block;" class="relative">
+        <div style="padding: 20px; padding-bottom: 0px;">
+          <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
+            Your Saved
+            <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
+              Marinas
+            </span>
+          </h1>
+        </div>
 
+        <section id="close-by" class="relative" ref="savedItemsContainer">
+          <div class="close-items" ref="savedItemsScroll">
+            <Card
+                v-for="marina in savedMarinasStore.savedMarinas"
+                :key="marina.id"
+                :id="marina.id!"
+                :name="marina.name!"
+                description=""
+                image=""
+                :has-image="false"
+                :distance="(marina.distanceFromUser?.toFixed(2))"
+                @click="searchStore.searchLocationValue = undefined"
+            ></Card>
+          </div>
+      
+        </section>
+        <button
+            v-if="!hideSavedScrollButton"
+            class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
+            @click="scrollSearchItems"
+        >
+            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+            </svg>
+          </button>
+      </span>
 
     <!-- <template v-if="mapStore.savedLocations.length > 0">
       <div style="padding: 20px; padding-bottom: 0px;">
@@ -126,10 +161,13 @@
   import Card from '../components/experimental/Card.vue';
   import { useSearchStore } from '../stores/searchStore';
   import { useMapStore } from '../stores/mapStore';
+  import {useSavedMarinasStore} from "../stores/savedMarinasStore";
   import SearchForm from '../components/experimental/SearchForm.vue';
   import { SearchPayload } from '../types/search';
   import * as client from '../api-client';
   import { DataApi } from '../api-client';
+  
+  const savedMarinasStore = useSavedMarinasStore();
 
   const dataApi = new DataApi();
 
@@ -191,6 +229,30 @@ function scrollCloseItems(){
   }
 }
 
+  // scrollSearchItems
+  const savedItemsContainer = ref<HTMLElement | null>(null);
+  const savedItemsScroll = ref<HTMLElement | null>(null);
+  const hideSavedScrollButton = ref<boolean>(false);
+  let currentSavedScrollPos = 0;
+  function scrollSearchItems(){
+    const container = savedItemsContainer.value;
+    const content = savedItemsScroll.value
+    if (container && content) {
+      const scrollAmount = container.scrollWidth / 5;
+      const futurePos = currentSavedScrollPos + scrollAmount
+      container.scrollBy({
+        left: scrollAmount, // Scroll horizontally
+        behavior: 'smooth', // Smooth scrolling effect
+      });
+
+      if((futurePos + scrollAmount) >= container.scrollWidth){
+        hideSavedScrollButton.value = true;
+        return;
+      }
+
+      currentSavedScrollPos += scrollAmount;
+    }
+  }
 const requestLocation = () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(

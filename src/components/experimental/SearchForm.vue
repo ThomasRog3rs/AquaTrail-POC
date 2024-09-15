@@ -255,7 +255,7 @@ const buildQueryString = (params: Record<string, string | number>) => {
         }catch(err: any){
             console.error("Location error: ", err);
             console.warn(err.response.statusText);
-            searchErrorMsg.value = "Can't find that location";
+            searchErrorMsg.value = "Location not found. Please check and try again.";
             searchHasError.value = true;
             return;
         }
@@ -286,6 +286,11 @@ const buildQueryString = (params: Record<string, string | number>) => {
             if (err.response && err.response.status === 404) {
                 router.push("/results");
                 searchStore.marinaSearchResults = [] as Array<client.MarinaModel> ;
+                router.push("/results");
+                searchHasError.value = false;
+                searchStore.resetSortOptions();
+                searchStore.resetServiceFilterOptions();
+                emit("searched");
                 return;
             }
             console.error("Search error: ", err);
