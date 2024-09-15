@@ -1,18 +1,6 @@
 <template>
-    <div class="fixed top-0 left-0 w-full bg-blue-100 p-4 z-50">
-  <div class="flex justify-center items-center">
-    <p class="text-center">
-      <strong class="text-blue-600 font-semibold">
-        Alpha
-      </strong>
-      <span class="text-gray-700 mx-2">
-        This is a new service. Help us improve it and <a class="text-blue-700 underline" href="mailto:matthewajc@outlook.com">give your feedback by email</a>.
-      </span>
-    </p>
-  </div>
-</div>
     <transition name="down">
-        <div id="searchForm" class="shadow-lg" v-if="searchBoxOpen" style="margin-top: 80px">
+        <div id="searchForm" class="shadow-lg" v-if="searchBoxOpen">
             <div class="flex justify-between text-lg">
                 <span class="hover:cursor-pointer" @click="searchBoxOpen = false">&cross;</span>
                 <h3 class="mb-2">Edit your search</h3>
@@ -24,7 +12,7 @@
 
     <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
 
-    <div class="bg-blue-700" style="padding: 15px; padding-top: 0px; height: 80px;margin-top: 80px">
+    <div class="bg-blue-700" style="padding: 15px; padding-top: 0px; height: 80px">
         <SearchBar @back="goHome" @click="openSearchBox"></SearchBar>
          
         <!-- <div id="searchContainer">

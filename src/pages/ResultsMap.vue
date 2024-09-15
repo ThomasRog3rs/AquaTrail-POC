@@ -1,17 +1,5 @@
 <template>
-  <div class="fixed top-0 left-0 w-full bg-blue-100 p-4 z-50">
-  <div class="flex justify-center items-center">
-    <p class="text-center">
-      <strong class="text-blue-600 font-semibold">
-        Alpha
-      </strong>
-      <span class="text-gray-700 mx-2">
-        This is a new service. Help us improve it and <a class="text-blue-700 underline" href="mailto:matthewajc@outlook.com">give your feedback by email</a>.
-      </span>
-    </p>
-  </div>
-</div>
-    <div class="flex-1 min-h-0 h-[calc(100vh)] w-full ml-0  sm:w-[calc(100vw)]" style="margin-top: 80px; overflow: hidden;">
+    <div class="flex-1 min-h-0 h-[calc(100vh)] w-full ml-0  sm:w-[calc(100vw)]" style="overflow: hidden;">
       <transition name="down">
         <div id="searchForm" class="shadow-lg" v-if="searchBoxOpen">
             <div class="flex justify-between text-lg">
@@ -25,7 +13,7 @@
 
     <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
 
-    <SearchBar style="margin-top: 80px; position: absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')" @click="openSearchBox">
+    <SearchBar style="position: absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')" @click="openSearchBox">
           <span class="mt-2 mr-9" style="" v-if="!mapStore.mapLoaded">
             <div class="loading">
               <span></span>
