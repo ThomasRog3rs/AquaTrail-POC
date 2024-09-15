@@ -58,14 +58,19 @@
         <span>{{ searchStore.marinaSearchResults?.length }} results</span>
 
 <div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4 mt-2" v-for="marina in searchStore.marinaSearchResults">
-    <a href="#">
+    <router-link :to="{name: 'Marina', params: {id: marina.id}}">
         <img class="rounded-t-lg" src="" alt="" />
-    </a>
+    </router-link >
     <div class="p-5">
-        <a href="#">
+      <router-link :to="{name: 'Marina', params: {id: marina.id}}" class="flex justify-between">
             <h2 class="mb-2 text-2xl font-bold text-gray-700 md:text-2xl lg:text-3xl"> {{ marina.name }}</h2>
+            <span v-if="marinaIsSaved(marina.id!)">
+              <svg class="w-7 h-7 text-[#facc15]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M7.833 2c-.507 0-.98.216-1.318.576A1.92 1.92 0 0 0 6 3.89V21a1 1 0 0 0 1.625.78L12 18.28l4.375 3.5A1 1 0 0 0 18 21V3.889c0-.481-.178-.954-.515-1.313A1.808 1.808 0 0 0 16.167 2H7.833Z"/>
+              </svg>
+            </span>
             <!-- <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ marina.name }}</h5> -->
-        </a>
+      </router-link >
         <!-- <p class="mb-3 font-normal text-gray-700">{{marina.notes!}}</p> -->
         <ul class="text-md font-normal text-gray-800 lg:text-xl list-inside mb-4">
             <!-- <li v-if="marina.address">Address: {{ marina.address }}</li> -->
@@ -123,15 +128,21 @@ import { useSearchStore } from '../stores/searchStore';
 import SearchBar from '../components/experimental/SearchBar.vue';
 import SearchForm from '../components/experimental/SearchForm.vue';
 import * as client from '../api-client';
+import {useSavedMarinasStore} from "../stores/savedMarinasStore";
 
 const router = useRouter();
 const searchStore = useSearchStore();
+const savedMarinasStore = useSavedMarinasStore();
 
 const showAllServiceOptions = ref<boolean>(false);
 
 const searchBoxOpen = ref<boolean>(false);
 const sortResultsOpen = ref<boolean>(false);
 const filterResultsOpen = ref<boolean>(false);
+
+function marinaIsSaved(marinaId: string){
+  return savedMarinasStore.savedMarinas?.some(x => x.id === marinaId)!;
+}
 
 const openSearchBox = () => {
     searchBoxOpen.value = true;
