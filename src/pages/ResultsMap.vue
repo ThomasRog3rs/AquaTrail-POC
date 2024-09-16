@@ -59,6 +59,9 @@ import { useSearchStore } from '../stores/searchStore';
 import * as client from '../api-client';
 import { GeoJsonApi } from '../api-client';
 import { DataApi } from '../api-client';
+import {useSavedMarinasStore} from "../stores/savedMarinasStore";
+
+const savedMarinasStore = useSavedMarinasStore();
 
 const geoJsonApi = new GeoJsonApi();
 const dataApi = new DataApi();
@@ -95,11 +98,13 @@ async function addPopup(location: popUpProps){
     console.error(err)
   }
   console.log("The marian:", marina);
+  
+  const isSaved = savedMarinasStore.savedMarinas!.some(x => x.geoJsonId === location.geoJsonId);
 
   new mapboxgl.Popup({ offset: [0, -15] })  
       //@ts-ignore
       .setLngLat(location.coordinates)
-      .setHTML(`<span><h3>${marina.name}</h3><a href="${marina.website}" target="_blank">Website</a><br/><a href="/marina/${marina.id}" class="save">View Location</button></span>`)
+      .setHTML(`<span><h3 class="${isSaved ? '!bg-[#e5b700]' : ''}">${marina.name}</h3><a class="${isSaved ? '!text-[#796100]' : ''}" href="${marina.website}" target="_blank">Website</a><br/><a class="${isSaved ? '!text-[#796100]' : ''}" href="/marina/${marina.id}" class="save">View Location</button></span>`)
       .addTo(map.value!);
 }
 
@@ -187,7 +192,10 @@ onMounted(async () => {
     el.id = `marker-${marker.properties?.mooringPinId!}`;
     /* Assign the `marker` class to each marker for styling. */
     el.className = 'marker';
-
+    if(savedMarinasStore.savedMarinas!.some(x => x.name === marker.properties?.title)){
+      el.className += ' marker-saved'
+    }
+    // alert(marker.properties?.title);
     /**
      * Create a marker using the div element
      * defined above and add it to the map.
@@ -376,6 +384,10 @@ div.search-info-box > span.back:hover{
     font-weight: 700;
     margin-top: -15px;
   }
+  
+  .mapbox-popup-content > span > h3.saved{
+    background:#facc15 !important;
+  }
 
   .mapboxgl-popup-content h4 {
     margin: 0;
@@ -437,11 +449,22 @@ div.search-info-box > span.back:hover{
   .marker {
   border: none;
   cursor: pointer;
-  height: 56px;
-  width: 56px;
-  background-image: url('../assets/pin_7695812.png');
+  height: 65px;
+  width: 65px;
+  background-image: url('../assets/map-icon.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-}
+  }
+  
+  div.marker-saved{
+    border: none;
+    cursor: pointer;
+    height: 65px;
+    width: 65px;
+    background-image: url('../assets/map-icon-saved.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 </style>
