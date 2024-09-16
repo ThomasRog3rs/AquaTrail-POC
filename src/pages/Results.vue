@@ -146,7 +146,6 @@ function marinaIsSaved(marinaId: string){
 }
 
 function handleSearched(){
-  alert("Searched")
   searchBoxOpen.value = false;
   let services : Array<filterOption> = [];
   const fuckoff = searchStore.marinaSearchResults?.forEach(marina => {
