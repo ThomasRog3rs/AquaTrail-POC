@@ -12,7 +12,7 @@
                     <input type="checkbox" :id="searchStore.serviceFilterOptions![index].serviceType.key!" :value="searchStore.serviceFilterOptions![index].serviceType.value" name="filter-services" :checked="searchStore.serviceFilterOptions![index].active" @click="setFilterActive(searchStore.serviceFilterOptions![index].serviceType.key!)"/>
                     <label :for="searchStore.serviceFilterOptions![index].serviceType.key!">{{ searchStore.serviceFilterOptions![index].serviceType.value! }}</label>
                 </div> -->
-                <div v-for="service in searchStore.serviceFilterOptions">
+                <div v-for="service in options">
                         <input type="checkbox" :id="service.serviceType.key!" name="filter-services" :value="service.serviceType.value!" :checked="service.active" @click="setFilterActive(service.serviceType.key!)" />
                         <label :for="service.serviceType.key!">{{ service.serviceType.value }}</label>
                 </div>
@@ -43,10 +43,12 @@
 </template>
 
 <script setup lang="ts">
-    import { onActivated, onMounted, ref, watchEffect } from 'vue';
+import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
     import { useSearchStore } from '../../stores/searchStore';
     import * as client from '../../api-client';
     import { DataApi } from '../../api-client';
+    import {filterOption} from '../../types/search';
+
 
     const dataApi = new DataApi();
 
@@ -54,11 +56,14 @@
 
     const props = defineProps<{
         open: boolean;
+        options: Array<filterOption>
     }>();
 
     const showAllServiceOptions = ref<boolean>(false);
 
     const numberOfResults = ref<number>();
+    
+    // const availableServiceOptions = ref<Array<filterOption>>([]);
 
     const displayAllServiceOptions = () => {
         showAllServiceOptions.value = true;
@@ -181,7 +186,7 @@ try{
 
     watchEffect(() => {
         numberOfResults.value = searchStore.marinaSearchResults?.length;
-    })
+    });
 </script>
 
 <style>

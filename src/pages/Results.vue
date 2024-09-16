@@ -6,7 +6,7 @@
                 <h3 class="mb-2">Edit your search</h3>
                 <span></span>
             </div>
-            <SearchForm :search-has-error="false" :search-error-msg="undefined" @searched="searchBoxOpen = false"></SearchForm>
+            <SearchForm :search-has-error="false" :search-error-msg="undefined" @searched="handleSearched()"></SearchForm>
         </div>
     </transition>
 
@@ -113,7 +113,7 @@
     </FilterBox> -->
 
     <transition name="slide">
-        <FilterBox :open="filterResultsOpen" @close="closeFilter">
+        <FilterBox :open="filterResultsOpen" :options="searchStore.serviceFilterOptions" @close="closeFilter">
             <h1>test</h1>
         </FilterBox>
     </transition>
@@ -129,6 +129,7 @@ import SearchBar from '../components/experimental/SearchBar.vue';
 import SearchForm from '../components/experimental/SearchForm.vue';
 import * as client from '../api-client';
 import {useSavedMarinasStore} from "../stores/savedMarinasStore";
+import {filterOption} from "@/types/search";
 
 const router = useRouter();
 const searchStore = useSearchStore();
@@ -142,6 +143,31 @@ const filterResultsOpen = ref<boolean>(false);
 
 function marinaIsSaved(marinaId: string){
   return savedMarinasStore.savedMarinas?.some(x => x.id === marinaId)!;
+}
+
+function handleSearched(){
+  alert("Searched")
+  searchBoxOpen.value = false;
+  let services : Array<filterOption> = [];
+  const fuckoff = searchStore.marinaSearchResults?.forEach(marina => {
+    marina.services!.forEach(service => {
+      if(!services.some(x => x?.serviceType.value === service.serviceType!.value)){
+        const filterOption : filterOption = {
+          serviceType: service.serviceType!,
+          active: false
+        }
+        console.log(filterOption);
+        services.push(filterOption);
+      }
+    });
+    console.warn(marina.name + ":");
+    console.log(services);
+  })!;
+  services =  services.sort((a:filterOption, b:filterOption) => {
+    return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
+  });
+  searchStore.serviceFilterOptions = [];
+  searchStore.serviceFilterOptions!.push(...services);
 }
 
 const openSearchBox = () => {
@@ -173,11 +199,32 @@ const closeFilter = () => {
 function goHome(){
     router.push("/");
 }
-
+const availableServiceOptions = ref<Array<filterOption>>([]);
 onMounted(async () => {
     searchStore.setSortOption(1);
     await searchStore.resetServiceFilterOptions();
     searchStore.setServiceFilterOptionActive(searchStore?.serviceSearchValue?.key!);
+
+      let services : Array<filterOption> = [];
+      const fuckoff = searchStore.marinaSearchResults?.forEach(marina => {
+        marina.services!.forEach(service => {
+          if(!services.some(x => x?.serviceType.value === service.serviceType!.value)){
+            const filterOption : filterOption = {
+              serviceType: service.serviceType!,
+              active: false
+            }
+            console.log(filterOption);
+            services.push(filterOption);
+          }
+        });
+        console.warn(marina.name + ":");
+        console.log(services);
+      })!;
+      services =  services.sort((a:filterOption, b:filterOption) => {
+        return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
+      });
+    searchStore.serviceFilterOptions = [];
+    searchStore.serviceFilterOptions!.push(...services);
 })
 
 onBeforeMount(() => {
