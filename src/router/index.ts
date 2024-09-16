@@ -5,7 +5,7 @@ import Home from '../pages/Home.vue';
 import Results from '../pages/Results.vue';
 import ResultsMap from '../pages/ResultsMap.vue';
 import Marina from '../pages/Marina.vue';
-
+import { nextTick } from 'vue';
 
 const router = createRouter({
     history: createWebHistory(""),
@@ -20,7 +20,26 @@ const router = createRouter({
             component: Marina,
             props: true // This passes the route params as props to the component
         }
-    ]
+    ],
+    scrollBehavior(to, from, savedPosition) {
+        console.log('Navigating from', from.fullPath, 'to', to.fullPath);
+        return { top: 0 };
+    }
 });
+
+// Global afterEach hook to scroll to the top
+router.afterEach(() => {
+    nextTick(() => {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    });
+});
+
+router.beforeEach(() => {
+    nextTick(() => {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    });
+})
 
 export default router;

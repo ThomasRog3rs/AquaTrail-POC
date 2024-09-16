@@ -120,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-import {onBeforeMount, onMounted, ref} from 'vue';
+import {onBeforeMount, onMounted, ref, nextTick} from 'vue';
 import { useRouter } from 'vue-router';
 import SortBox from '../components/experimental/SortBox.vue';
 import FilterBox from '../components/experimental/FilterBox.vue';
