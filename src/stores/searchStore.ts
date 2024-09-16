@@ -2,29 +2,11 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import * as client from '../api-client';
 import { TypesApi } from '../api-client';
+import {SearchType, sortOption, filterOption} from '../types/search';
 
 
 export const useSearchStore = defineStore('searchStore', () => {
     const types = new TypesApi();
-    // Define the type for each search type object
-    type SearchType = {
-        icon: string,
-        title: string,
-        active: boolean
-    };
-
-    //Define the type for sort options
-    type sortOption = {
-        name: string,
-        active: boolean,
-        id: number,
-        enabled: boolean
-    }
-
-    type filterOption = {
-        serviceType: client.ServiceTypeModel,
-        active: boolean
-    }
 
     // Initialize the searchTypes array with the correct structure
     const searchItems = ref<SearchType[]>([
@@ -54,7 +36,7 @@ export const useSearchStore = defineStore('searchStore', () => {
 
     ]
 
-    const serviceFilterOptions = ref<Array<filterOption>>();
+    const serviceFilterOptions = ref<Array<filterOption>>([]);
 
     async function getServiceTypes(){
         try {
@@ -67,16 +49,28 @@ export const useSearchStore = defineStore('searchStore', () => {
     }
 
     async function resetServiceFilterOptions(){
-        await getServiceTypes();
-        serviceFilterOptions.value = serviceTypes.value?.map(x => {
-            const filterOption : filterOption = {
+        if(serviceFilterOptions === undefined) return;
+
+        serviceFilterOptions.value = serviceFilterOptions.value.map(x => {
+            return {
                 serviceType: x,
                 active: false
-            }
-            return filterOption;
+            } as filterOption;
         }).sort((a:filterOption, b:filterOption) => {
             return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
         });
+        
+        
+        // await getServiceTypes();
+        // serviceFilterOptions.value! = serviceTypes.value?.map(x => {
+        //     const filterOption : filterOption = {
+        //         serviceType: x,
+        //         active: false
+        //     }
+        //     return filterOption;
+        // }).sort((a:filterOption, b:filterOption) => {
+        //     return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
+        // });
     }
 
     function setServiceFilterOptionActive(key: string){
