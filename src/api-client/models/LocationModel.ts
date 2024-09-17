@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { CoordinatesModel } from './CoordinatesModel';
+import {
+    CoordinatesModelFromJSON,
+    CoordinatesModelFromJSONTyped,
+    CoordinatesModelToJSON,
+} from './CoordinatesModel';
+
 /**
  * 
  * @export
@@ -27,10 +34,16 @@ export interface LocationModel {
     name?: string | null;
     /**
      * 
+     * @type {CoordinatesModel}
+     * @memberof LocationModel
+     */
+    coordinates?: CoordinatesModel;
+    /**
+     * 
      * @type {string}
      * @memberof LocationModel
      */
-    readonly coordinates?: string | null;
+    readonly coordinatesString?: string | null;
 }
 
 /**
@@ -51,17 +64,19 @@ export function LocationModelFromJSONTyped(json: any, ignoreDiscriminator: boole
     return {
         
         'name': json['name'] == null ? undefined : json['name'],
-        'coordinates': json['coordinates'] == null ? undefined : json['coordinates'],
+        'coordinates': json['coordinates'] == null ? undefined : CoordinatesModelFromJSON(json['coordinates']),
+        'coordinatesString': json['coordinatesString'] == null ? undefined : json['coordinatesString'],
     };
 }
 
-export function LocationModelToJSON(value?: Omit<LocationModel, 'coordinates'> | null): any {
+export function LocationModelToJSON(value?: Omit<LocationModel, 'coordinatesString'> | null): any {
     if (value == null) {
         return value;
     }
     return {
         
         'name': value['name'],
+        'coordinates': CoordinatesModelToJSON(value['coordinates']),
     };
 }
 

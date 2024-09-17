@@ -24,7 +24,7 @@
         v-model="searchStore.searchLocationValue"
         @focus="suggestionsActive = true"
         @blur="handleBlur"
-        @keyup="getSuggestions(searchStore.searchLocationValue ?? '')"
+        @keyup="setSuggestions(searchStore.searchLocationValue ?? '')"
       />
       <!-- Suggestions box -->
       <div
@@ -163,6 +163,17 @@ const buildQueryString = (params: Record<string, string | number>) => {
     .join('&');
 };
     const suggestions = ref<Array<client.LocationModel>>();
+    
+    async function setSuggestions(currentSearchValue: string){
+      const theSuggestions = await getSuggestions(currentSearchValue);
+      if(theSuggestions == undefined) return;
+      suggestions.value = theSuggestions.features.map((x:any) => {
+        return{
+          name: x.properties.full_address ?? "NOPE",
+          coordinates: `${x.properties.coordinates.latitude},${x.properties.coordinates.longitude}`
+        }
+      });
+    }
     async function getSuggestions(currentSearchValue : string) {
       currentSearchValue = currentSearchValue.trim();
       const apiKey = import.meta.env.VITE_API_KEY;
@@ -185,12 +196,7 @@ const buildQueryString = (params: Record<string, string | number>) => {
 
         const data = await response.json();
         console.log("LOCATION SEARCH: ", data)
-        suggestions.value = data.features.map((x:any) => {
-          return{
-            name: x.properties.full_address ?? "NOPE",
-            coordinates: `${x.properties.coordinates.latitude},${x.properties.coordinates.longitude}`
-          }
-        });
+
         return data;
       } catch (error) {
         console.error('Error fetching geocoding data:', error);
@@ -240,25 +246,31 @@ const buildQueryString = (params: Record<string, string | number>) => {
         if(searchStore.searchRadiusValue > 30){
             searchStore.searchRadiusValue = 30;
         }
-
+ 
         //get Location
         const locationParams : client.LocationSearchGetRequest = {
             query: searchStore.searchLocationValue
         }
 
+        const results = await getSuggestions(searchStore.searchLocationValue);
+
         let locationCoordinates : string | undefined = undefined;
-        try{
-            const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
-            locationCoordinates = loactionResponse[0].coordinates!;
-            searchStore.searchLocationValue = truncateLocation(loactionResponse[0].name!);
-            searchStore.searchLocationCoordinatesValue = loactionResponse[0].coordinates!;
-        }catch(err: any){
-            console.error("Location error: ", err);
-            console.warn(err.response.statusText);
-            searchErrorMsg.value = "Location not found. Please check and try again.";
-            searchHasError.value = true;
-            return;
-        }
+        locationCoordinates = `${results.features[0].properties.coordinates.longitude}, ${results.features[0].properties.coordinates.latitude}`;
+         searchStore.searchLocationCoordinatesValue = locationCoordinates!;
+        //searchStore.searchLocationValue = results.features[0].properties.place_formatted;
+        
+        // try{
+        //     const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
+        //     locationCoordinates = loactionResponse[0].coordinates!;
+        //     searchStore.searchLocationValue = truncateLocation(loactionResponse[0].name!);
+        //     searchStore.searchLocationCoordinatesValue = loactionResponse[0].coordinates!;
+        // }catch(err: any){
+        //     console.error("Location error: ", err);
+        //     console.warn(err.response.statusText);
+        //     searchErrorMsg.value = "Location not found. Please check and try again.";
+        //     searchHasError.value = true;
+        //     return;
+        // }
 
         if(locationCoordinates === undefined){
             console.warn("something wrong with location searhc")
