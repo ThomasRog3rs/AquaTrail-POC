@@ -471,7 +471,7 @@ onMounted(async () => {
     button.scroll-right-button{
       padding: 10px;
       border-radius: 100%;
-      z-index: 9999;
+      z-index: 99;
       top: 50%;
       right: 20px;
     }

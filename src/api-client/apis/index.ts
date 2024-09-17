@@ -3,4 +3,5 @@
 export * from './DataApi';
 export * from './GeoJsonApi';
 export * from './LocationApi';
+export * from './SessionApi';
 export * from './TypesApi';
