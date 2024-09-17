@@ -161,10 +161,8 @@ export class BaseAPI {
             method: context.method,
             headers,
             body: context.body,
-            credentials: this.configuration.credentials ?? "include",
+            credentials: this.configuration.credentials ?? 'include',
         };
-        
-        console.log(initParams);
 
         const overriddenInit: RequestInit = {
             ...initParams,
