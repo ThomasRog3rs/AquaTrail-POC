@@ -142,7 +142,7 @@ const searchUserLocation = async () => {
 
         const data = await response.json();
         console.log("USER LOCATION SEARCH REVERSE: ", data)
-        searchStore.searchLocationValue = data.features[0].properties.place_formatted;
+        searchStore.searchLocationValue = data.features[0].properties.full_address;
         // suggestions.value = data.features.map((x:any) => {
         //   return{
         //     name: x.properties.place_formatted ?? "NOPE",
@@ -169,7 +169,7 @@ const buildQueryString = (params: Record<string, string | number>) => {
       if(theSuggestions == undefined) return;
       suggestions.value = theSuggestions.features.map((x:any) => {
         return{
-          name: x.properties.place_formatted ?? "NOPE",
+          name: x.properties.full_address ?? "NOPE",
           coordinates: `${x.properties.coordinates.latitude},${x.properties.coordinates.longitude}`
         }
       });
@@ -253,7 +253,7 @@ const buildQueryString = (params: Record<string, string | number>) => {
         }
 
         const results = await getSuggestions(searchStore.searchLocationValue);
-        console.log
+
         let locationCoordinates : string | undefined = undefined;
         locationCoordinates = `${results.features[0].properties.coordinates.longitude}, ${results.features[0].properties.coordinates.latitude}`;
          searchStore.searchLocationCoordinatesValue = locationCoordinates!;

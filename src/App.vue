@@ -56,7 +56,12 @@ const registerCookie = async () => {
     console.error(error)
   }
 }
-
+interface userLocation {
+  latitude: number;
+  longitude: number;
+}
+const userLocation = ref<userLocation | null>(null);
+const error = ref<string | null>(null);
 const requestLocation = () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -94,9 +99,6 @@ const requestLocation = () => {
 
 onMounted(async () => {
   requestLocation();
-  const closeMarinaParams : client.DataMarinasClosestGetRequest = {
-    userCoordinates: searchStore.userLocation,
-  }
   
   const res : client.CheckSessionTypeModel = await sessionApi.sessionCheckSessionGet();
   console.log(res);

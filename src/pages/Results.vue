@@ -26,7 +26,7 @@
     </div>
     <!-- Icons: https://www.freepik.com/icon/sort_4511377 -->
     <div id="searchOptions" class="shadow-lg p-4">
-        <div class="mt-6 flex justify-between">
+        <div class="mt-7 flex justify-between">
             <span @click="openSort">
                 <svg class="w-6 h-6 text-gray-800 inline-block mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 20V10m0 10-3-3m3 3 3-3m5-13v10m0-10 3 3m-3-3-3 3"/>

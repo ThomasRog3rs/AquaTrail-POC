@@ -32,7 +32,7 @@
           </div>
         </div> -->
       </section>
-      <span v-if="userLocation && marinasClose != undefined" style="display: block;" class="relative">
+      <span v-if="searchStore.userLocation && marinasClose != undefined" style="display: block;" class="relative">
         <div style="padding: 20px; padding-bottom: 0px;">
           <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
             <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
