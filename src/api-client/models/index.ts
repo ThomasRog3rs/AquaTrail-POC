@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './CheckSessionTypeModel';
 export * from './CoordinatesModel';
 export * from './GeoJsonFeature';
 export * from './GeoJsonGeometry';
@@ -14,3 +15,4 @@ export * from './MooringTypeModel';
 export * from './RegisterSessionModel';
 export * from './ServiceModel';
 export * from './ServiceTypeModel';
+export * from './SessionTypeModel';

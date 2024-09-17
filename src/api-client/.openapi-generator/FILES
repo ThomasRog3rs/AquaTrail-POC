@@ -5,6 +5,7 @@ apis/SessionApi.ts
 apis/TypesApi.ts
 apis/index.ts
 index.ts
+models/CheckSessionTypeModel.ts
 models/CoordinatesModel.ts
 models/GeoJsonFeature.ts
 models/GeoJsonGeometry.ts
@@ -19,5 +20,6 @@ models/MooringTypeModel.ts
 models/RegisterSessionModel.ts
 models/ServiceModel.ts
 models/ServiceTypeModel.ts
+models/SessionTypeModel.ts
 models/index.ts
 runtime.ts

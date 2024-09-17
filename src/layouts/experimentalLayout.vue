@@ -253,40 +253,40 @@ function scrollCloseItems(){
       currentSavedScrollPos += scrollAmount;
     }
   }
-const requestLocation = () => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        userLocation.value = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-        console.log('Location:', userLocation.value);  // Log location when obtained
-        searchStore.userLocation = `${userLocation.value.longitude}, ${userLocation.value.latitude}`;
-      },
-      (err) => {
-        switch (err.code) {
-          case err.PERMISSION_DENIED:
-            error.value = "User denied the request for Geolocation.";
-            break;
-          case err.POSITION_UNAVAILABLE:
-            error.value = "Location information is unavailable.";
-            break;
-          case err.TIMEOUT:
-            error.value = "The request to get user location timed out.";
-            break;
-          default:
-            error.value = "An unknown error occurred.";
-            break;
-        }
-        console.log('Error:', error.value);  // Log error if occurred
-      }
-    );
-  } else {
-    error.value = "Geolocation is not supported by this browser.";
-    console.log('Error:', error.value);  // Log if geolocation is not supported
-  }
-};
+// const requestLocation = () => {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(
+//       (position) => {
+//         userLocation.value = {
+//           latitude: position.coords.latitude,
+//           longitude: position.coords.longitude,
+//         };
+//         console.log('Location:', userLocation.value);  // Log location when obtained
+//         searchStore.userLocation = `${userLocation.value.longitude}, ${userLocation.value.latitude}`;
+//       },
+//       (err) => {
+//         switch (err.code) {
+//           case err.PERMISSION_DENIED:
+//             error.value = "User denied the request for Geolocation.";
+//             break;
+//           case err.POSITION_UNAVAILABLE:
+//             error.value = "Location information is unavailable.";
+//             break;
+//           case err.TIMEOUT:
+//             error.value = "The request to get user location timed out.";
+//             break;
+//           default:
+//             error.value = "An unknown error occurred.";
+//             break;
+//         }
+//         console.log('Error:', error.value);  // Log error if occurred
+//       }
+//     );
+//   } else {
+//     error.value = "Geolocation is not supported by this browser.";
+//     console.log('Error:', error.value);  // Log if geolocation is not supported
+//   }
+// };
 
 const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
 
@@ -309,7 +309,7 @@ const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
 
 onMounted(async () => {
   activeOption.value = searchStore.searchItems.find((x:any) => x.active)!.title;
-  requestLocation();
+    // requestLocation();
   // Log current state immediately after request
   console.log('Initial Location:', userLocation.value);
   console.log('Initial Error:', error.value);
