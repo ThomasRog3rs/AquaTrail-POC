@@ -3,5 +3,11 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // server: {
+  //   https: {
+  //     key: './mooringpin-privateKey.key',
+  //     cert: './mooringpin.crt',
+  //   }
+  // },
   plugins: [vue()],
 })
