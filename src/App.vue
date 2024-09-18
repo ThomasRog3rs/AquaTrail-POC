@@ -5,7 +5,7 @@
   <div v-if="cookieBannerOpen" class="fixed bottom-0 left-0 w-full bg-blue-700 text-white py-4 px-6 flex flex-col md:flex-row items-center z-[999]">
     <div class="flex-1 text-left mb-4 md:mb-0">
       <h2 class="text-lg font-semibold mb-1">Cookie Notice</h2>
-      <p class="text-sm">We use a cookie to help improve the site. Your consent helps us to make valuable updates. <a href="#" class="underline">Privacy Policy</a></p>
+      <p class="text-sm">We use a cookie to help improve the site. Your consent helps us to make valuable updates. <router-link to="/privacy-policy" class="underline">Privacy Policy</router-link></p>
     </div>
     <button class="absolute top-2 right-2 text-white text-lg" aria-label="Close" @click="cookieBannerOpen = false">
       &times;
