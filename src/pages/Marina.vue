@@ -104,7 +104,7 @@
             Help us improve your experience by sharing your thoughts on how we can make meaningful updates to the web app.
           </p>
           <div class="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-3">
-            <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAANAAbMagWdUODVLS0owRTFMSlRHUjFIT0oyUlAyR1YyTy4u" target="_blank" class="w-full md:w-1/2 bg-[#D9A61C] hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
+            <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAANAAbMagWdUODVLS0owRTFMSlRHUjFIT0oyUlAyR1YyTy4u" target="_blank" class="w-full md:w-1/2 bg-blue-700 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
               Fill out the feedback form
             </a>
             <button @click="modalStore.modalOpen = false" type="button" class="w-full md:w-1/2 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded mb-2 md:mb-0">
