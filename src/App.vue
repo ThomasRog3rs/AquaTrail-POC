@@ -1,4 +1,5 @@
 <template>
+  <div v-show="modalStore.modalOpen" class="fixed inset-0 bg-black bg-opacity-50 z-40 backdrop-blur-sm"></div>
   <main>
     <router-view></router-view>
   </main>
@@ -29,6 +30,9 @@ import {onMounted, ref} from "vue";
 import * as client from './api-client';
 import {RegisterSessionModel, SessionApi} from './api-client';
 import {useSearchStore} from "./stores/searchStore";
+import {useModalStore} from './stores/ModalStore';
+
+const modalStore = useModalStore();
 
 const sessionApi = new SessionApi();
 
