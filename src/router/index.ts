@@ -7,6 +7,7 @@ import ResultsMap from '../pages/ResultsMap.vue';
 import Marina from '../pages/Marina.vue';
 import Privacy from '../pages/Privacy.vue';
 import Cookie from '../pages/Cookie.vue';
+import NotFound from '../pages/NotFound.vue';
 import { nextTick } from 'vue';
 
 const router = createRouter({
@@ -23,7 +24,8 @@ const router = createRouter({
             props: true // This passes the route params as props to the component
         },
         { path: '/cookie-policy', name: 'Cookie', component: Cookie },
-        {path: '/privacy-policy',name: 'Privacy', component: Privacy}
+        {path: '/privacy-policy',name: 'Privacy', component: Privacy},
+        { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
     ],
     scrollBehavior(to, from, savedPosition) {
         console.log('Navigating from', from.fullPath, 'to', to.fullPath);
