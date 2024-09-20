@@ -8,6 +8,7 @@ import Marina from '../pages/Marina.vue';
 import Privacy from '../pages/Privacy.vue';
 import Cookie from '../pages/Cookie.vue';
 import NotFound from '../pages/NotFound.vue';
+import Questionnaire from '../pages/Questionnaire.vue';
 import { nextTick } from 'vue';
 
 import {useQuestionnaireStore} from "../stores/questionnaireStore";
@@ -25,6 +26,7 @@ const router = createRouter({
             component: Marina,
             props: true // This passes the route params as props to the component
         },
+        {path: '/feedback', name: 'Feedback', component: Questionnaire},
         { path: '/cookie-policy', name: 'Cookie', component: Cookie },
         {path: '/privacy-policy',name: 'Privacy', component: Privacy},
         { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
