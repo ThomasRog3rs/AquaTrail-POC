@@ -21,7 +21,7 @@ window.globalStore = pinia;
 const app = createApp(App);
 app.component('v-select', vSelect);
 // Use the router and pinia
-app.use(router);
 app.use(pinia);
+app.use(router);
 
 app.mount('#app');

@@ -10,6 +10,8 @@ import Cookie from '../pages/Cookie.vue';
 import NotFound from '../pages/NotFound.vue';
 import { nextTick } from 'vue';
 
+import {useQuestionnaireStore} from "../stores/questionnaireStore";
+
 const router = createRouter({
     history: createWebHistory(""),
     routes: [
@@ -38,6 +40,9 @@ router.afterEach(() => {
     nextTick(() => {
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
+
+        const questionnaireStore = useQuestionnaireStore();
+        questionnaireStore.trackUserInteractions();
     });
 });
 
