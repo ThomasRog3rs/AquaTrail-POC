@@ -63,6 +63,7 @@ import {useSavedMarinasStore} from "../stores/savedMarinasStore";
 
 const savedMarinasStore = useSavedMarinasStore();
 
+const dataApi = new DataApi();
 const geoJsonApi = new GeoJsonApi();
 
 const searchStore = useSearchStore();
@@ -94,7 +95,6 @@ async function addPopup(location: popUpProps){
   try{
     // const data : any =  await geoJsonApi.geoJsonGeoJsonByIdGet(marianProps);
     // marina = data!.features![0].properties;
-    const dataApi = new DataApi();
     marina = await dataApi.dataMarinaByGeojsonIdGeoJsonIdGet(marianProps)
   }catch(err:any){
     console.error(err)
@@ -107,7 +107,7 @@ async function addPopup(location: popUpProps){
   new mapboxgl.Popup({ offset: [0, -15] })
       //@ts-ignore
       .setLngLat(location.coordinates)
-      .setHTML(`<span><h3 class="${isSaved ? '!bg-[#e5b700]' : ''}">${marina.name}</h3><a class="${isSaved ? '!text-[#796100]' : ''}" href="${marina.website}" target="_blank">Website</a><br/><a class="${isSaved ? '!text-[#796100]' : ''}" href="/marina/${marina.id}" class="save">View Location</button></span>`)
+      .setHTML(`<span><h3 class="${isSaved ? '!bg-[#e5b700]' : ''}">${marina.name}</h3><a class="${isSaved ? '!text-[#796100]' : ''} ${marina?.website == undefined ? 'd-none' : ''}" href="${marina?.website}" target="_blank">Website</a><br/><a class="${isSaved ? '!text-[#796100]' : ''}" href="/marina/${marina.id}" class="save">View Location</button></span>`)
       .addTo(map.value!);
 }
 
@@ -470,5 +470,9 @@ div.marker-saved{
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.d-none{
+  display: none !important;
 }
 </style>

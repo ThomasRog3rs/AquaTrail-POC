@@ -28,8 +28,7 @@
           </button>
 
           <!-- Skip and Return to App Button -->
-          <router-link type="button" to="/">
-                  class="w-full sm:w-auto bg-gray-600 text-white font-semibold py-2 px-4 rounded hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-500">
+          <router-link type="button" to="/" class="w-full sm:w-auto bg-gray-600 text-white text-center font-semibold py-2 px-4 rounded hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-500">
             Continue Without Email
           </router-link>
         </div>
