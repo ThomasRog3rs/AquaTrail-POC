@@ -111,8 +111,14 @@ const currentQuestionIndex = ref<number>(0);
 
 const showThanks = ref<boolean>(false);
 
-const handleAnswer = (answer : string[]) => {
-  questionnaireStore.questions[currentQuestionIndex.value].theAnswer = answer;
+const handleAnswer = (answer : string[] | string) => {
+  if (Array.isArray(answer)) {
+    // If answer is already an array, assign it directly
+    questionnaireStore.questions[currentQuestionIndex.value].theAnswer = answer;
+  } else {
+    // If answer is a single string, wrap it in an array
+    questionnaireStore.questions[currentQuestionIndex.value].theAnswer = [answer];
+  }
 }
 
 const previousQuestion = () => {
