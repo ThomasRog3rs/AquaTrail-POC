@@ -111,8 +111,8 @@ const currentQuestionIndex = ref<number>(0);
 
 const showThanks = ref<boolean>(false);
 
-const handleAnswer = (answer : string | string[]) => {
-  questionnaireStore.questions[currentQuestionIndex.value].theAnswer = [answer];
+const handleAnswer = (answer : string[]) => {
+  questionnaireStore.questions[currentQuestionIndex.value].theAnswer = answer;
 }
 
 const previousQuestion = () => {
