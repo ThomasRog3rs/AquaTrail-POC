@@ -12,6 +12,8 @@ export * from './MarinaModel';
 export * from './MarinaTypeModel';
 export * from './MooringModel';
 export * from './MooringTypeModel';
+export * from './QuestionnaireModel';
+export * from './QuestionnaireResponseModel';
 export * from './RegisterSessionModel';
 export * from './ServiceModel';
 export * from './ServiceTypeModel';
