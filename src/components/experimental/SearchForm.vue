@@ -253,7 +253,13 @@ const buildQueryString = (params: Record<string, string | number>) => {
         }
 
         const results = await getSuggestions(searchStore.searchLocationValue);
-
+        console.log(results);
+        if(results.features.length <= 0){
+          searchErrorMsg.value = "We can't find that location";
+          searchHasError.value = true;
+          return;
+        }
+        
         let locationCoordinates : string | undefined = undefined;
         locationCoordinates = `${results.features[0].properties.coordinates.longitude}, ${results.features[0].properties.coordinates.latitude}`;
          searchStore.searchLocationCoordinatesValue = locationCoordinates!;

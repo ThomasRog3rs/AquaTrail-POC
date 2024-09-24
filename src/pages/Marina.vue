@@ -83,10 +83,9 @@
             </div>
         </section>
     </main>
-
-
     </div>
-  </template>
+
+</template>
   
   <script setup lang="ts">
   import { onMounted, ref, computed } from 'vue';

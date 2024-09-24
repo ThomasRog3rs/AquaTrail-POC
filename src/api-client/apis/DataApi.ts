@@ -28,7 +28,7 @@ import {
     ServiceModelToJSON,
 } from '../models/index';
 
-export interface DataGeoJsonIdGetRequest {
+export interface DataMarinaByGeojsonIdGeoJsonIdGetRequest {
     geoJsonId: number;
 }
 
@@ -61,6 +61,10 @@ export interface DataMarinasTypeTypeGetRequest {
     offset?: number;
 }
 
+export interface DataMooringByGeojsonIdGeoJsonIdGetRequest {
+    geoJsonId: number;
+}
+
 export interface DataMooringsIdGetRequest {
     id: string;
 }
@@ -83,6 +87,10 @@ export interface DataMooringsTypeTypeGetRequest {
     searchDistance?: number;
     limit?: number;
     offset?: number;
+}
+
+export interface DataServiceByGeojsonIdGeoJsonIdGetRequest {
+    geoJsonId: number;
 }
 
 export interface DataServicesIdGetRequest {
@@ -115,11 +123,11 @@ export class DataApi extends runtime.BaseAPI {
 
     /**
      */
-    async dataGeoJsonIdGetRaw(requestParameters: DataGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarinaModel>> {
+    async dataMarinaByGeojsonIdGeoJsonIdGetRaw(requestParameters: DataMarinaByGeojsonIdGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarinaModel>> {
         if (requestParameters['geoJsonId'] == null) {
             throw new runtime.RequiredError(
                 'geoJsonId',
-                'Required parameter "geoJsonId" was null or undefined when calling dataGeoJsonIdGet().'
+                'Required parameter "geoJsonId" was null or undefined when calling dataMarinaByGeojsonIdGeoJsonIdGet().'
             );
         }
 
@@ -128,7 +136,7 @@ export class DataApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/Data/{geoJsonId}`.replace(`{${"geoJsonId"}}`, encodeURIComponent(String(requestParameters['geoJsonId']))),
+            path: `/Data/marina/by-geojson-id/{geoJsonId}`.replace(`{${"geoJsonId"}}`, encodeURIComponent(String(requestParameters['geoJsonId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -139,8 +147,8 @@ export class DataApi extends runtime.BaseAPI {
 
     /**
      */
-    async dataGeoJsonIdGet(requestParameters: DataGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarinaModel> {
-        const response = await this.dataGeoJsonIdGetRaw(requestParameters, initOverrides);
+    async dataMarinaByGeojsonIdGeoJsonIdGet(requestParameters: DataMarinaByGeojsonIdGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarinaModel> {
+        const response = await this.dataMarinaByGeojsonIdGeoJsonIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -316,6 +324,37 @@ export class DataApi extends runtime.BaseAPI {
 
     /**
      */
+    async dataMooringByGeojsonIdGeoJsonIdGetRaw(requestParameters: DataMooringByGeojsonIdGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MooringModel>> {
+        if (requestParameters['geoJsonId'] == null) {
+            throw new runtime.RequiredError(
+                'geoJsonId',
+                'Required parameter "geoJsonId" was null or undefined when calling dataMooringByGeojsonIdGeoJsonIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Data/mooring/by-geojson-id/{geoJsonId}`.replace(`{${"geoJsonId"}}`, encodeURIComponent(String(requestParameters['geoJsonId']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MooringModelFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async dataMooringByGeojsonIdGeoJsonIdGet(requestParameters: DataMooringByGeojsonIdGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MooringModel> {
+        const response = await this.dataMooringByGeojsonIdGeoJsonIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
     async dataMooringsIdGetRaw(requestParameters: DataMooringsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MooringModel>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
@@ -449,6 +488,37 @@ export class DataApi extends runtime.BaseAPI {
      */
     async dataMooringsTypeTypeGet(requestParameters: DataMooringsTypeTypeGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MooringModel>> {
         const response = await this.dataMooringsTypeTypeGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async dataServiceByGeojsonIdGeoJsonIdGetRaw(requestParameters: DataServiceByGeojsonIdGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServiceModel>> {
+        if (requestParameters['geoJsonId'] == null) {
+            throw new runtime.RequiredError(
+                'geoJsonId',
+                'Required parameter "geoJsonId" was null or undefined when calling dataServiceByGeojsonIdGeoJsonIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Data/service/by-geojson-id/{geoJsonId}`.replace(`{${"geoJsonId"}}`, encodeURIComponent(String(requestParameters['geoJsonId']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ServiceModelFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async dataServiceByGeojsonIdGeoJsonIdGet(requestParameters: DataServiceByGeojsonIdGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceModel> {
+        const response = await this.dataServiceByGeojsonIdGeoJsonIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

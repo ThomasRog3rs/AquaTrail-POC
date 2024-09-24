@@ -1,4 +1,5 @@
 <template>
+  <div v-show="questionnaireStore.promptModalOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 backdrop-blur-sm"></div>
   <main>
     <router-view></router-view>
   </main>
@@ -19,16 +20,19 @@
       </button>
     </div>
   </div>
-
-
-
+  <QuestionnairePrompt></QuestionnairePrompt>
 </template>
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
+import QuestionnairePrompt from "./components/experimental/QuestionnairePrompt.vue";
+
 import * as client from './api-client';
 import {RegisterSessionModel, SessionApi} from './api-client';
 import {useSearchStore} from "./stores/searchStore";
+import {useQuestionnaireStore} from './stores/questionnaireStore';
+
+const questionnaireStore = useQuestionnaireStore();
 
 const sessionApi = new SessionApi();
 
@@ -101,10 +105,12 @@ const requestLocation = () => {
 
 onMounted(async () => {
   requestLocation();
-  
+  // alert(navigator.userAgent);
+    
   const res : client.CheckSessionTypeModel = await sessionApi.sessionCheckSessionGet();
   console.log(res);
   cookieBannerOpen.value = !res.hasSession;
+  // questionnaireStore.startPromptTimer(2800);
 })
 </script>
 

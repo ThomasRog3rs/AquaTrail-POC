@@ -1,2 +1,12 @@
+# Environment variables
 .env
-node_modules
+
+# Node modules
+node_modules/
+
+# Ignore the build output directory
+dist/
+dist/*
+
+# Ignore all JavaScript files
+*.js

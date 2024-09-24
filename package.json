@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview",
+    "preview": "vite preview", 
     "generate-client": "openapi-generator-cli generate -i http://localhost:5000/swagger/v1/swagger.json -g typescript-fetch -o src/api-client -c api-config.json",
     "update-client": "npm run generate-client && cd src/api-client && npm install"
   },

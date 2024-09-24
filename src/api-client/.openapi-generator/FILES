@@ -1,6 +1,7 @@
 apis/DataApi.ts
 apis/GeoJsonApi.ts
 apis/LocationApi.ts
+apis/QuestionnaireApi.ts
 apis/SessionApi.ts
 apis/TypesApi.ts
 apis/index.ts
@@ -17,6 +18,8 @@ models/MarinaModel.ts
 models/MarinaTypeModel.ts
 models/MooringModel.ts
 models/MooringTypeModel.ts
+models/QuestionnaireModel.ts
+models/QuestionnaireResponseModel.ts
 models/RegisterSessionModel.ts
 models/ServiceModel.ts
 models/ServiceTypeModel.ts
