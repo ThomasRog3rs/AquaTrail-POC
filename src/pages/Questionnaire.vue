@@ -14,15 +14,17 @@
         <!-- Optional Email Input -->
         <div class="mb-4">
           <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Your Email (optional):</label>
-          <input type="email" id="email" name="email" placeholder="you@example.com"
+          <input type="email" id="email" name="email" placeholder="you@example.com" v-model="userEmail"
                  class="w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                 :class="{'border-red-500': formError}"
           />
-        </div>
+        </div>  
 
         <!-- Buttons -->
         <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 sm:space-x-3">
           <!-- Submit Button for Email -->
           <button type="submit"
+                  @click="submitEmail"
                   class="w-full sm:w-auto bg-blue-700 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500">
             Submit Email
           </button>
@@ -44,16 +46,19 @@
     </h1>
     <div id="formProgress" class="mb-6">
       <div class="flex justify-between">
-    <span v-for="(item, index) in questionnaireStore.questions"
-          :key="item.id"
-          class="w-full mr-2 mt-6 text-center text-white"
-          :class="{
-            'bg-blue-500': item.hasBeenAnswered,   /* Blue for answered */
-            'bg-gray-500': !item.hasBeenAnswered && currentQuestionIndex !== index, /* Gray for unanswered */
-            '!bg-yellow-500': currentQuestionIndex === index  /* Yellow for current question */
-          }"
-          style="height: 3px;"> <!-- Adjust height here -->
-    </span>
+        <span v-for="(item, index) in questionnaireStore.questions"
+              :key="item.id"
+              class="w-full mr-2 mt-6 text-center text-white"
+              :class="{
+                'bg-blue-500': item.hasBeenAnswered,   /* Blue for answered */
+                'bg-gray-500': !item.hasBeenAnswered && currentQuestionIndex !== index, /* Gray for unanswered */
+                '!bg-yellow-500': currentQuestionIndex === index  /* Yellow for current question */
+              }"
+              style="height: 3px;"> <!-- Adjust height here -->
+        </span>
+      </div>
+      <div class="container-header mt-6">
+        <div class="search-error bg-red-600" v-if="formError">Please answer the question before moving onto the next section</div>
       </div>
     </div>
     <form @submit.prevent class="space-y-6">
@@ -65,6 +70,12 @@
             class="space-y-2"
         />
       </div>
+      
+<!--      <div v-else-if="questionnaireStore.questions[currentQuestionIndex].type === 'range'">-->
+<!--        <Range :question="questionnaireStore.questions[currentQuestionIndex]">-->
+<!--          -->
+<!--        </Range>-->
+<!--      </div>-->
       
       <div v-else-if="questionnaireStore.questions[currentQuestionIndex].type === 'multi-select'">
         <Select             
@@ -103,12 +114,23 @@ import {useQuestionnaireStore} from "../stores/questionnaireStore";
 import {onMounted, ref} from "vue";
 import Radio from "../components/formComponents/Radio.vue";
 import Select from "../components/formComponents/Select.vue";
+import Range from "../components/formComponents/Range.vue";
+import * as client from '../api-client';
+import {QuestionnaireApi} from "../api-client/";
+import {ApiQuestionnairePostRequest} from "../api-client";
+import {useRouter} from 'vue-router';
+
+const router = useRouter();
+
+const questionAPI = new QuestionnaireApi();
 
 const questionnaireStore = useQuestionnaireStore();
 
 const currentQuestionIndex = ref<number>(0);
 
 const showThanks = ref<boolean>(false);
+
+const formError = ref<boolean>(false);
 
 const handleAnswer = (answer : string[] | string) => {
   if (Array.isArray(answer)) {
@@ -126,18 +148,74 @@ const previousQuestion = () => {
   }
 }
 
-const nextQuestion = () => {
+const nextQuestion = async () => {
   //Todo: post question to the backend
-  questionnaireStore.questions[currentQuestionIndex.value].hasBeenAnswered = true;
+  if(questionnaireStore.questions[currentQuestionIndex.value].theAnswer === undefined){
+    formError.value = true;
+    return;
+  }
+  
+  formError.value = false;
   console.warn("ANSEWR:")
   console.log(questionnaireStore.questions[currentQuestionIndex.value])
+  const postRequest : client.ApiQuestionnairePostRequest = {
+    questionnaireModel: {
+      questionNumber: questionnaireStore.questions[currentQuestionIndex.value].id,
+      questionName: questionnaireStore.questions[currentQuestionIndex.value].question,
+      questionType: questionnaireStore.questions[currentQuestionIndex.value].type,
+      questionOptions: questionnaireStore.questions[currentQuestionIndex.value].options,
+      answers: questionnaireStore.questions[currentQuestionIndex.value].theAnswer
+    }
+  }
+  console.log(postRequest);
+  await questionAPI.apiQuestionnairePost(postRequest);
+  questionnaireStore.questions[currentQuestionIndex.value].hasBeenAnswered = true;
   
   if (currentQuestionIndex.value < questionnaireStore.questions.length - 1) {
     currentQuestionIndex.value++;
   }else{
     //Todo: post whole form to backend
+    
     showThanks.value = true;
   }
+}
+
+const userEmail =  ref<string | undefined>(undefined);
+
+const submitEmail = async () => {
+  if(userEmail.value === undefined) {
+    formError.value = true;
+    return;
+  }
+
+  // Regular expression to validate email format
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Check if the email is valid
+  if (!userEmail || !emailPattern.test(userEmail.value)) {
+    formError.value = true;
+    return;
+  }
+  
+  formError.value = false;
+  const postRequest : client.ApiQuestionnairePostRequest = {
+    questionnaireModel: {
+      questionNumber: 7,
+      questionName: "Please can we have your email and contact you?",
+      questionType: "text-input",
+      questionOptions: [""] as Array<string>,
+      answers: [userEmail.value] as Array<string>
+    }
+  }
+  console.log(postRequest);
+  try{
+    const res = await questionAPI.apiQuestionnairePost(postRequest);
+    console.log(res);
+    router.push("/");
+  }catch(error: any){
+    console.warn(error)
+  }
+
 }
 
 onMounted(() => {

@@ -42,14 +42,14 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
             id: 4,
             question: "What other features would you find useful on our website? (Select all that apply)",
             options: [
-                "Ability to search for moorings as well as marinas",
-                "Ability to search for services (e.g., water points, Elsan points, fuel stations)",
-                "Booking stays at marinas and moorings through the app",
-                "Ability to place orders with a fuel boat through the app",
-                "Ability to contact marina offices directly through the app",
-                "Notifications for marina or mooring availability updates",
+                "Search for moorings as well as marinas",
+                "Search for services (e.g., Elsan points, fuel stations)",
+                "Contact marina offices through the app",
+                "Book marinas and moorings through the app",
+                "Place orders with a fuel boat through the app",
+                "Marina or mooring availability updates",
                 "Navigation features",
-                "Closures and outage warnings and information",
+                "Closures and outage warnings/information",
                 "Boat maintenance and service reminders (e.g., engine service, fire safety checks)"
             ],
             hasBeenAnswered: false,
@@ -72,7 +72,7 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
                 "I live on my boat (Liveaboard boater)",
                 "I use my boat for holidays/recreation (Holiday boater)",
                 "I don't own a boat but I’m interested in boating",
-                "Other (please specify)"
+                "Other"
             ],
             hasBeenAnswered: false,
             theAnswer: undefined

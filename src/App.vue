@@ -105,11 +105,11 @@ const requestLocation = () => {
 
 onMounted(async () => {
   requestLocation();
-  
+  // alert(navigator.userAgent);
+    
   const res : client.CheckSessionTypeModel = await sessionApi.sessionCheckSessionGet();
   console.log(res);
   cookieBannerOpen.value = !res.hasSession;
-  alert(navigator.userAgent);
   // questionnaireStore.startPromptTimer(2800);
 })
 </script>
