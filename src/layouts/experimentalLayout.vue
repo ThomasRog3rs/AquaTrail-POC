@@ -32,6 +32,42 @@
           </div>
         </div> -->
       </section>
+  <span v-if="savedMarinasStore.savedMarinas && savedMarinasStore.savedMarinas.length > 0" style="display: block;" class="relative">
+        <div style="padding: 20px; padding-bottom: 0px;">
+          <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
+            Your Saved
+            <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
+              Marinas
+            </span>
+          </h1>
+        </div>
+
+        <section id="close-by" class="relative" ref="savedItemsContainer">
+          <div class="close-items" ref="savedItemsScroll">
+            <Card
+                v-for="marina in savedMarinasStore.savedMarinas"
+                :key="marina.id"
+                :id="marina.id!"
+                :name="marina.name!"
+                description=""
+                image=""
+                :has-image="false"
+                :distance="(marina.distanceFromUser?.toFixed(2))"
+                @click="searchStore.searchLocationValue = undefined"
+            ></Card>
+          </div>
+      
+        </section>
+        <button
+            v-if="!hideSavedScrollButton"
+            class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
+            @click="scrollSearchItems"
+        >
+            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+            </svg>
+          </button>
+      </span>
       <span v-if="searchStore.userLocation && marinasClose != undefined" style="display: block;" class="relative">
         <div style="padding: 20px; padding-bottom: 0px;">
           <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
@@ -63,43 +99,6 @@
             class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
             @click="scrollCloseItems"
           >
-            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
-            </svg>
-          </button>
-      </span>
-
-      <span v-if="savedMarinasStore.savedMarinas && savedMarinasStore.savedMarinas.length > 0" style="display: block;" class="relative">
-        <div style="padding: 20px; padding-bottom: 0px;">
-          <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
-            Your Saved
-            <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
-              Marinas
-            </span>
-          </h1>
-        </div>
-
-        <section id="close-by" class="relative" ref="savedItemsContainer">
-          <div class="close-items" ref="savedItemsScroll">
-            <Card
-                v-for="marina in savedMarinasStore.savedMarinas"
-                :key="marina.id"
-                :id="marina.id!"
-                :name="marina.name!"
-                description=""
-                image=""
-                :has-image="false"
-                :distance="(marina.distanceFromUser?.toFixed(2))"
-                @click="searchStore.searchLocationValue = undefined"
-            ></Card>
-          </div>
-      
-        </section>
-        <button
-            v-if="!hideSavedScrollButton"
-            class="absolute border border-gray-500 shadow-lg bg-gray-100 scroll-right-button"
-            @click="scrollSearchItems"
-        >
             <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
             </svg>
