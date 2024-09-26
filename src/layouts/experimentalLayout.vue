@@ -1,17 +1,19 @@
 <template>
-      <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px;">
-        <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
-        <!-- <h1 class="logo">Mooring Pin</h1> -->
-        <img style="margin: 0px auto" src="../assets/logo.png" width="50%" alt="">
-        <!-- <p v-if="userLocation">Your location: {{ userLocation.longitude }}, {{ userLocation.latitude }}</p>         -->
-        <div class="search-types">
-          <template v-if="searchStore.searchItems.length > 1" v-for="type in searchStore.searchItems">
-              <div class="search-type" :class="{ active: type.active }" @click="setActive(type.title)">
-                {{ type.title }}
-              </div>location
-          </template>
-        </div>
-      </nav>
+  <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px; padding-bottom: 10px">
+    <div class="logo" style="display: flex; justify-content: center; align-items: center;">
+      <img src="../assets/logo4.png" width="50" height="50" alt="Logo" style="margin-right: 10px;">
+      <h1 style="color: white; font-size: 24px; margin: 0;">Mooring Pin</h1>
+    </div>
+  </nav>
+
+<!--  <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px;">-->
+<!--        &lt;!&ndash; <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  &ndash;&gt;-->
+<!--        &lt;!&ndash; <h1 class="logo">Mooring Pin</h1> &ndash;&gt;-->
+<!--        <div class="logo">-->
+<!--          <img src="../assets/logo4.png" width="20%" alt="">-->
+<!--          <h1>Mooring Pin</h1>-->
+<!--        </div>-->
+<!--      </nav>-->
       <section id="search">
         <div class="mb-4">
 
@@ -347,6 +349,18 @@ onMounted(async () => {
   <style>
     nav, section{
       padding: 20px;
+    }
+    
+    img{
+      display: inline-block;
+    }
+    
+    .logo > h1{
+      display: inline-block;
+      color: white;
+      font-size: 25px;
+      text-align: center;
+      font-weight: bold;
     }
 
     h1.logo{
