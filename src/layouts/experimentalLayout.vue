@@ -5,15 +5,6 @@
       <h1 style="color: white; font-size: 24px; margin: 0;">Mooring Pin</h1>
     </div>
   </nav>
-
-<!--  <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px;">-->
-<!--        &lt;!&ndash; <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  &ndash;&gt;-->
-<!--        &lt;!&ndash; <h1 class="logo">Mooring Pin</h1> &ndash;&gt;-->
-<!--        <div class="logo">-->
-<!--          <img src="../assets/logo4.png" width="20%" alt="">-->
-<!--          <h1>Mooring Pin</h1>-->
-<!--        </div>-->
-<!--      </nav>-->
       <section id="search">
         <div class="mb-4">
 
@@ -351,17 +342,6 @@ onMounted(async () => {
       padding: 20px;
     }
     
-    img{
-      display: inline-block;
-    }
-    
-    .logo > h1{
-      display: inline-block;
-      color: white;
-      font-size: 25px;
-      text-align: center;
-      font-weight: bold;
-    }
 
     h1.logo{
       color: white;

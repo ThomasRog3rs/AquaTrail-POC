@@ -1,9 +1,9 @@
 <template>
-  <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px;">
-    <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
-    <!-- <h1 class="logo">Mooring Pin</h1> -->
-    <img style="margin: 0px auto" src="../assets/logo.png" width="50%" alt="">
-    <!-- <p v-if="userLocation">Your location: {{ userLocation.longitude }}, {{ userLocation.latitude }}</p>         -->
+  <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px; padding-bottom: 10px">
+    <div class="logo" style="display: flex; justify-content: center; align-items: center;">
+      <img src="../assets/logo4.png" width="70"  alt="Logo" style="margin-right: 0px;">
+      <h1 style="color: white; font-size: 24px; margin: 0;">Mooring Pin</h1>
+    </div>
   </nav>
   <!--  class="max-w-md mx-auto mt-5 bg-white rounded"-->
   <section v-if="showThanks">
