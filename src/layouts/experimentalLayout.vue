@@ -151,7 +151,7 @@
         </div>
         <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
           <div>
-            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
+            <h2 class="mb-6 text-sm font-semibold uppercase text-white">Resources</h2>
             <ul class="text-gray-300 font-medium">
               <li class="mb-4">
                 <a href="/feedback" class="hover:underline">Feedback form</a>
@@ -165,7 +165,7 @@
             </ul>
           </div>
           <div>
-            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Follow us</h2>
+            <h2 class="mb-6 text-sm font-semibold uppercase text-white">Follow us</h2>
             <ul class="text-gray-300 font-medium">
               <li class="mb-4">
                 <a href="https://www.instagram.com/mooringpin/" target="_blank" class="hover:underline">Instagram</a>
