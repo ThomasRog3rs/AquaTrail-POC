@@ -14,7 +14,7 @@ const acceptForm = async () => {
       questionName: "please give us feedback",
       questionType: "prompt",
       questionOptions: ["yes", "no"],
-      answers: ["yes"]
+      answers: ["yes", navigator.userAgent]
     }
   }
   console.log(postRequest);
