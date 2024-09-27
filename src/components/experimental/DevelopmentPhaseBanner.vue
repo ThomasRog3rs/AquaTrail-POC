@@ -19,7 +19,7 @@ const acceptForm = async () => {
   }
   console.log(postRequest);
   await questionAPI.apiQuestionnairePost(postRequest);
-  promptModalOpen.value = false;
+  questionnaireStore.promptModalOpen = false;
   await router.push("/feedback");
   questionnaireStore.hasBeenPrompted = true;
 }
