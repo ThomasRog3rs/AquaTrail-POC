@@ -5,7 +5,7 @@
   <main>
     <router-view></router-view>
   </main>
-  <div v-if="cookieBannerOpen" class="fixed bottom-0 left-0 w-full bg-blue-700 text-white py-4 px-6 flex flex-col md:flex-row items-center z-[999]">
+  <div v-if="cookieBannerOpen" class="fixed bottom-0 left-0 w-full bg-blue-700 text-white py-4 px-6 flex flex-col md:flex-row items-center z-[999] rounded" style="border-top: 5px solid #facc15">
     <div class="flex-1 text-left mb-4 md:mb-0">
       <h2 class="text-lg font-semibold mb-1">Cookie Notice</h2>
       <p class="text-sm">We use a cookie to help improve the site. Your consent helps us to make valuable updates. <router-link to="/privacy-policy" class="underline">Privacy Policy</router-link></p>

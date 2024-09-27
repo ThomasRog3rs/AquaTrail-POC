@@ -1,11 +1,25 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {useQuestionnaireStore} from "../../stores/questionnaireStore";
+import * as client from "../../api-client";
+import {QuestionnaireApi} from "../../api-client";
 const questionnaireStore = useQuestionnaireStore();
 const router = useRouter();
+
+const questionAPI = new QuestionnaireApi();
 const acceptForm = async () => {
+  const postRequest : client.ApiQuestionnairePostRequest = {
+    questionnaireModel: {
+      questionNumber: 0,
+      questionName: "please give us feedback",
+      questionType: "prompt",
+      questionOptions: ["yes", "no"],
+      answers: ["yes"]
+    }
+  }
+  console.log(postRequest);
+  await questionAPI.apiQuestionnairePost(postRequest);
   await router.push("/feedback");
-  questionnaireStore.closePrompt();
   questionnaireStore.hasBeenPrompted = true;
 }
 </script>
