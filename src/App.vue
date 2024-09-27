@@ -1,5 +1,7 @@
 <template>
-  <div v-show="questionnaireStore.promptModalOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 backdrop-blur-sm"></div>
+  <DevelopmentPhaseBanner></DevelopmentPhaseBanner>
+  
+<!--  <div v-show="questionnaireStore.promptModalOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 backdrop-blur-sm"></div>-->
   <main>
     <router-view></router-view>
   </main>
@@ -12,15 +14,15 @@
       &times;
     </button>
     <div class="flex flex-col w-full md:flex-row md:w-auto md:space-x-4">
-      <button class="w-full md:w-1/2 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded mb-2 md:mb-0" @click="cookieBannerOpen = false">
-        Decline
-      </button>
-      <button class="w-full md:w-1/2 bg-[#D9A61C] hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded" @click="registerCookie">
+      <button class="w-full md:w-1/2 bg-[#D9A61C] hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded mb-2 md:mb-0" @click="registerCookie">
         Accept
+      </button>
+      <button class="w-full md:w-1/2 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded" @click="cookieBannerOpen = false">
+        Decline
       </button>
     </div>
   </div>
-  <QuestionnairePrompt></QuestionnairePrompt>
+<!--  <QuestionnairePrompt></QuestionnairePrompt>-->
 </template>
 
 <script setup lang="ts">
@@ -31,6 +33,7 @@ import * as client from './api-client';
 import {RegisterSessionModel, SessionApi} from './api-client';
 import {useSearchStore} from "./stores/searchStore";
 import {useQuestionnaireStore} from './stores/questionnaireStore';
+import DevelopmentPhaseBanner from "./components/experimental/DevelopmentPhaseBanner.vue";
 
 const questionnaireStore = useQuestionnaireStore();
 

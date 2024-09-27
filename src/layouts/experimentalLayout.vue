@@ -1,4 +1,5 @@
 <template>
+  
   <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px; padding-bottom: 10px">
     <div class="logo" style="display: flex; justify-content: center; align-items: center;">
       <img src="../assets/logo4.png" width="70"  alt="Logo" style="margin-right: -4px;">
@@ -158,6 +159,8 @@
   import { SearchPayload } from '../types/search';
   import * as client from '../api-client';
   import { DataApi } from '../api-client';
+  import DevelopmentPhaseBanner from "../components/experimental/DevelopmentPhaseBanner.vue";
+
   
   const savedMarinasStore = useSavedMarinasStore();
 

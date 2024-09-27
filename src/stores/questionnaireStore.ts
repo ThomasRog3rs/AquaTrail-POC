@@ -84,23 +84,26 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
         // alert(pageVisits.value)
         // Check if user has visited 3 or more pages or interacted significantly
         if (pageVisits.value >= 4 && !hasBeenPrompted.value) {
-            startPromptTimer(3000); // Wait 3 seconds before showing, or adapt to idle state
+            startPromptTimer(15000); // Wait 15 seconds before showing, or adapt to idle state
             // hasBeenPrompted.value = true;
         }
     }
     
     
     const startPromptTimer = (timeMs : number) => {
+        // alert("prompt has started t-15s")
         //To do: 
         // - check if they have or have not already done the form via cookie
         // alert("starting feedback form timer...");
         setTimeout(() => {
             promptModalOpen.value = true;
+            // alert("prompt open")
         }, timeMs)
     }
     
     const closePrompt = () => {
         promptModalOpen.value = false;
+        hasBeenPrompted.value = true;
     }
 
     return {
