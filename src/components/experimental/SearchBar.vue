@@ -8,7 +8,8 @@
 </svg>
 
                     </span>
-                    <span class="mt-3 truncate w-[75%]">{{ searchStore.searchLocationValue }}</span>
+                    <input type="text" class="p-2 w-[75%] bg-transparent pointer-events-none" :value="searchStore.searchLocationValue">
+                    <!-- <span class="mt-3 truncate w-[75%]">{{ searchStore.searchLocationValue }}</span> -->
                 </div>
                 <slot></slot>
                 <!-- <span v-if="searchStore.marinaSearchValue" class="searchTerm mr-5">&#9873; {{ searchStore.marinaSearchValue }}</span>

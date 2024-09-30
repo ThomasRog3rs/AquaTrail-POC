@@ -140,7 +140,7 @@
 </footer> -->
 
 
-  <footer class="bg-blue-700">
+  <footer class="bg-blue-700 mt-[30px] p-3">
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
       <div class="md:flex md:justify-between">
         <div class="mb-5 md:mb-0">
@@ -176,7 +176,7 @@
       </div>
       <hr class="my-6 border-gray-200 sm:mx-auto lg:my-8" />
       <div class="sm:flex sm:items-center sm:justify-between">
-        <span class="text-sm text-gray-300 sm:text-center">© {{currentYear}} <a href="https://flowbite.com/" class="hover:underline">Mooring Pin</a>. All Rights Reserved.</span>
+        <span class="text-sm text-gray-300 sm:text-center">© {{currentYear}} <a href="https://mooringpin.co.uk/" class="hover:underline">Mooring Pin</a>. All Rights Reserved.</span>
         <div class="flex mt-4 sm:justify-center sm:mt-0">
 <!--          <a href="#" class="text-gray-300 hover:text-white">-->
 <!--            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 8 19">-->
