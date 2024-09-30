@@ -1,9 +1,9 @@
 <template>
-  <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px;">
-    <!-- <img src="../assets/signal-2024-08-14-154247_002.png" width="50" height="50" style="display: inline-block;"/>  -->
-    <!-- <h1 class="logo">Mooring Pin</h1> -->
-    <img style="margin: 0px auto" src="../assets/logo.png" width="50%" alt="">
-    <!-- <p v-if="userLocation">Your location: {{ userLocation.longitude }}, {{ userLocation.latitude }}</p>         -->
+  <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px; padding-bottom: 10px">
+    <router-link to="/" class="logo" style="display: flex; justify-content: center; align-items: center;">
+      <img src="../assets/logo4.png" width="70"  alt="Logo" style="margin-right: -4px;">
+      <h1 style="color: white; font-size: 25px; margin: 0;" class="font-bold">Mooring Pin</h1>
+    </router-link>
   </nav>
   <!--  class="max-w-md mx-auto mt-5 bg-white rounded"-->
   <section v-if="showThanks">
@@ -28,7 +28,6 @@
                   class="w-full sm:w-auto bg-blue-700 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500">
             Submit Email
           </button>
-
           <!-- Skip and Return to App Button -->
           <router-link type="button" to="/" class="w-full sm:w-auto bg-gray-600 text-white text-center font-semibold py-2 px-4 rounded hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-500">
             Continue Without Email

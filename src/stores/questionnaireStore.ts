@@ -1,10 +1,14 @@
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
 import {Question} from "../types/question";
+import * as client from '../api-client';
+import {QuestionnaireApi} from "../api-client/";
 export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
     const promptModalOpen = ref<boolean>(false);
     const pageVisits = ref<number>(0);
     const hasBeenPrompted = ref<boolean>(false);
+    const questionAPI = new QuestionnaireApi();
+
     
     const questions = ref<Question[] >([
         {
@@ -84,23 +88,39 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
         // alert(pageVisits.value)
         // Check if user has visited 3 or more pages or interacted significantly
         if (pageVisits.value >= 4 && !hasBeenPrompted.value) {
-            startPromptTimer(3000); // Wait 3 seconds before showing, or adapt to idle state
-            // hasBeenPrompted.value = true;
+            startPromptTimer(15000); // Wait 15 seconds before showing, or adapt to idle state
         }
     }
     
     
     const startPromptTimer = (timeMs : number) => {
+        // alert("prompt has started t-15s")
         //To do: 
         // - check if they have or have not already done the form via cookie
         // alert("starting feedback form timer...");
         setTimeout(() => {
             promptModalOpen.value = true;
+            hasBeenPrompted.value = true;
+            
+            // alert("prompt open")
         }, timeMs)
     }
     
-    const closePrompt = () => {
+    const closePrompt = async () => {
         promptModalOpen.value = false;
+        hasBeenPrompted.value = true;
+        
+        const postRequest : client.ApiQuestionnairePostRequest = {
+            questionnaireModel: {
+                questionNumber: 0,
+                questionName: "please give us feedback",
+                questionType: "prompt",
+                questionOptions: ["yes", "no"],
+                answers: ["no", navigator.userAgent]
+            }
+        }
+        console.log(postRequest);
+        await questionAPI.apiQuestionnairePost(postRequest);
     }
 
     return {

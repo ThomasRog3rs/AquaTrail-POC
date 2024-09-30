@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bc60c409-dfdc-4c07-bf20-40dc743a1223" name="Changes" comment="trying to fix this fucking bullshit">
+      <change afterPath="$PROJECT_DIR$/src/pages/Cookie.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Questionnaire.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Questionnaire.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ResultsMap.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ResultsMap.vue" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="Vue Options API Component" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ThomasRog3rs&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ThomasRog3rs/AquaTrail-POC.git&quot;,
+    &quot;accountId&quot;: &quot;a51adb4a-2f9e-47ec-9503-305e8353274a&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/api-client/models/QuestionnaireResponseModel.ts" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2m9h2oEJj4jw2PL8CZn5LkDQhZr" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/tom/Documents/source/AquaTrail-POC/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;/home/tom/.config/JetBrains/Rider2024.1/resharper-host/DecompilerCache&quot;,
+      &quot;/home/tom/.config/JetBrains/Rider2024.1/resharper-host/SourcesCache&quot;,
+      &quot;/home/tom/.local/share/Symbols/src&quot;
+    ],
+    &quot;vue.recent.templates&quot;: [
+      &quot;Vue Options API Component&quot;
+    ]
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bc60c409-dfdc-4c07-bf20-40dc743a1223" name="Changes" comment="" />
+      <created>1726494496946</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1726494496946</updated>
+      <workItem from="1726494500521" duration="9940000" />
+      <workItem from="1726575194793" duration="19273000" />
+      <workItem from="1726604831120" duration="660000" />
+      <workItem from="1726688715660" duration="3546000" />
+      <workItem from="1726839145364" duration="22876000" />
+      <workItem from="1726871382584" duration="1455000" />
+    </task>
+    <task id="LOCAL-00001" summary="Add Cookie consent banner">
+      <option name="closed" value="true" />
+      <created>1726582100779</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1726582100779</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Add cookie to header">
+      <option name="closed" value="true" />
+      <created>1726602813489</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1726602813489</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Some small fixes">
+      <option name="closed" value="true" />
+      <created>1726604009170</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1726604009170</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Trying to get the build working">
+      <option name="closed" value="true" />
+      <created>1726605228350</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1726605228350</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add Privacy and Cookie policy">
+      <option name="closed" value="true" />
+      <created>1726690443443</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1726690443443</updated>
+    </task>
+    <task id="LOCAL-00006" summary="add padding to cookie policy">
+      <option name="closed" value="true" />
+      <created>1726691179966</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1726691179966</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Add home button to cookie page">
+      <option name="closed" value="true" />
+      <created>1726691293315</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1726691293315</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Make the feedback form prompt open a bit smarter (count page views show after 3 or more page vistis)">
+      <option name="closed" value="true" />
+      <created>1726844407055</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1726844407055</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Created the questionnaire">
+      <option name="closed" value="true" />
+      <created>1726863534596</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1726863534596</updated>
+    </task>
+    <task id="LOCAL-00010" summary="fix build">
+      <option name="closed" value="true" />
+      <created>1726864031894</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1726864031894</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fix build?">
+      <option name="closed" value="true" />
+      <created>1726865458421</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1726865458421</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fix build?">
+      <option name="closed" value="true" />
+      <created>1726866187064</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1726866187064</updated>
+    </task>
+    <task id="LOCAL-00013" summary="fix build?">
+      <option name="closed" value="true" />
+      <created>1726866818624</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1726866818624</updated>
+    </task>
+    <task id="LOCAL-00014" summary="misc">
+      <option name="closed" value="true" />
+      <created>1726867618197</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1726867618197</updated>
+    </task>
+    <task id="LOCAL-00015" summary="misc">
+      <option name="closed" value="true" />
+      <created>1726867658006</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1726867658006</updated>
+    </task>
+    <task id="LOCAL-00016" summary="*shrug*">
+      <option name="closed" value="true" />
+      <created>1726867796169</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1726867796169</updated>
+    </task>
+    <task id="LOCAL-00017" summary="trying to fix this fucking bullshit">
+      <option name="closed" value="true" />
+      <created>1726871896538</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1726871896538</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/main.js" />
+        <option value="$PROJECT_DIR$/src/stores/savedMarinasStore.js" />
+        <option value="$PROJECT_DIR$/src/stores/mapStore.js" />
+        <option value="$PROJECT_DIR$/src/stores/navStore.js" />
+        <option value="$PROJECT_DIR$/src/stores/searchStore.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/MooringModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/index.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/MooringTypeModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/MarinaModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/MarinaTypeModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/GeoJsonProperties.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/ServiceModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/ServiceTypeModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/GeoJsonGeometry.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/IconModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/GeoJsonModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/LocationModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/GeoJsonFeature.js" />
+        <option value="$PROJECT_DIR$/src/types/search.js" />
+        <option value="$PROJECT_DIR$/src/types/location.js" />
+        <option value="$PROJECT_DIR$/src/types/closeToHome.js" />
+        <option value="$PROJECT_DIR$/src/router/index.js" />
+        <option value="$PROJECT_DIR$/src/api-client/index.js" />
+        <option value="$PROJECT_DIR$/src/api-client/runtime.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/LocationApi.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/TypesApi.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/index.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/GeoJsonApi.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/DataApi.js" />
+        <option value="$PROJECT_DIR$/src/main.js" />
+        <option value="$PROJECT_DIR$/src/api-client/index.js" />
+        <option value="$PROJECT_DIR$/src/api-client/runtime.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/SessionApi.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/LocationApi.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/TypesApi.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/index.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/GeoJsonApi.js" />
+        <option value="$PROJECT_DIR$/src/api-client/apis/DataApi.js" />
+        <option value="$PROJECT_DIR$/src/stores/savedMarinasStore.js" />
+        <option value="$PROJECT_DIR$/src/stores/questionnaireStore.js" />
+        <option value="$PROJECT_DIR$/src/stores/mapStore.js" />
+        <option value="$PROJECT_DIR$/src/stores/navStore.js" />
+        <option value="$PROJECT_DIR$/src/stores/searchStore.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/MooringModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/SessionTypeModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/index.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/MooringTypeModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/MarinaModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/RegisterSessionModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/MarinaTypeModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/CheckSessionTypeModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/CoordinatesModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/GeoJsonProperties.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/ServiceModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/ServiceTypeModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/GeoJsonGeometry.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/IconModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/GeoJsonModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/LocationModel.js" />
+        <option value="$PROJECT_DIR$/src/api-client/models/GeoJsonFeature.js" />
+        <option value="$PROJECT_DIR$/src/types/search.js" />
+        <option value="$PROJECT_DIR$/src/types/question.js" />
+        <option value="$PROJECT_DIR$/src/types/location.js" />
+        <option value="$PROJECT_DIR$/src/types/closeToHome.js" />
+        <option value="$PROJECT_DIR$/src/router/index.js" />
+      </list>
+    </option>
+  </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Add Cookie consent banner" />
+    <MESSAGE value="Add cookie to header" />
+    <MESSAGE value="Some small fixes" />
+    <MESSAGE value="Trying to get the build working" />
+    <MESSAGE value="Add Privacy and Cookie policy" />
+    <MESSAGE value="add padding to cookie policy" />
+    <MESSAGE value="Add home button to cookie page" />
+    <MESSAGE value="Make the feedback form prompt open a bit smarter (count page views show after 3 or more page vistis)" />
+    <MESSAGE value="Created the questionnaire" />
+    <MESSAGE value="fix build" />
+    <MESSAGE value="fix build?" />
+    <MESSAGE value="misc" />
+    <MESSAGE value="*shrug*" />
+    <MESSAGE value="trying to fix this fucking bullshit" />
+    <option name="LAST_COMMIT_MESSAGE" value="trying to fix this fucking bullshit" />
+  </component>
+</project>
