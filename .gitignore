@@ -10,3 +10,6 @@ dist/*
 
 # Ignore all JavaScript files
 *.js
+.idea/.idea.AquaTrail-POC.dir/.idea/shelf/Uncommitted_changes_before_Update_at_18_09_2024,_21_36_\[Changes]/shelved.patch
+.idea/.idea.AquaTrail-POC.dir/.idea/shelf/Uncommitted_changes_before_Update_at_18_09_2024__21_36__Changes_.xml
+.idea/.idea.AquaTrail-POC.dir/.idea/shelf/Uncommitted_changes_before_Update_at_17_09_2024__21_27__Changes_.xml
