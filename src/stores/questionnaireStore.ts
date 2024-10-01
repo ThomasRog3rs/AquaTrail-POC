@@ -80,6 +80,14 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
             ],
             hasBeenAnswered: false,
             theAnswer: undefined
+        },
+        {
+            id: 7,
+            question: "Do you have any additional comments or suggestions?",
+            type: "text",
+            options: [],
+            hasBeenAnswered: false,
+            theAnswer: undefined
         }
     ]);
     
