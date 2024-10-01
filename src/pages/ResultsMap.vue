@@ -230,6 +230,22 @@ function flyToLocation(coordinates: Array<number>): Promise<void>{
   });
 }
 
+function getZoomLevel(searchRadius: number): number {
+  // Define the min and max zoom levels
+  const minZoom = 6;
+  const maxZoom = 10;
+  
+  // Define the min and max search radius
+  const minRadius = 1;  // 1 mile
+  const maxRadius = 30; // 30 miles
+  
+  // Clamp the searchRadius within the min/max bounds
+  searchRadius = Math.max(minRadius, Math.min(searchRadius, maxRadius));
+  
+  // Linear interpolation to get the zoom level
+  const zoomLevel = maxZoom - ((searchRadius - minRadius) / (maxRadius - minRadius)) * (maxZoom - minZoom);
+  return zoomLevel;
+}
 
 onMounted(async () => {
   document.getElementsByTagName("body")[0].style.overflow = "hidden";
@@ -244,10 +260,12 @@ onMounted(async () => {
       style: 'mapbox://styles/mapbox/streets-v12',
       // style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
       //style: 'mapbox://styles/mapbox/streets-v12',
-      center: [-1.474008, 52.155133],//, // starting center in [lng, lat]
+      center: searchStore.searchLocationCoordinatesValue?.split(","),//, // starting center in [lng, lat]
       //bounds: [[-22.92826178066636, 47.677731905744565], [9.98024578066787, 50.887536758179465]],
-      zoom: 6
+      zoom: getZoomLevel(searchStore.searchRadiusValue!)
     });
+
+    // const coor = ;
 
     // alert(searchStore.marinaSearchResults![0].coordinates);
 
