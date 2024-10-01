@@ -21,7 +21,16 @@
               <span></span>
             </div>
           </span>
-    </SearchBar>        <!-- <div class="search-info-box-container">
+    </SearchBar>        
+    
+    <button @click="openFilter" style="position: absolute; z-index: 1; margin-top: 115px; background-color: whitesmoke;" class="border-2 border-blue-700 ml-[20px] rounded-md p-2">
+      <svg class="w-[30px] h-[30px] text-gray-800 inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z"/>
+    </svg>
+      <span style="margin: 5px;">Filter</span>
+  </button>
+
+    <!-- <div class="search-info-box-container">
             <div class="search-info-box">
                 <span class="back" @click="goBack">
                 &LeftArrow;
@@ -39,6 +48,11 @@
 </div> -->
     <div ref="map" class="map-container w-1/1 h-full" id="map-container"></div>
   </div>
+  <transition name="slide">
+    <FilterBox :open="filterResultsOpen" :options="searchStore.serviceFilterOptions" @close="closeFilter" style="z-index: 999;">
+      <h1>test</h1>
+    </FilterBox>
+  </transition>
 </template>
 
 <script setup lang="ts">
@@ -60,6 +74,8 @@ import * as client from '../api-client';
 import {DataMarinaByGeojsonIdGeoJsonIdGetRequest, GeoJsonApi} from '../api-client';
 import { DataApi } from '../api-client';
 import {useSavedMarinasStore} from "../stores/savedMarinasStore";
+import FilterBox from '../components/experimental/FilterBox.vue';
+
 
 const savedMarinasStore = useSavedMarinasStore();
 
@@ -71,6 +87,85 @@ const router = useRouter();
 
 const mapStore = useMapStore();
 const navStore = useNavStore();
+
+const filterResultsOpen = ref<boolean>(false);
+
+const openFilter = () => {
+  filterResultsOpen.value = true;
+}
+
+const closeFilter = async () => {
+
+  filterResultsOpen.value = false;
+  // Clear existing markers on the map before adding new ones
+  if (map.value && map.value.getSource('marinas')) {
+    map.value.removeLayer('marinas');
+    map.value.removeSource('marinas');
+  }
+  removeAllMarkers();
+
+  // Fetch new geojson data for filtered results
+  const theIds: Array<number> = searchStore.marinaSearchResults?.map(x => x.geoJsonId!)!;
+  const geoParams: client.GeoJsonGeoJsonByIdsGetRequest = {
+    ids: theIds!,
+  }
+
+  const geojsonData = await geoJsonApi.geoJsonGeoJsonByIdsGet(geoParams);
+
+  // Add filtered markers back to the map
+  map.value?.addSource('marinas', {
+    type: 'geojson',
+    //@ts-ignore
+    data: geojsonData
+  });
+
+  for (const marker of geojsonData.features!) {
+    const el = document.createElement('div');
+    el.id = `marker-${marker.properties?.mooringPinId!}`;
+    el.className = 'marker';
+    if (savedMarinasStore.savedMarinas!.some(x => x.name === marker.properties?.title)) {
+      el.className += ' marker-saved';
+    }
+
+    const newMarker = new mapboxgl.Marker(el, { offset: [0, -23] })
+      .setLngLat(marker.geometry!.coordinates)
+      .addTo(map.value);
+
+      markers.value.push({ newMarker, element: el });
+
+    el.addEventListener('click', (e) => {
+      flyToLocation(marker.geometry?.coordinates!);
+      const popProps: popUpProps = {
+        coordinates: marker.geometry?.coordinates!,
+        geoJsonId: marker.id!
+      };
+      addPopup(popProps);
+
+      const activeItem = document.getElementsByClassName('active');
+      e.stopPropagation();
+      if (activeItem[0]) {
+        activeItem[0].classList.remove('active');
+      }
+      const listing = document.getElementById(`listing-${marker.properties?.mooringPinId}`);
+      listing?.classList.add('active');
+    });
+  }
+};
+
+const markers = ref<{ newMarker: mapboxgl.Marker, element: HTMLElement }[]>([]);
+
+function removeAllMarkers() {
+  markers.value.forEach(({ newMarker, element }) => {
+    newMarker.remove();          // Remove the marker from the map
+    if (element && element.parentNode) {
+      element.parentNode.removeChild(element);  // Remove the DOM element from the map
+    }
+  });
+  markers.value.length = 0; // Clear the markers array
+}
+
+
+
 
 type popUpProps = {
   coordinates: Array<number>,
@@ -204,9 +299,11 @@ onMounted(async () => {
          * Create a marker using the div element
          * defined above and add it to the map.
          **/
-        new mapboxgl.Marker(el, { offset: [0, -23] })
+        const newMarker = new mapboxgl.Marker(el, { offset: [0, -23] })
             .setLngLat(marker.geometry!.coordinates)
             .addTo(map.value);
+        
+            markers.value.push({ newMarker, element: el });
 
         el.addEventListener('click', (e) => {
           /* Fly to the point */

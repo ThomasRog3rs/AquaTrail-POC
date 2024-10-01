@@ -6,23 +6,26 @@ import {QuestionnaireApi} from "../../api-client";
 const questionnaireStore = useQuestionnaireStore();
 const router = useRouter();
 
-const questionAPI = new QuestionnaireApi();
-const acceptForm = async () => {
-  const postRequest : client.ApiQuestionnairePostRequest = {
-    questionnaireModel: {
-      questionNumber: 0,
-      questionName: "please give us feedback",
-      questionType: "prompt",
-      questionOptions: ["yes", "no"],
-      answers: ["yes", navigator.userAgent]
-    }
-  }
-  console.log(postRequest);
-  await questionAPI.apiQuestionnairePost(postRequest);
-  questionnaireStore.promptModalOpen = false;
-  await router.push("/feedback");
-  questionnaireStore.hasBeenPrompted = true;
-}
+//const questionAPI = new QuestionnaireApi();
+// const acceptForm = async () => {
+//   questionnaireStore.promptModalOpen = false;
+//   questionnaireStore.hasBeenPrompted = true;
+
+//   const postRequest : client.ApiQuestionnairePostRequest = {
+//     questionnaireModel: {
+//       questionNumber: 0,
+//       questionName: "please give us feedback",
+//       questionType: "prompt",
+//       questionOptions: ["yes", "no"],
+//       answers: ["yes", navigator.userAgent]
+//     }
+//   }
+//   console.log(postRequest);
+//   await questionAPI.apiQuestionnairePost(postRequest);
+//   questionnaireStore.promptModalOpen = false;
+//   await router.push("/feedback");
+//   questionnaireStore.hasBeenPrompted = true;
+// }
 </script>
 
 <template>
@@ -37,7 +40,7 @@ const acceptForm = async () => {
         </strong>
         <span class="text-gray-700 mx-2">
           Help us improve your experience by sharing your thoughts on how we can make meaningful updates to the web app.
-          <span @click="acceptForm" class="text-blue-700 underline cursor-pointer">Fill out the feedback form</span>.
+          <span @click="questionnaireStore.acceptPrompt()" class="text-blue-700 underline cursor-pointer">Fill out the feedback form</span>.
         </span>
       </p>
     </div>
