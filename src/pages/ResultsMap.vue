@@ -107,7 +107,7 @@ async function addPopup(location: popUpProps){
   new mapboxgl.Popup({ offset: [0, -15] })
       //@ts-ignore
       .setLngLat(location.coordinates)
-      .setHTML(`<span><h3 class="${isSaved ? '!bg-[#e5b700]' : ''}">${marina.name}</h3><a class="${isSaved ? '!text-[#796100]' : ''} ${marina?.website == undefined ? 'd-none' : ''}" href="${marina?.website}" target="_blank">Website</a><br/><a class="${isSaved ? '!text-[#796100]' : ''}" href="/marina/${marina.id}" class="save">View Location</button></span>`)
+      .setHTML(`<span><h3 class="${isSaved ? '!bg-[#e5b700]' : ''}">${marina.name}</h3><a class="${isSaved ? '!text-[#796100]' : ''} ${marina?.website == undefined ? 'd-none' : ''}" href="${marina?.website}" target="_blank">Website</a><br/><a class="${isSaved ? '!text-[#796100]' : ''}" href="/marina/${marina.id}" class="save">View Details</button></span>`)
       .addTo(map.value!);
 }
 
