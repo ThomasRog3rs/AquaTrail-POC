@@ -7,7 +7,7 @@
     </div>
   </div>
     <div v-else class="bg-blue-700" style="padding: 25px; height: 80px;">
-        <div class="flex justify-between text-white">
+        <div class="flex justify-between text-white mx-auto w-full max-w-screen-xl">
             <span class="back w-20" @click="goBack">
                 <svg class="w-6 h-6 text-white-800 inline-block mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
@@ -42,7 +42,7 @@
         </div>
     </div> -->
     <div>
-    <main id="marina-details">
+    <main id="marina-details" class="mx-auto w-full max-w-screen-xl lg:py-8">
         <section class="marina-heading flex justify-between">
             <h1 class="mb-2 text-2xl font-extrabold text-gray-800 md:text-5xl lg:text-6xl">{{ marina?.name }}</h1>
 <!--          <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">ave</button>-->

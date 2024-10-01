@@ -6,6 +6,7 @@
       <h1 style="color: white; font-size: 25px; margin: 0;" class="font-bold">Mooring Pin</h1>
     </router-link>
   </nav>
+  <main class="mx-auto w-full max-w-screen-xl lg:py-8">
       <section id="search">
         <div class="mb-4">
 
@@ -138,7 +139,7 @@
         <span class="block text-sm text-gray-200 sm:text-center dark:text-gray-200">© 2024 <a href="https://flowbite.com/" class="hover:underline">Mooring Pin</a>. All Rights Reserved.</span>
     </div>
 </footer> -->
-
+</main>
 
   <footer class="bg-blue-700 mt-[30px] p-3">
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">

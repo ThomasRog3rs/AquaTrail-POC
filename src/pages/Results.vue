@@ -13,6 +13,7 @@
   <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
 
   <div class="bg-blue-700" style="padding: 15px; padding-top: 0px; height: 80px">
+    <span class="mx-auto w-full max-w-screen-xl">
     <SearchBar @back="goHome" @click="openSearchBox"></SearchBar>
 
     <!-- <div id="searchContainer">
@@ -23,7 +24,9 @@
             <span class="searchTerm">"Search Term here"</span>
         </div>
     </div> -->
+  </span>
   </div>
+  
   <!-- Icons: https://www.freepik.com/icon/sort_4511377 -->
   <div id="searchOptions" class="shadow-lg p-4">
     <div class="mt-7 flex justify-between">
