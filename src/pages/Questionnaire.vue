@@ -44,10 +44,10 @@
         Continue Without Email
       </router-link>
     </div>
-
+    <hr class="my-6 border-t-2 border-gray-300">
     <!-- Instagram CTA -->
-    <div class="mt-6 text-center">
-      <p class="text-gray-600 mb-2">Stay connected with us on social media for the latest updates!</p>
+    <div class="text-center">
+      <!-- <p class="text-gray-600 mb-2">Stay connected with us on social media for the latest updates!</p> -->
       <a
         href="https://instagram.com/mooringpin"
         target="_blank"
