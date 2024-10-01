@@ -90,12 +90,15 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
             theAnswer: undefined
         }
     ]);
+
+    const isTimerRunning = ref<boolean>(false);
     
     const trackUserInteractions = () => {
         pageVisits.value++;
         // alert(pageVisits.value)
         // Check if user has visited 3 or more pages or interacted significantly
-        if (pageVisits.value >= 4 && !hasBeenPrompted.value) {
+        if (pageVisits.value >= 4 && !hasBeenPrompted.value && !isTimerRunning.value) {
+            isTimerRunning.value = true;
             startPromptTimer(15000); // Wait 15 seconds before showing, or adapt to idle state
         }
     }
@@ -109,7 +112,7 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
         setTimeout(() => {
             promptModalOpen.value = true;
             hasBeenPrompted.value = true;
-            
+            isTimerRunning.value = false;
             // alert("prompt open")
         }, timeMs)
     }
@@ -131,6 +134,23 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
         await questionAPI.apiQuestionnairePost(postRequest);
     }
 
+    const acceptPrompt = async () => {
+        promptModalOpen.value = false;
+        hasBeenPrompted.value = true;
+        
+        const postRequest : client.ApiQuestionnairePostRequest = {
+            questionnaireModel: {
+                questionNumber: 0,
+                questionName: "please give us feedback",
+                questionType: "prompt",
+                questionOptions: ["yes", "no"],
+                answers: ["yes", navigator.userAgent]
+            }
+        }
+        console.log(postRequest);
+        await questionAPI.apiQuestionnairePost(postRequest);
+    }
+
     return {
         promptModalOpen,
         pageVisits,
@@ -138,6 +158,7 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
         questions,
         trackUserInteractions,
         startPromptTimer,
-        closePrompt
+        closePrompt,
+        acceptPrompt
     };
 },{persist: true});
