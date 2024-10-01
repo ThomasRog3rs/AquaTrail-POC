@@ -145,8 +145,8 @@
       <div class="md:flex md:justify-between">
         <div class="mb-5 md:mb-0">
           <a href="https://www.mooringpin.co.uk" class="flex items-center">
-            <img src="../assets/logo4.png" class="h-12 me-0 ml-[-6px]" alt="MooringPin Logo" />
-            <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">MooringPin</span>
+            <img src="../assets/logo4.png" class="h-12 me-0 ml-[-6px]" alt="Mooring Pin Logo" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Mooring Pin</span>
           </a>
         </div>
         <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">

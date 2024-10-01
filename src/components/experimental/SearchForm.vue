@@ -4,7 +4,7 @@
             <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
         </div>
         
-        <form class="mx-w-md mx-auto">
+        <form class="mx-w-md mx-auto" @submit.prevent="search">
     <label for="search-location" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
     <div class="relative bg-transparent">
       <!-- Icon inside input field -->
