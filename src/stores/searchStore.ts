@@ -102,7 +102,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         switch(sortItem.name){
             case "Distance":
                 marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
-                    return  (a.distanceFromUser || 0) - (b.distanceFromUser || 0);
+                    return  (a.distanceFromSearch || 0) - (b.distanceFromSearch || 0);
                 });
                 break;
             case "Alphabetically":
