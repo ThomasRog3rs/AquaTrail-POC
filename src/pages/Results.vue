@@ -130,32 +130,22 @@
 
   <div class="w-full max-w-lg mx-auto mt-6">
     <SearchForm @searched="setStillNoRes"></SearchForm>
-      <!-- <label for="radius" class="block text-left text-gray-600 font-medium mb-2">
-      Search Radius: {{ searchStore.searchRadiusValue }} miles
-    </label>
-    
-    <input
-      type="range"
-      id="radius"
-      v-model="searchStore.searchRadiusValue"
-      max="30"
-      min="1"
-      class="w-full"
-    />
-
-    <div class="flex justify-between text-gray-500 mt-1">
-      <span>1 mile</span>
-      <span>30 miles</span>
-    </div>
-
-    <button
-      class="mt-4 w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
-      @click="search"
-    >
-      Search Again
-    </button> -->
   </div>
+
+  <!-- New Marina Suggestion Section -->
+  <!-- <div class="mt-8">
+    <p class="text-gray-600">
+      Can't find the marina you're looking for?
+    </p>
+    <a
+      href="/suggest-marina" 
+      class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded"
+      >
+      Suggest a Marina
+    </a>
+  </div> -->
 </div>
+
 
 
   <transition name="slide">
@@ -208,11 +198,32 @@ function marinaIsSaved(marinaId: string){
 }
 const stillNoRes = ref<boolean>(false);
 function setStillNoRes(){
-
-  stillNoRes.value = true
+  stillNoRes.value = true;
+  if(searchStore.marinaSearchResults?.length! > 0){
+    let services : Array<filterOption> = [];
+  searchStore.marinaSearchResults?.forEach(marina => {
+    marina.services!.forEach(service => {
+      if(!services.some(x => x?.serviceType.value === service.serviceType!.value)){
+        const filterOption : filterOption = {
+          serviceType: service.serviceType!,
+          active: false
+        }
+        console.log(filterOption);
+        services.push(filterOption);
+      }
+    });
+    console.warn(marina.name + ":");
+    console.log(services);
+  })!;
+  services =  services.sort((a:filterOption, b:filterOption) => {
+    return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
+  });
+  searchStore.serviceFilterOptions = [];
+  searchStore.serviceFilterOptions!.push(...services);
+  }
 }
 
-watchEffect(() =>{
+watchEffect(async () =>{
   if(searchStore.marinaSearchResults?.length! > 0){
     stillNoRes.value = false;
   }
@@ -276,10 +287,10 @@ onMounted(async () => {
   stillNoRes.value = false;
   searchStore.setSortOption(1);
   await searchStore.resetServiceFilterOptions();
-  searchStore.setServiceFilterOptionActive(searchStore?.serviceSearchValue?.key!);
+  // searchStore.setServiceFilterOptionActive(searchStore?.serviceSearchValue?.key!);
 
   let services : Array<filterOption> = [];
-  const fuckoff = searchStore.marinaSearchResults?.forEach(marina => {
+  searchStore.marinaSearchResults?.forEach(marina => {
     marina.services!.forEach(service => {
       if(!services.some(x => x?.serviceType.value === service.serviceType!.value)){
         const filterOption : filterOption = {

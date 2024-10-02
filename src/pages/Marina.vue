@@ -107,6 +107,16 @@
                     <li v-for="service in marina?.services" :key="service.id">{{ service.serviceType?.value }}</li>
                 </ul>
             </div>
+                    <!-- Update Marina Info Section -->
+        <!-- <div id="update-marina-info" class="mt-4 text-center">
+            <p class="text-gray-600">Is the information incomplete or inaccurate?</p>
+            <a
+              href="/update-marina/{{ marina.id }}"
+              class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded"
+            >
+              Update Marina Info
+            </a>
+        </div> -->
         </section>
     </main>
     </div>
