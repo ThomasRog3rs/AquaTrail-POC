@@ -120,7 +120,7 @@
       </div>
     </div>
   </div>
-  <div id="searchResults" class="text-center mt-28" v-else>
+  <div id="searchResults" class="text-center mt-[25px]" v-else>
   <p class="text-lg font-semibold text-gray-700">
     <span v-if="stillNoRes" class="text-blue-700">Still </span>No Results Found.
   </p>
