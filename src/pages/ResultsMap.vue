@@ -244,6 +244,7 @@ function getZoomLevel(searchRadius: number): number {
   
   // Linear interpolation to get the zoom level
   const zoomLevel = maxZoom - ((searchRadius - minRadius) / (maxRadius - minRadius)) * (maxZoom - minZoom);
+  
   return zoomLevel;
 }
 
@@ -265,9 +266,6 @@ onMounted(async () => {
       zoom: getZoomLevel(searchStore.searchRadiusValue!)
     });
 
-    // const coor = ;
-
-    // alert(searchStore.marinaSearchResults![0].coordinates);
 
     const theIds: Array<number> = searchStore.marinaSearchResults?.map(x => x.geoJsonId!)!;
 
