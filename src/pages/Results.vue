@@ -120,9 +120,43 @@
       </div>
     </div>
   </div>
-  <div id="searchResults" v-else>
-    No results found, try adjusting your search
+  <div id="searchResults" class="text-center mt-28" v-else>
+  <p class="text-lg font-semibold text-gray-700">
+    <span v-if="stillNoRes" class="text-blue-700">Still </span>No Results Found.
+  </p>
+  <p class="text-gray-600">
+    Try adjusting your search or increase the search radius to find more results.
+  </p>
+
+  <div class="w-full max-w-lg mx-auto mt-6">
+    <SearchForm @searched="setStillNoRes"></SearchForm>
+      <!-- <label for="radius" class="block text-left text-gray-600 font-medium mb-2">
+      Search Radius: {{ searchStore.searchRadiusValue }} miles
+    </label>
+    
+    <input
+      type="range"
+      id="radius"
+      v-model="searchStore.searchRadiusValue"
+      max="30"
+      min="1"
+      class="w-full"
+    />
+
+    <div class="flex justify-between text-gray-500 mt-1">
+      <span>1 mile</span>
+      <span>30 miles</span>
+    </div>
+
+    <button
+      class="mt-4 w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+      @click="search"
+    >
+      Search Again
+    </button> -->
   </div>
+</div>
+
 
   <transition name="slide">
     <SortBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
@@ -148,7 +182,7 @@
 </template>
 
 <script setup lang="ts">
-import {onBeforeMount, onMounted, ref, nextTick} from 'vue';
+import {onBeforeMount, onMounted, ref, nextTick, watchEffect} from 'vue';
 import { useRouter } from 'vue-router';
 import SortBox from '../components/experimental/SortBox.vue';
 import FilterBox from '../components/experimental/FilterBox.vue';
@@ -172,6 +206,17 @@ const filterResultsOpen = ref<boolean>(false);
 function marinaIsSaved(marinaId: string){
   return savedMarinasStore.savedMarinas?.some(x => x.id === marinaId)!;
 }
+const stillNoRes = ref<boolean>(false);
+function setStillNoRes(){
+
+  stillNoRes.value = true
+}
+
+watchEffect(() =>{
+  if(searchStore.marinaSearchResults?.length! > 0){
+    stillNoRes.value = false;
+  }
+})
 
 function handleSearched(){
   searchBoxOpen.value = false;
@@ -228,6 +273,7 @@ function goHome(){
 }
 const availableServiceOptions = ref<Array<filterOption>>([]);
 onMounted(async () => {
+  stillNoRes.value = false;
   searchStore.setSortOption(1);
   await searchStore.resetServiceFilterOptions();
   searchStore.setServiceFilterOptionActive(searchStore?.serviceSearchValue?.key!);

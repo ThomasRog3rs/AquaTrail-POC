@@ -8,6 +8,15 @@ html, body, main{
     overflow-y: hidden; */
 }
 
+body {
+    overflow: scroll; /* Allow scrolling */
+    scrollbar-width: none; /* For Firefox */
+  }
+  
+  body::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Edge */
+  }
+
 body, html {
     margin: 0;
     padding: 0;
