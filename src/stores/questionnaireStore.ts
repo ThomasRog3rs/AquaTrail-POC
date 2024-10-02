@@ -3,7 +3,9 @@ import {ref} from 'vue';
 import {Question} from "../types/question";
 import * as client from '../api-client';
 import {QuestionnaireApi} from "../api-client/";
+import { useRouter } from 'vue-router';
 export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
+    const router = useRouter();
     const promptModalOpen = ref<boolean>(false);
     const pageVisits = ref<number>(0);
     const hasBeenPrompted = ref<boolean>(false);
@@ -149,6 +151,7 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
         }
         console.log(postRequest);
         await questionAPI.apiQuestionnairePost(postRequest);
+        router.push("/feedback");
     }
 
     return {
