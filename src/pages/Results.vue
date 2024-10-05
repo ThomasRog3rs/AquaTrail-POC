@@ -232,7 +232,7 @@ watchEffect(async () =>{
 function handleSearched(){
   searchBoxOpen.value = false;
   let services : Array<filterOption> = [];
-  const fuckoff = searchStore.marinaSearchResults?.forEach(marina => {
+  searchStore.marinaSearchResults?.forEach(marina => {
     marina.services!.forEach(service => {
       if(!services.some(x => x?.serviceType.value === service.serviceType!.value)){
         const filterOption : filterOption = {

@@ -154,6 +154,54 @@ export class DataApi extends runtime.BaseAPI {
 
     /**
      */
+    async dataMarinaGetAllCanalNamesGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Data/marina/getAllCanalNames`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     */
+    async dataMarinaGetAllCanalNamesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+        const response = await this.dataMarinaGetAllCanalNamesGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async dataMarinaGetAllNamesGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Data/marina/getAllNames`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     */
+    async dataMarinaGetAllNamesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+        const response = await this.dataMarinaGetAllNamesGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
     async dataMarinaIdGetRaw(requestParameters: DataMarinaIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarinaModel>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
