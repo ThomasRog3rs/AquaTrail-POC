@@ -27,9 +27,13 @@ const router = createRouter({
             props: true // This passes the route params as props to the component
         },
         {path: '/feedback', name: 'Feedback', component: Questionnaire},
-        { path: '/cookie-policy', name: 'Cookie', component: Cookie },
-        {path: '/privacy-policy',name: 'Privacy', component: Privacy},
-        { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
+        { path: '/cookie-policy', name: 'Cookiez', component: () => window.location.href = '/cookie-policy.html' },
+        { path: '/privacy-policy', name: 'Privacy', component: () => window.location.href = '/privacy-policy.html' },
+        { 
+            path: '/:pathMatch(.*)*', 
+            name: 'NotFound', 
+            component: NotFound,
+         }
     ],
     scrollBehavior(to, from, savedPosition) {
         console.log('Navigating from', from.fullPath, 'to', to.fullPath);
