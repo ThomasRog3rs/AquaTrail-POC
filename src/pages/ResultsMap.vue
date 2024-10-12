@@ -303,7 +303,7 @@ onMounted(async () => {
 
         //Calculate the distance between the northernmost and southernmost marinas
         const distance = calculateDistance(northernmost, southernmost);
-        alert(distance)
+        // alert(distance)
         // Use the distance to set the searchRadius
         searchRadius = distance;
         break;

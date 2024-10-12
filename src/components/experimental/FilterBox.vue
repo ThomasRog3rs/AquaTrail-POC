@@ -184,7 +184,7 @@ import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
                 return;
             }
             console.error("Search error: ", err);
-            alert("search error")
+            // alert("search error")
             return;
         }
     }
