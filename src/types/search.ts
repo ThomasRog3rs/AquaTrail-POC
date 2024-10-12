@@ -7,6 +7,13 @@ export enum SearchType {
     None = 'None' // Edge case for when no search type is set
 }
 
+export interface SuggestionModel {
+    name: string;
+    type: SearchType;
+    coordinates: string | undefined;
+    score: number
+}
+
 export type SearchPayload = {
     marina: string;
     service: string;

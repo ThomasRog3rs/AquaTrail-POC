@@ -47,7 +47,7 @@ import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
     import { useSearchStore } from '../../stores/searchStore';
     import * as client from '../../api-client';
     import { DataApi } from '../../api-client';
-    import {filterOption} from '../../types/search';
+    import {filterOption, SearchType} from '../../types/search';
 
 
     const dataApi = new DataApi();
@@ -73,6 +73,58 @@ import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
         showAllServiceOptions.value = false;
     }
 
+    const setFilterParams = (filtersToSearch : Array<string> | undefined) : client.DataMarinasSearchGetRequest | undefined => {
+        let params : client.DataMarinasSearchGetRequest | undefined = undefined;
+        
+        switch(searchStore.currentSearchType){
+            case SearchType.Marina:
+                //alert("FILTER Marina Search by Marina Name");
+                params = {
+                    name: searchStore.selectedSuggestion!.name,
+                    searchCoordinates: undefined,
+                    searchDistance: undefined,
+                    userCoordinates: searchStore.userLocation ?? undefined,
+                    serviceTypes: filtersToSearch ?? undefined,
+                    limit: undefined,   
+                    offset: 0,
+                };
+                break;
+    
+            case SearchType.Canal:
+                //alert("FILTER Marina Search by Canal Name");
+                params = {
+                    name: undefined,
+                    canalName: searchStore.selectedSuggestion!.name,
+                    searchCoordinates: undefined,
+                    searchDistance: undefined,
+                    userCoordinates: searchStore.userLocation ?? undefined,
+                    serviceTypes: filtersToSearch ?? undefined,
+                    limit: undefined,   
+                    offset: 0,
+                };
+                break;
+    
+            case SearchType.Coordinates:
+                //alert("FILTER Marina Search by Coordinates with a radius");
+                params = {
+                    searchCoordinates: searchStore.searchLocationCoordinatesValue ?? undefined,
+                    searchDistance: searchStore.searchRadiusValue,
+                    userCoordinates: searchStore.userLocation ?? undefined,
+                    serviceTypes: filtersToSearch ?? undefined,
+                    limit: undefined,   
+                    offset: 0,
+                }
+                break;
+    
+            default:
+                console.warn("No valid search type selected");
+                //throw new Error("Invalid search type");
+        }
+
+        console.warn(params);
+        return params;
+    }
+
     const setFilterActive = async (key:string) => {
         const option = searchStore.serviceFilterOptions!.find(x => x.serviceType.key === key);
 
@@ -86,31 +138,20 @@ import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
             filtersToSearch = undefined;
         }
 
-        const params : client.DataMarinasSearchGetRequest = {
-            name: searchStore.marinaSearchValue ?? undefined,
-            searchCoordinates: searchStore.searchLocationCoordinatesValue ?? undefined,
-            searchDistance: searchStore.searchRadiusValue,
-            userCoordinates: searchStore.userLocation ?? undefined,
-            serviceTypes: filtersToSearch ?? undefined,
-            limit: undefined,   
-            offset: 0,
-        }
-
-        console.warn(params);
+        const params : client.DataMarinasSearchGetRequest | undefined = setFilterParams(filtersToSearch);
+        if(params === undefined) return;
 
         try{
-            const res : Array<client.MarinaModel> = await dataApi.dataMarinasSearchGet(params);
-            searchStore.marinaSearchResults = res;
-            console.log(searchStore.marinaSearchResults);
-            numberOfResults.value = searchStore.marinaSearchResults.length;
+            await searchStore.searchMarinas(params);
+            console.log("From filter, search results: ", searchStore.marinaSearchResults);
+            numberOfResults.value = searchStore.marinaSearchResults!.length;
         }catch(err: any){
             if (err.response && err.response.status === 404) {
-                searchStore.marinaSearchResults = [] as Array<client.MarinaModel> ;
-                    numberOfResults.value = 0;
+                searchStore.marinaSearchResults = [] as Array<client.MarinaModel>;
+                numberOfResults.value = 0;
                 return;
             }
             console.error("Search error: ", err);
-            // alert("search error")
             return;
         }
 
@@ -121,39 +162,31 @@ import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
 
         let filtersToSearch: Array<string> | undefined = searchStore.serviceFilterOptions?.filter(x => x.active!).map(x => x.serviceType.key!)!;
 
-console.log(filtersToSearch);
+        console.log(filtersToSearch);
 
-if(filtersToSearch.length == 0){
+        if(filtersToSearch.length == 0){
             filtersToSearch = undefined;
         }
 
-const params : client.DataMarinasSearchGetRequest = {
-    name: searchStore.marinaSearchValue ?? undefined,
-    searchCoordinates: searchStore.searchLocationCoordinatesValue ?? undefined,
-    searchDistance: searchStore.searchRadiusValue ?? 4,
-    userCoordinates: searchStore.userLocation ?? undefined,
-    serviceTypes: filtersToSearch ?? undefined,
-    limit: undefined,   
-    offset: 0,
-}
+        const params : client.DataMarinasSearchGetRequest | undefined = setFilterParams(filtersToSearch);
+        if(params === undefined) return;
 
-console.warn(params.serviceTypes);
+        console.warn(params.serviceTypes);
 
-try{
-    const res : Array<client.MarinaModel> = await dataApi.dataMarinasSearchGet(params);
-    searchStore.marinaSearchResults = res;
-    console.log(searchStore.marinaSearchResults);
-    numberOfResults.value = searchStore.marinaSearchResults.length;
-}catch(err: any){
-    if (err.response && err.response.status === 404) {
-        searchStore.marinaSearchResults = [] as Array<client.MarinaModel> ;
-        numberOfResults.value = 0;
-        return;
-    }
-    console.error("Search error: ", err);
-    alert("search error")
-    return;
-}
+        try{
+            await searchStore.searchMarinas(params);
+            console.log("From filter, search results: ", searchStore.marinaSearchResults);
+            numberOfResults.value = searchStore.marinaSearchResults!.length;
+        }catch(err: any){
+            if (err.response && err.response.status === 404) {
+                searchStore.marinaSearchResults = [] as Array<client.MarinaModel> ;
+                numberOfResults.value = 0;
+                return;
+            }
+            console.error("Search error: ", err);
+            alert("search error")
+            return;
+        }
     }
   
     const emit = defineEmits<{

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import * as client from '../api-client';
 import { TypesApi, DataApi } from '../api-client';
-import {SearchType, sortOption, filterOption} from '../types/search';
+import {SearchType, sortOption, filterOption, SuggestionModel} from '../types/search';
 
 
 export const useSearchStore = defineStore('searchStore', () => {
@@ -27,6 +27,8 @@ export const useSearchStore = defineStore('searchStore', () => {
 
     const serviceFilterOptions = ref<Array<filterOption>>([]);
 
+    const selectedSuggestion = ref<SuggestionModel | undefined>(undefined);
+
     sortOptions.value = [
         {name: "Alphabetically", active: true, enabled: true, id: 1},
         {name: "Number Of Services", active: false, enabled: true, id: 2},
@@ -38,7 +40,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         let foundMarinas : Array<client.MarinaModel> | undefined = undefined;
         switch (currentSearchType.value) {
             case SearchType.Marina:
-                alert("Marina Search by Marina Name");
+                // alert("Marina Search by Marina Name");
                 if (!searchParams.name) {
                     throw new Error("Marina search params MUST include a name");
                 }
@@ -47,7 +49,7 @@ export const useSearchStore = defineStore('searchStore', () => {
                 break;
     
             case SearchType.Canal:
-                alert("Marina Search by Canal Name");
+                // alert("Marina Search by Canal Name");
                 if (!searchParams.canalName) {
                     throw new Error("Marina search params MUST include a canalName");
                 }
@@ -56,7 +58,7 @@ export const useSearchStore = defineStore('searchStore', () => {
                 break;
     
             case SearchType.Coordinates:
-                alert("Marina Search by Coordinates with a radius");
+                // alert("Marina Search by Coordinates with a radius");
                 if (!searchParams.searchCoordinates || !searchParams.searchDistance) {
                     throw new Error("Marina search params MUST include searchCoordinates AND searchDistance");
                 }
@@ -183,6 +185,7 @@ export const useSearchStore = defineStore('searchStore', () => {
 
     return { 
         currentSearchType,
+        selectedSuggestion,
         searchMarinas,
         getCurrentSearchIcon,
         serviceTypes,

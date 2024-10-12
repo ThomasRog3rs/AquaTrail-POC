@@ -106,29 +106,22 @@
     import { useRouter } from 'vue-router';
     import {ServiceTypeModel, TypesApi, DataApi, LocationApi} from '../../api-client';
     import * as client from '../../api-client';
-    import { SearchType } from '../../types/search';
+    import { SearchType, SuggestionModel } from '../../types/search';
 
     const types = new TypesApi();
     const dataApi = new DataApi();
     const locationApi = new LocationApi();
-
-    interface SuggestionModel {
-      name: string;
-      type: SearchType;
-      coordinates: string | undefined;
-      score: number
-    }
 
     const suggestionsBox = ref<HTMLElement | undefined>();
 
     const canalNames = ref<string[] | undefined>(undefined);
     const marinaNames = ref<string[] | undefined>(undefined);
 
-    const selectedSuggestion = ref<SuggestionModel | undefined>(undefined);
+    // const selectedSuggestion = ref<SuggestionModel | undefined>(undefined);
 
     function setSelectedSuggestion(suggestion: SuggestionModel){
       searchStore.searchValue = suggestion.name!
-      selectedSuggestion.value = suggestion;
+      searchStore.selectedSuggestion = suggestion;
       searchStore.currentSearchType = suggestion.type;
     }
 
@@ -140,7 +133,7 @@
 
     const manualFormEnter = () =>{
       searchStore.currentSearchType = SearchType.Coordinates;
-      selectedSuggestion.value = undefined;
+      searchStore.selectedSuggestion = undefined;
       search();
     }
 
@@ -205,7 +198,7 @@
 
 const searchUserLocation = async () => {
   searchStore.currentSearchType = SearchType.Coordinates;
-  selectedSuggestion.value = undefined;
+  searchStore.selectedSuggestion = undefined;
 
   const apiKey = import.meta.env.VITE_API_KEY;
   const baseURL = 'https://api.mapbox.com/search/geocode/v6/reverse';
@@ -503,8 +496,8 @@ function calculateScore(currentSearchValue: string, name: string, type: string):
             searchStore.searchRadiusValue = 30;
         }
 
-        if(selectedSuggestion.value === undefined){
-          alert("no suggestion selected so search a location with mapbox");
+        if(searchStore.selectedSuggestion === undefined){
+          // alert("no suggestion selected so search a location with mapbox");s
 
           //make sure mapbox has results for the search query
           const results = await getMapBoxSuggestions(searchStore.searchValue);
@@ -556,11 +549,11 @@ function calculateScore(currentSearchValue: string, name: string, type: string):
               return;
           }
         }else{
-          //alert("Do a custom search based on suggestion type: " + selectedSuggestion.value.type)
-          if(selectedSuggestion.value.type === SearchType.Coordinates){
+          //alert("Do a custom search based on suggestion type: " + searchStore.selectedSuggestion.type)
+          if(searchStore.selectedSuggestion.type === SearchType.Coordinates){
             searchStore.currentSearchType = SearchType.Coordinates;
-            //alert(selectedSuggestion.value.coordinates);
-            const extractCoordiantes = selectedSuggestion.value.coordinates?.split(",");
+            //alert(searchStore.selectedSuggestion.coordinates);
+            const extractCoordiantes = searchStore.selectedSuggestion.coordinates?.split(",");
             let locationCoordinates : string | undefined = undefined;
             locationCoordinates = `${extractCoordiantes![1]}, ${extractCoordiantes![0]}`;
             //alert(locationCoordinates);
@@ -603,12 +596,12 @@ function calculateScore(currentSearchValue: string, name: string, type: string):
                 searchHasError.value = true;
                 return;
             }
-          }else if(selectedSuggestion.value.type === SearchType.Canal){
+          }else if(searchStore.selectedSuggestion.type === SearchType.Canal){
             searchStore.currentSearchType = SearchType.Canal;
-            alert("canal search")
+            // alert("canal search")
             const params : client.DataMarinasSearchGetRequest = {
               name: undefined,
-              canalName: selectedSuggestion.value.name,
+              canalName: searchStore.selectedSuggestion.name,
               searchCoordinates: undefined,
               searchDistance: undefined,
               userCoordinates: searchStore.userLocation ?? undefined,
@@ -638,13 +631,13 @@ function calculateScore(currentSearchValue: string, name: string, type: string):
                 searchHasError.value = true;
                 return;
             }
-          }else if(selectedSuggestion.value.type === SearchType.Marina){
+          }else if(searchStore.selectedSuggestion.type === SearchType.Marina){
             searchStore.currentSearchType = SearchType.Marina;
-            alert("marina search")
+            // alert("marina search")
             const params : client.DataMarinasSearchGetRequest = {
-              name: selectedSuggestion.value.name,
+              name: searchStore.selectedSuggestion.name,
               searchCoordinates: undefined,
-              searchDistance: searchStore.searchRadiusValue,
+              searchDistance: undefined,
               userCoordinates: searchStore.userLocation ?? undefined,
               serviceTypes: undefined,
               limit: undefined,   
