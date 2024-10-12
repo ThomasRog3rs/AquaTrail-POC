@@ -43,6 +43,7 @@ export interface DataMarinasClosestGetRequest {
 
 export interface DataMarinasSearchGetRequest {
     name?: string;
+    canalName?: string;
     searchCoordinates?: string;
     userCoordinates?: string;
     searchDistance?: number;
@@ -123,6 +124,30 @@ export class DataApi extends runtime.BaseAPI {
 
     /**
      */
+    async dataCanalGetAllCanalNamesGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Data/canal/getAllCanalNames`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     */
+    async dataCanalGetAllCanalNamesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+        const response = await this.dataCanalGetAllCanalNamesGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
     async dataMarinaByGeojsonIdGeoJsonIdGetRaw(requestParameters: DataMarinaByGeojsonIdGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarinaModel>> {
         if (requestParameters['geoJsonId'] == null) {
             throw new runtime.RequiredError(
@@ -149,30 +174,6 @@ export class DataApi extends runtime.BaseAPI {
      */
     async dataMarinaByGeojsonIdGeoJsonIdGet(requestParameters: DataMarinaByGeojsonIdGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarinaModel> {
         const response = await this.dataMarinaByGeojsonIdGeoJsonIdGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async dataMarinaGetAllCanalNamesGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/Data/marina/getAllCanalNames`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     */
-    async dataMarinaGetAllCanalNamesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
-        const response = await this.dataMarinaGetAllCanalNamesGetRaw(initOverrides);
         return await response.value();
     }
 
@@ -270,6 +271,10 @@ export class DataApi extends runtime.BaseAPI {
 
         if (requestParameters['name'] != null) {
             queryParameters['name'] = requestParameters['name'];
+        }
+
+        if (requestParameters['canalName'] != null) {
+            queryParameters['canalName'] = requestParameters['canalName'];
         }
 
         if (requestParameters['searchCoordinates'] != null) {

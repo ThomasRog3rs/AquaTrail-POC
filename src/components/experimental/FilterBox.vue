@@ -82,14 +82,6 @@ import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
 
         console.log(filtersToSearch);
 
-        //search with new options
-        // let serviceTypesArray: Array<string> | undefined = 
-        //     searchStore.serviceSearchValue ? [searchStore.serviceSearchValue.key!] : undefined;
-        
-        if(searchStore.serviceSearchValue){
-            // filtersToSearch.push(searchStore.serviceSearchValue.key!);
-        }
-
         if(filtersToSearch.length == 0){
             filtersToSearch = undefined;
         }
@@ -130,14 +122,6 @@ import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
         let filtersToSearch: Array<string> | undefined = searchStore.serviceFilterOptions?.filter(x => x.active!).map(x => x.serviceType.key!)!;
 
 console.log(filtersToSearch);
-
-//search with new options
-// let serviceTypesArray: Array<string> | undefined = 
-//     searchStore.serviceSearchValue ? [searchStore.serviceSearchValue.key!] : undefined;
-
-if(searchStore.serviceSearchValue){
-    // filtersToSearch.push(searchStore.serviceSearchValue.key!);
-}
 
 if(filtersToSearch.length == 0){
             filtersToSearch = undefined;

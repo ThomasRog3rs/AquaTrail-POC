@@ -58,7 +58,7 @@
         <h1>Marina Name</h1>
         
     </div> -->
-    <span>{{ searchStore.marinaSearchResults?.length }} results</span>
+    <span>{{ searchStore.marinaSearchResults?.length }} results (searched by {{ searchStore.currentSearchType.toLocaleLowerCase() }})</span>
 
     <div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4 mt-2" v-for="marina in searchStore.marinaSearchResults">
       <router-link :to="{name: 'Marina', params: {id: marina.id}}">
@@ -181,7 +181,7 @@ import SearchBar from '../components/experimental/SearchBar.vue';
 import SearchForm from '../components/experimental/SearchForm.vue';
 import * as client from '../api-client';
 import {useSavedMarinasStore} from "../stores/savedMarinasStore";
-import {filterOption} from "@/types/search";
+import {filterOption, SearchType} from "../types/search";
 
 const router = useRouter();
 const searchStore = useSearchStore();
@@ -287,7 +287,6 @@ onMounted(async () => {
   stillNoRes.value = false;
   searchStore.setSortOption(1);
   await searchStore.resetServiceFilterOptions();
-  // searchStore.setServiceFilterOptionActive(searchStore?.serviceSearchValue?.key!);
 
   let services : Array<filterOption> = [];
   searchStore.marinaSearchResults?.forEach(marina => {
@@ -312,6 +311,11 @@ onMounted(async () => {
 })
 
 onBeforeMount(() => {
+  if(searchStore.currentSearchType === SearchType.None){
+    router.push("/");
+    return;
+  }
+
   if(searchStore.userLocation){
     searchStore.sortOptions!.find(x => x.name === "Distance")!.enabled = true;
   }
@@ -436,27 +440,6 @@ div#searchOptions > div > span{
 
 div#searchOptions > div > *:hover{
   cursor: pointer;
-}
-
-div#searchTerm > span{
-  /* padding: 4px; */
-  display: inline-block;
-}
-
-div#searchTerm > span.back{
-  /* margin: 5px;s */
-  font-size: 40px;
-  margin-top: -15px;
-  margin-right: 15px;
-  /* width: 15%; */
-}
-
-div#searchTerm > span.back:hover{
-  cursor: pointer;
-}
-
-div#searchTerm > span.searchTerm{
-  /* margin-left: 19%; */
 }
 
 div#searchResults{
