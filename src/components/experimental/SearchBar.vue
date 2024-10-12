@@ -13,7 +13,8 @@
     <input type="text" 
            class="flex-grow max-w-[calc(100%-75px)] w-full p-2 bg-transparent border-gray-300 rounded focus:outline-none" 
            :value="searchStore.searchValue"
-           placeholder="Search..."> <!-- Add placeholder for clarity -->
+           placeholder="Search..."
+           readonly> <!-- Add placeholder for clarity -->
 
     <!-- Icon on the far right -->
     <span class="flex-shrink-0 p-2 bg-gray-300 rounded" v-html="searchStore.getCurrentSearchIcon()"></span>
