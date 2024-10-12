@@ -23,7 +23,7 @@
           </span>
     </SearchBar>        
     
-    <button @click="openFilter" style="position: absolute; z-index: 1; margin-top: 115px; background-color: whitesmoke;" class="border-2 border-blue-700 ml-[20px] rounded-md p-2">
+    <button @click="openFilter" style="position: absolute; z-index: 1; margin-top: 115px; background-color: whitesmoke;" class="border-2 border-blue-700 ml-[20px] rounded-md p-2" :class="{ disabled: searchStore.serviceFilterOptions!.length < 3 }">
       <svg class="w-[30px] h-[30px] text-gray-800 inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
       <path d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z"/>
     </svg>
@@ -75,6 +75,7 @@ import {DataMarinaByGeojsonIdGeoJsonIdGetRequest, GeoJsonApi} from '../api-clien
 import { DataApi } from '../api-client';
 import {useSavedMarinasStore} from "../stores/savedMarinasStore";
 import FilterBox from '../components/experimental/FilterBox.vue';
+import { SearchType } from '../types/search';
 
 
 const savedMarinasStore = useSavedMarinasStore();
@@ -230,7 +231,11 @@ function flyToLocation(coordinates: Array<number>): Promise<void>{
   });
 }
 
-function getZoomLevel(searchRadius: number): number {
+function getZoomLevel(searchRadius: number | undefined): number {
+  if(searchRadius === undefined){
+    return 15;
+  }
+
   // Define the min and max zoom levels
   const minZoom = 6;
   const maxZoom = 10;
@@ -248,6 +253,22 @@ function getZoomLevel(searchRadius: number): number {
   return zoomLevel;
 }
 
+function calculateDistance(coord1: number[], coord2: number[]): number {
+  const R = 3958.8; // Earth's radius in miles
+  const lat1 = coord1[0] * (Math.PI / 180);  // Convert latitude to radians
+  const lat2 = coord2[0] * (Math.PI / 180);  // Convert latitude to radians
+  const deltaLat = lat2 - lat1;
+  const deltaLng = (coord2[1] - coord1[1]) * (Math.PI / 180);  // Convert longitude to radians
+
+  // Haversine formula
+  const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+            Math.cos(lat1) * Math.cos(lat2) *
+            Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in miles
+}
+
 onMounted(async () => {
   document.getElementsByTagName("body")[0].style.overflow = "hidden";
 
@@ -255,15 +276,50 @@ onMounted(async () => {
   //console.log();
   mapStore.mapLoaded = false;
   if(map.value){
+    let centerCoordinates;
+    let searchRadius;
+    switch(searchStore.currentSearchType){
+      case SearchType.Marina:
+        centerCoordinates = searchStore.marinaSearchResults![0].coordinates?.split(",");
+        searchRadius = undefined
+        break;
+      case SearchType.Canal:
+        //Work out centre and zoom for canal name search type
+        // Sort results by latitude (north-south)
+        const sortedMarinas = searchStore.marinaSearchResults!.sort((a, b) => {
+          const aCoords = a.coordinates!.split(",").map(Number);
+          const bCoords = b.coordinates!.split(",").map(Number);
+          return aCoords[0] - bCoords[0]; // Compare latitudes
+        });
+
+        // Get the northernmost and southernmost marinas
+        const northernmost = sortedMarinas[0].coordinates!.split(",").map(Number);
+        const southernmost = sortedMarinas[sortedMarinas.length - 1].coordinates!.split(",").map(Number);
+
+        // Calculate center coordinates as the midpoint between northernmost and southernmost marinas
+        const centerLat = (northernmost[1] + southernmost[1]) / 2;
+        const centerLng = (northernmost[0] + southernmost[0]) / 2;
+        centerCoordinates = [centerLng, centerLat];
+
+        //Calculate the distance between the northernmost and southernmost marinas
+        const distance = calculateDistance(northernmost, southernmost);
+        alert(distance)
+        // Use the distance to set the searchRadius
+        searchRadius = distance;
+        break;
+      default:
+        centerCoordinates = searchStore.searchLocationCoordinatesValue?.split(",");
+        searchRadius = searchStore.searchRadiusValue
+    }
     map.value = new mapboxgl.Map({
       //@ts-ignore
       container: map.value as HTMLElement,
       style: 'mapbox://styles/mapbox/streets-v12',
       // style: 'mapbox://styles/mr-thomas-rogers/clvk00pzg01e501quhyrs5psj',
       //style: 'mapbox://styles/mapbox/streets-v12',
-      center: searchStore.searchLocationCoordinatesValue?.split(","),//, // starting center in [lng, lat]
+      center: centerCoordinates,//, // starting center in [lng, lat]
       //bounds: [[-22.92826178066636, 47.677731905744565], [9.98024578066787, 50.887536758179465]],
-      zoom: getZoomLevel(searchStore.searchRadiusValue!)
+      zoom: getZoomLevel(searchRadius)
     });
 
 
@@ -454,6 +510,15 @@ onUnmounted(() => {
 </script>
 
 <style>
+button.disabled{
+  color: rgb(93, 93, 93) !important;
+  border-color: rgb(93, 93, 93) !important;
+  pointer-events: none;
+}
+
+button.disabled > svg{
+  color: rgb(93, 93, 93) !important;
+}
 
 
 div.search-info-box > span.back:hover{

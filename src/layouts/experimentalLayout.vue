@@ -13,7 +13,7 @@
 <h1 class="mb-2 text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">Find <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">Marinas</span></h1>
 <p class="text-md font-normal text-gray-500 lg:text-xl dark:text-gray-600">Looking for nearby marinas? Enter a location, adjust the radius, or search directly by marina or canal name.</p>
         </div>
-        <SearchForm></SearchForm>
+        <SearchForm @searched="handleSearched()"></SearchForm>
       </section>
   <span v-if="savedMarinasStore.savedMarinas && savedMarinasStore.savedMarinas.length > 0" style="display: block;" class="relative">
         <div style="padding: 20px; padding-bottom: 0px;">
@@ -217,6 +217,8 @@
   import SearchForm from '../components/experimental/SearchForm.vue';
   import * as client from '../api-client';
   import { DataApi } from '../api-client';
+  import {filterOption} from "../types/search";
+
 
   const currentYear = computed(() => new Date().getFullYear())
   
@@ -237,6 +239,30 @@ const closeItemsContainer = ref<HTMLElement | null>(null);
 const closeItemsScroll = ref<HTMLElement | null>(null);
 const hideScrollButton = ref<boolean>(false);
 let currentScrollPos = 0;
+
+function handleSearched(){
+  let services : Array<filterOption> = [];
+  searchStore.marinaSearchResults?.forEach(marina => {
+    marina.services!.forEach(service => {
+      if(!services.some(x => x?.serviceType.value === service.serviceType!.value)){
+        const filterOption : filterOption = {
+          serviceType: service.serviceType!,
+          active: false
+        }
+        console.log(filterOption);
+        services.push(filterOption);
+      }
+    });
+    console.warn(marina.name + ":");
+    console.log(services);
+  })!;
+  services =  services.sort((a:filterOption, b:filterOption) => {
+    return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
+  });
+  searchStore.serviceFilterOptions = [];
+  searchStore.serviceFilterOptions!.push(...services);
+}
+
 function scrollCloseItems(){
   const container = closeItemsContainer.value;
   const content = closeItemsScroll.value
