@@ -1,19 +1,25 @@
 <template>
         <div id="searchContainer" clas="mb-2">
             <div id="searchTermContainer" :class="{ 'flex justify-between': !mapStore.mapLoaded }">
-                <div id="searchTerm">
-                    <span class="back" @click="goBack">
-                        <svg class="w-6 h-6 text-gray-800 inline-block " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
-</svg>
+                <div id="searchTerm" class="flex items-center justify-between space-x-2 w-full "> <!-- Set a max width for the entire container if needed -->
+    <!-- Back Button on the far left -->
+    <span class="flex-shrink-0 h-full" @click="goBack">
+        <svg class="w-6 h-full text-gray-800 cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
+        </svg>
+    </span>
 
-                    </span>
-                    <input type="text" class="p-2 w-[75%] bg-transparent pointer-events-none" :value="searchStore.searchLocationValue">
-                    <!-- <span class="mt-3 truncate w-[75%]">{{ searchStore.searchLocationValue }}</span> -->
-                </div>
-                <slot></slot>
-                <!-- <span v-if="searchStore.marinaSearchValue" class="searchTerm mr-5">&#9873; {{ searchStore.marinaSearchValue }}</span>
-                <span v-if="searchStore.serviceSearchValue && !searchStore.marinaSearchValue">&#9733; {{searchStore.serviceSearchValue.value}}</span> -->
+    <!-- Input box that grows but never pushes the icon down -->
+    <input type="text" 
+           class="flex-grow max-w-[calc(100%-75px)] w-full p-2 bg-transparent border-gray-300 rounded focus:outline-none" 
+           :value="searchStore.searchValue"
+           placeholder="Search..."
+           readonly> <!-- Add placeholder for clarity -->
+
+    <!-- Icon on the far right -->
+    <span class="flex-shrink-0 p-2 bg-gray-300 rounded" v-html="searchStore.getCurrentSearchIcon()"></span>
+</div>
+
             </div>
         </div>
 </template>

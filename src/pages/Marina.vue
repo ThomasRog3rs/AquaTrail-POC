@@ -31,7 +31,7 @@
             <!--<span class="w-20"></span>-->
         </div>
     </div>
-    <!-- <div id="serviceIcons" class="shadow-lg border" v-if="iconPaths?.length! > 0">
+    <div id="serviceIcons" class="shadow-lg border" v-if="iconPaths?.length! > 0">
         <div>
             <span v-for="icon in iconPaths">
                 <img :src="icon.path" :alt="icon.name" :title="icon.name" class=""/>
@@ -40,7 +40,7 @@
                 <img :src="icon.path" :alt="icon.name" :title="icon.name" class=""/>
             </span>
         </div>
-    </div> -->
+    </div>
     <div>
     <main id="marina-details" class="mx-auto w-full max-w-screen-xl lg:py-8">
         <section class="marina-heading flex justify-between">
@@ -174,7 +174,7 @@ const map = ref<Map|null>(null);
 
   const goBack = () => {
     // alert(searchStore.searchLocationValue)
-    if(searchStore.searchLocationValue == undefined){
+    if(searchStore.searchValue == undefined){
         router.push("/");
         return;
     } 

@@ -11,21 +11,9 @@
         <div class="mb-4">
 
 <h1 class="mb-2 text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">Find <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">Marinas</span></h1>
-<p class="text-md font-normal text-gray-500 lg:text-xl dark:text-gray-600">Enter a location and adjust the radius to find nearby marinas.</p>
+<p class="text-md font-normal text-gray-500 lg:text-xl dark:text-gray-600">Looking for nearby marinas? Enter a location, adjust the radius, or search directly by marina or canal name.</p>
         </div>
-        <SearchForm></SearchForm>
-        <!-- <div class="search-container">
-          <div class="container-header">
-              <div class="search-error bg-red-600" v-if="searchHasError">{{searchErrorMsg}}</div>            
-            </div>
-          <form>            
-            <input type="search" placeholder="Search Marina Name" v-model="marinaSearchValue">
-            <v-select label="name" placeholder="Which service are you looking for?" :options="searchStore.serviceValues" v-model="serviceSearchValue"></v-select>
-          </form>
-          <div class="container-footer">
-              <button class="bg-blue-700" @click="search">Search</button>
-          </div>
-        </div> -->
+        <SearchForm @searched="handleSearched()"></SearchForm>
       </section>
   <span v-if="savedMarinasStore.savedMarinas && savedMarinasStore.savedMarinas.length > 0" style="display: block;" class="relative">
         <div style="padding: 20px; padding-bottom: 0px;">
@@ -48,7 +36,7 @@
                 image=""
                 :has-image="false"
                 :distance="(marina.distanceFromUser?.toFixed(2))"
-                @click="searchStore.searchLocationValue = undefined"
+                @click="searchStore.searchValue = undefined"
             ></Card>
           </div>
       
@@ -84,7 +72,7 @@
               image=""
               :has-image="false"
               :distance="(marina.distanceFromUser!.toFixed(2))"
-              @click="searchStore.searchLocationValue = undefined"
+              @click="searchStore.searchValue = undefined"
             ></Card>
           </div>
       
@@ -225,50 +213,24 @@
   import {useRouter} from 'vue-router';
   import Card from '../components/experimental/Card.vue';
   import { useSearchStore } from '../stores/searchStore';
-  import { useMapStore } from '../stores/mapStore';
   import {useSavedMarinasStore} from "../stores/savedMarinasStore";
   import SearchForm from '../components/experimental/SearchForm.vue';
-  import { SearchPayload } from '../types/search';
   import * as client from '../api-client';
   import { DataApi } from '../api-client';
-  import DevelopmentPhaseBanner from "../components/experimental/DevelopmentPhaseBanner.vue";
+  import {filterOption} from "../types/search";
+
 
   const currentYear = computed(() => new Date().getFullYear())
   
   const savedMarinasStore = useSavedMarinasStore();
 
   const dataApi = new DataApi();
-
-  const mapStore = useMapStore();
   const searchStore = useSearchStore();
 
-  const activeOption = ref<string>();
-
-  const adOpen = ref<boolean>(true);
-
-  const router = useRouter();
-  // const marinaSearchValue = ref<string | undefined>();
-  // const serviceSearchValue = ref<string | undefined>();
-  const searchErrorMsg = ref<string>("");
-  const searchHasError = ref<boolean>(false);
-
-  //Call the API
-  //alert(`Searching: ${marinaSearchValue.value}, ${serviceSearchValue.value}`);
-
-  function closeAd(){
-    adOpen.value = false;
-  }
-
-  function setActive(title:string){
-    searchStore.searchItems.find(x => x.active)!.active = false;
-    searchStore.searchItems.find(x => x.title === title)!.active = true;
-    activeOption.value = searchStore.searchItems.find(x => x.active)!.title;
-  }
-
   interface userLocation {
-  latitude: number;
-  longitude: number;
-}
+    latitude: number;
+    longitude: number;
+  }
 
 const userLocation = ref<userLocation | null>(null);
 const error = ref<string | null>(null);
@@ -277,6 +239,30 @@ const closeItemsContainer = ref<HTMLElement | null>(null);
 const closeItemsScroll = ref<HTMLElement | null>(null);
 const hideScrollButton = ref<boolean>(false);
 let currentScrollPos = 0;
+
+function handleSearched(){
+  let services : Array<filterOption> = [];
+  searchStore.marinaSearchResults?.forEach(marina => {
+    marina.services!.forEach(service => {
+      if(!services.some(x => x?.serviceType.value === service.serviceType!.value)){
+        const filterOption : filterOption = {
+          serviceType: service.serviceType!,
+          active: false
+        }
+        console.log(filterOption);
+        services.push(filterOption);
+      }
+    });
+    console.warn(marina.name + ":");
+    console.log(services);
+  })!;
+  services =  services.sort((a:filterOption, b:filterOption) => {
+    return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
+  });
+  searchStore.serviceFilterOptions = [];
+  searchStore.serviceFilterOptions!.push(...services);
+}
+
 function scrollCloseItems(){
   const container = closeItemsContainer.value;
   const content = closeItemsScroll.value
@@ -376,8 +362,7 @@ const marinasClose = ref<Array<client.MarinaModel> | undefined>(undefined);
   });
 
 onMounted(async () => {
-  activeOption.value = searchStore.searchItems.find((x:any) => x.active)!.title;
-    // requestLocation();
+  // requestLocation();
   // Log current state immediately after request
   console.log('Initial Location:', userLocation.value);
   console.log('Initial Error:', error.value);

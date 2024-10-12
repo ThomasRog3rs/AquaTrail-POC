@@ -30,21 +30,20 @@
   <!-- Icons: https://www.freepik.com/icon/sort_4511377 -->
   <div id="searchOptions" class="shadow-lg p-4">
     <div class="mt-7 flex justify-between">
-            <span @click="openSort">
-                <svg class="w-6 h-6 text-gray-800 inline-block mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+      <span @click="openSort" :class="{ disabled: searchStore.marinaSearchResults!.length < 2 }">
+        <svg class="w-6 h-6 text-gray-800 inline-block mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 20V10m0 10-3-3m3 3 3-3m5-13v10m0-10 3 3m-3-3-3 3"/>
 </svg>
-
                 Sort
             </span>
-      <span @click="openFilter">
+      <span @click="openFilter" :class="{ disabled: searchStore.serviceFilterOptions!.length < 3 }">
         <svg class="w-6 h-6 text-gray-800 inline-block mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
       <path d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z"/>
     </svg>
 
                 Filter
             </span>
-      <span @click="router.push('/results/map')">                
+      <span @click="router.push('/results/map')" :class="{ disabled: searchStore.marinaSearchResults!.length < 1 }">                
                 <svg class="text-gray-800 inline-block mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
   <path fill-rule="evenodd" d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z" clip-rule="evenodd"/>
 </svg>
@@ -58,7 +57,7 @@
         <h1>Marina Name</h1>
         
     </div> -->
-    <span>{{ searchStore.marinaSearchResults?.length }} results</span>
+    <span>{{ searchStore.marinaSearchResults?.length }} results (searched by {{ searchStore.currentSearchType.toLocaleLowerCase() }})</span>
 
     <div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4 mt-2" v-for="marina in searchStore.marinaSearchResults">
       <router-link :to="{name: 'Marina', params: {id: marina.id}}">
@@ -181,7 +180,7 @@ import SearchBar from '../components/experimental/SearchBar.vue';
 import SearchForm from '../components/experimental/SearchForm.vue';
 import * as client from '../api-client';
 import {useSavedMarinasStore} from "../stores/savedMarinasStore";
-import {filterOption} from "@/types/search";
+import {filterOption, SearchType} from "../types/search";
 
 const router = useRouter();
 const searchStore = useSearchStore();
@@ -232,7 +231,7 @@ watchEffect(async () =>{
 function handleSearched(){
   searchBoxOpen.value = false;
   let services : Array<filterOption> = [];
-  const fuckoff = searchStore.marinaSearchResults?.forEach(marina => {
+  searchStore.marinaSearchResults?.forEach(marina => {
     marina.services!.forEach(service => {
       if(!services.some(x => x?.serviceType.value === service.serviceType!.value)){
         const filterOption : filterOption = {
@@ -287,7 +286,6 @@ onMounted(async () => {
   stillNoRes.value = false;
   searchStore.setSortOption(1);
   await searchStore.resetServiceFilterOptions();
-  // searchStore.setServiceFilterOptionActive(searchStore?.serviceSearchValue?.key!);
 
   let services : Array<filterOption> = [];
   searchStore.marinaSearchResults?.forEach(marina => {
@@ -312,6 +310,11 @@ onMounted(async () => {
 })
 
 onBeforeMount(() => {
+  if(searchStore.currentSearchType === SearchType.None){
+    router.push("/");
+    return;
+  }
+
   if(searchStore.userLocation){
     searchStore.sortOptions!.find(x => x.name === "Distance")!.enabled = true;
   }
@@ -319,6 +322,16 @@ onBeforeMount(() => {
 </script>
 
 <style>
+span.disabled{
+  color: rgb(93, 93, 93) !important;
+  pointer-events: none;
+}
+
+span.disabled > svg{
+  color: rgb(93, 93, 93) !important;
+  pointer-events: none;
+}
+
 div#searchForm{
   /* transform: translateY(0); */
   background-color: whitesmoke;
@@ -438,29 +451,9 @@ div#searchOptions > div > *:hover{
   cursor: pointer;
 }
 
-div#searchTerm > span{
-  /* padding: 4px; */
-  display: inline-block;
-}
-
-div#searchTerm > span.back{
-  /* margin: 5px;s */
-  font-size: 40px;
-  margin-top: -15px;
-  margin-right: 15px;
-  /* width: 15%; */
-}
-
-div#searchTerm > span.back:hover{
-  cursor: pointer;
-}
-
-div#searchTerm > span.searchTerm{
-  /* margin-left: 19%; */
-}
-
 div#searchResults{
   padding: 20px;
+  min-height: 81vh;
 }
 
 div.resultsCard{
