@@ -13,7 +13,7 @@
 
     <div id="overlay" v-show="searchBoxOpen" @click="searchBoxOpen = false"></div>
 
-    <SearchBar style="position: absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')" @click="openSearchBox">
+    <SearchBar style="position:absolute; z-index: 1; width: 100%; padding: 20px; padding-top: 0px;" @back="router.push('/results')"   :style="{ paddingTop: questionnaireStore.promptModalOpen ? '100px' : '0px' }"  @click="openSearchBox">
           <span class="mt-2 mr-9" style="" v-if="!mapStore.mapLoaded">
             <div class="loading">
               <span></span>
@@ -76,7 +76,9 @@ import { DataApi } from '../api-client';
 import {useSavedMarinasStore} from "../stores/savedMarinasStore";
 import FilterBox from '../components/experimental/FilterBox.vue';
 import { SearchType } from '../types/search';
+import { useQuestionnaireStore } from '../stores/questionnaireStore';
 
+const questionnaireStore = useQuestionnaireStore();
 
 const savedMarinasStore = useSavedMarinasStore();
 
