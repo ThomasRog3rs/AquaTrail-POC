@@ -7,7 +7,7 @@
           <h3 class="mb-2">Edit your search</h3>
           <span></span>
         </div>
-        <SearchForm :search-has-error="false" :search-error-msg="undefined" @searched="searchBoxOpen = false"></SearchForm>
+        <SearchForm :search-has-error="false" :search-error-msg="undefined" @searched="handleSearched()"></SearchForm>
       </div>
     </transition>
 
@@ -75,7 +75,7 @@ import {DataMarinaByGeojsonIdGeoJsonIdGetRequest, GeoJsonApi} from '../api-clien
 import { DataApi } from '../api-client';
 import {useSavedMarinasStore} from "../stores/savedMarinasStore";
 import FilterBox from '../components/experimental/FilterBox.vue';
-import { SearchType } from '../types/search';
+import { SearchType, filterOption } from '../types/search';
 import { useQuestionnaireStore } from '../stores/questionnaireStore';
 
 const questionnaireStore = useQuestionnaireStore();
@@ -92,6 +92,30 @@ const mapStore = useMapStore();
 const navStore = useNavStore();
 
 const filterResultsOpen = ref<boolean>(false);
+
+function handleSearched(){
+  searchBoxOpen.value = false;
+  let services : Array<filterOption> = [];
+  searchStore.marinaSearchResults?.forEach(marina => {
+    marina.services!.forEach(service => {
+      if(!services.some(x => x?.serviceType.value === service.serviceType!.value)){
+        const filterOption : filterOption = {
+          serviceType: service.serviceType!,
+          active: false
+        }
+        console.log(filterOption);
+        services.push(filterOption);
+      }
+    });
+    console.warn(marina.name + ":");
+    console.log(services);
+  })!;
+  services =  services.sort((a:filterOption, b:filterOption) => {
+    return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
+  });
+  searchStore.serviceFilterOptions = [];
+  searchStore.serviceFilterOptions!.push(...services);
+}
 
 const openFilter = () => {
   filterResultsOpen.value = true;
