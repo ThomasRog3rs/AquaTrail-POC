@@ -118,6 +118,20 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
             // alert("prompt open")
         }, timeMs)
     }
+
+    const startedForm = async () => {
+        const postRequest : client.ApiQuestionnairePostRequest = {
+            questionnaireModel: {
+                questionNumber: 0,
+                questionName: "START OF FORM",
+                questionType: "form-loaded",
+                questionOptions: ["true"],
+                answers: ["true", navigator.userAgent]
+            }
+        }
+        console.log(postRequest);
+        await questionAPI.apiQuestionnairePost(postRequest);
+    }
     
     const closePrompt = async () => {
         promptModalOpen.value = false;
@@ -125,11 +139,11 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
         
         const postRequest : client.ApiQuestionnairePostRequest = {
             questionnaireModel: {
-                questionNumber: 0,
-                questionName: "please give us feedback",
+                questionNumber: -1,
+                questionName: "Form prompt",
                 questionType: "prompt",
-                questionOptions: ["yes", "no"],
-                answers: ["no", navigator.userAgent]
+                questionOptions: ["Yes", "No"],
+                answers: ["No"]
             }
         }
         console.log(postRequest);
@@ -142,11 +156,11 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
         
         const postRequest : client.ApiQuestionnairePostRequest = {
             questionnaireModel: {
-                questionNumber: 0,
+                questionNumber: -1,
                 questionName: "please give us feedback",
                 questionType: "prompt",
-                questionOptions: ["yes", "no"],
-                answers: ["yes", navigator.userAgent]
+                questionOptions: ["Yes", "No"],
+                answers: ["Yes"]
             }
         }
         console.log(postRequest);
@@ -155,6 +169,7 @@ export const useQuestionnaireStore = defineStore('questionnaireStore', () => {
     }
 
     return {
+        startedForm,
         promptModalOpen,
         pageVisits,
         hasBeenPrompted,
