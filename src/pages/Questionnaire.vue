@@ -235,7 +235,7 @@ const submitEmail = async () => {
   formError.value = false;
   const postRequest : client.ApiQuestionnairePostRequest = {
     questionnaireModel: {
-      questionNumber: 7,
+      questionNumber: 8,
       questionName: "Please can we have your email and contact you?",
       questionType: "text-input",
       questionOptions: [""] as Array<string>,
@@ -253,7 +253,7 @@ const submitEmail = async () => {
 
 }
 
-onMounted(() => {
-  
+onMounted(async () => {
+  await questionnaireStore.startedForm();
 })
 </script>
