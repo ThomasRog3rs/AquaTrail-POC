@@ -26,7 +26,7 @@ import {
 } from '../models/index';
 
 export interface ApiQuestionnairePostRequest {
-    questionnaireModel?: Omit<QuestionnaireModel, 'id'|'sessionId'|'requestTimestamp'>;
+    questionnaireModel?: Omit<QuestionnaireModel, 'id'|'submissionId'|'sessionId'|'requestTimestamp'>;
 }
 
 /**
