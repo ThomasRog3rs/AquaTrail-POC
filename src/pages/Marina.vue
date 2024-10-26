@@ -186,7 +186,6 @@ const map = ref<Map|null>(null);
   const updateMarinaModalOpen = ref<boolean>(false);
 
   const goBack = () => {
-    // alert(searchStore.searchLocationValue)
     if(searchStore.searchValue == undefined){
         router.push("/");
         return;
@@ -213,9 +212,7 @@ const map = ref<Map|null>(null);
       toastOpen.value = true;
       toastSuccess.value = success;
       toastMessage.value = "Thanks for the submission, we wil take it into consideration";
-      alert("Thanks for the submission, we wil take it into consideration ");
     }else{
-      alert("something went wrong, try again later")
       toastOpen.value = true;
       toastSuccess.value = success;
       toastMessage.value = "something went wrong, try again later";
