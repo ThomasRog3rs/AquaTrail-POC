@@ -1,7 +1,7 @@
 <template>
   <DevelopmentPhaseBanner></DevelopmentPhaseBanner>
   
-<!--  <div v-show="questionnaireStore.promptModalOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 backdrop-blur-sm"></div>-->
+ <div v-show="modalStore.showBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-50 backdrop-blur-sm"></div>
   <main>
     <router-view></router-view>
   </main>
@@ -34,8 +34,11 @@ import {RegisterSessionModel, SessionApi} from './api-client';
 import {useSearchStore} from "./stores/searchStore";
 import {useQuestionnaireStore} from './stores/questionnaireStore';
 import DevelopmentPhaseBanner from "./components/experimental/DevelopmentPhaseBanner.vue";
+import { useModalStore } from "./stores/modalStore";
 
 const questionnaireStore = useQuestionnaireStore();
+
+const modalStore = useModalStore();
 
 const sessionApi = new SessionApi();
 

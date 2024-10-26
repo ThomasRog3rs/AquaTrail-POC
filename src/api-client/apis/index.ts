@@ -5,4 +5,5 @@ export * from './GeoJsonApi';
 export * from './LocationApi';
 export * from './QuestionnaireApi';
 export * from './SessionApi';
+export * from './SuggestionApi';
 export * from './TypesApi';

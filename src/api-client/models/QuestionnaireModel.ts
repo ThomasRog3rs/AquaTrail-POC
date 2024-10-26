@@ -27,6 +27,12 @@ export interface QuestionnaireModel {
     readonly id?: string;
     /**
      * 
+     * @type {string}
+     * @memberof QuestionnaireModel
+     */
+    readonly submissionId?: string | null;
+    /**
+     * 
      * @type {number}
      * @memberof QuestionnaireModel
      */
@@ -87,6 +93,7 @@ export function QuestionnaireModelFromJSONTyped(json: any, ignoreDiscriminator: 
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'submissionId': json['submissionId'] == null ? undefined : json['submissionId'],
         'questionNumber': json['questionNumber'] == null ? undefined : json['questionNumber'],
         'questionName': json['questionName'] == null ? undefined : json['questionName'],
         'questionType': json['questionType'] == null ? undefined : json['questionType'],
@@ -97,7 +104,7 @@ export function QuestionnaireModelFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-export function QuestionnaireModelToJSON(value?: Omit<QuestionnaireModel, 'id'|'sessionId'|'requestTimestamp'> | null): any {
+export function QuestionnaireModelToJSON(value?: Omit<QuestionnaireModel, 'id'|'submissionId'|'sessionId'|'requestTimestamp'> | null): any {
     if (value == null) {
         return value;
     }

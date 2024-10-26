@@ -19,14 +19,14 @@
             </span>
             <span class="save w-20">
                 <template v-if="marinaIsSaved"><svg @click="unsaveMarina" class="w-6 h-6 mt-2 ml-2 text-[#facc15]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-  <path d="M7.833 2c-.507 0-.98.216-1.318.576A1.92 1.92 0 0 0 6 3.89V21a1 1 0 0 0 1.625.78L12 18.28l4.375 3.5A1 1 0 0 0 18 21V3.889c0-.481-.178-.954-.515-1.313A1.808 1.808 0 0 0 16.167 2H7.833Z"/>
-</svg>
+                    <path d="M7.833 2c-.507 0-.98.216-1.318.576A1.92 1.92 0 0 0 6 3.89V21a1 1 0 0 0 1.625.78L12 18.28l4.375 3.5A1 1 0 0 0 18 21V3.889c0-.481-.178-.954-.515-1.313A1.808 1.808 0 0 0 16.167 2H7.833Z"/>
+                  </svg>
 
-</template>
-                <template v-else> <svg @click="saveMarina" class="w-6 h-6 mt-2 ml-2 text-[#facc15]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
-</svg>
-</template>
+                  </template>
+                  <template v-else> <svg @click="saveMarina" class="w-6 h-6 mt-2 ml-2 text-[#facc15]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
+  </svg>
+  </template>
             </span>
             <!--<span class="w-20"></span>-->
         </div>
@@ -108,34 +108,46 @@
                 </ul>
             </div>
                     <!-- Update Marina Info Section -->
-        <!-- <div id="update-marina-info" class="mt-4 text-center">
+          <div id="update-marina-info" class="mt-4 text-center">
             <p class="text-gray-600">Is the information incomplete or inaccurate?</p>
-            <a
+            <!-- <a
               href="/update-marina/{{ marina.id }}"
               class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded"
             >
               Update Marina Info
-            </a>
-        </div> -->
+            </a> -->
+            <button class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded" type="button" @click="openUpdateModal">
+              Update Marina Info
+            </button>
+          </div>
         </section>
     </main>
     </div>
 
+    <updateMarinaModal v-if="updateMarinaModalOpen" :open="updateMarinaModalOpen" :marina="marina!" @close="closeUpdateModal" @submitted="formSubmitted"></updateMarinaModal>
+    <div class="p-4">   
+       <toast v-if="toastOpen" :success="toastSuccess" :message="toastMessage"></toast>
+    </div>
 </template>
   
   <script setup lang="ts">
   import { onMounted, ref, computed } from 'vue';
   import * as client from '../api-client';
   import { useRouter } from 'vue-router';
-//   import cpBarIcon from '../assets/icons/cp-bar.svg'; // Import the SVG
-//@ts-ignore
-import mapboxgl, {Map} from 'mapbox-gl';
-//@ts-ignore
-// import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import { useMapStore } from '../stores/mapStore';
-import { useSearchStore } from '../stores/searchStore';
-import {useSavedMarinasStore} from "../stores/savedMarinasStore";
+  //   import cpBarIcon from '../assets/icons/cp-bar.svg'; // Import the SVG
+  //@ts-ignore
+  import mapboxgl, {Map} from 'mapbox-gl';
+  //@ts-ignore
+  // import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+  import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+  import { useMapStore } from '../stores/mapStore';
+  import { useSearchStore } from '../stores/searchStore';
+  import {useSavedMarinasStore} from "../stores/savedMarinasStore";
+  import updateMarinaModal from "../components/updateComponents/updateMarinaModal.vue";
+  import { useModalStore } from '../stores/modalStore';
+import { format } from 'path';
+import toast from '../components/updateComponents/toast.vue';
+  const modalStore = useModalStore();
 
   const savedMarinasStore = useSavedMarinasStore();
   const searchStore = useSearchStore();
@@ -171,14 +183,40 @@ const map = ref<Map|null>(null);
   });
 
   const marina = ref<client.MarinaModel>();
+  const updateMarinaModalOpen = ref<boolean>(false);
 
   const goBack = () => {
-    // alert(searchStore.searchLocationValue)
     if(searchStore.searchValue == undefined){
         router.push("/");
         return;
     } 
     router.push("/Results");
+  }
+
+  const openUpdateModal = () => {
+    updateMarinaModalOpen.value = true;
+    modalStore.showBackdrop = true;
+  }
+
+  const closeUpdateModal = () => {
+    updateMarinaModalOpen.value = false;
+    modalStore.showBackdrop = false;
+  }
+
+  const toastSuccess = ref<boolean>(false);
+  const toastMessage = ref<string>("");
+  const toastOpen = ref<boolean>(false);
+  const formSubmitted = (success: boolean) => {
+    closeUpdateModal();
+    if(success){
+      toastOpen.value = true;
+      toastSuccess.value = success;
+      toastMessage.value = "Thanks for the submission, we wil take it into consideration";
+    }else{
+      toastOpen.value = true;
+      toastSuccess.value = success;
+      toastMessage.value = "something went wrong, try again later";
+    }
   }
 
   function saveMarina() {
