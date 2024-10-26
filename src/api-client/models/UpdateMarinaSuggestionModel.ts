@@ -42,7 +42,7 @@ export interface UpdateMarinaSuggestionModel {
      * @type {Date}
      * @memberof UpdateMarinaSuggestionModel
      */
-    readonly requestTimestamp?: Date;
+    readonly submissionTimeStamp?: Date;
     /**
      * 
      * @type {string}
@@ -87,6 +87,12 @@ export interface UpdateMarinaSuggestionModel {
     suggestedPhoneNumber?: string | null;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof UpdateMarinaSuggestionModel
+     */
+    services?: Array<string> | null;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateMarinaSuggestionModel
      */
@@ -113,7 +119,7 @@ export function UpdateMarinaSuggestionModelFromJSONTyped(json: any, ignoreDiscri
         'id': json['id'] == null ? undefined : json['id'],
         'marinaId': json['marinaId'] == null ? undefined : json['marinaId'],
         'sessionId': json['sessionId'] == null ? undefined : json['sessionId'],
-        'requestTimestamp': json['requestTimestamp'] == null ? undefined : (new Date(json['requestTimestamp'])),
+        'submissionTimeStamp': json['submissionTimeStamp'] == null ? undefined : (new Date(json['submissionTimeStamp'])),
         'userEmail': json['userEmail'] == null ? undefined : json['userEmail'],
         'suggestedName': json['suggestedName'] == null ? undefined : json['suggestedName'],
         'suggestedCoordinates': json['suggestedCoordinates'] == null ? undefined : json['suggestedCoordinates'],
@@ -121,11 +127,12 @@ export function UpdateMarinaSuggestionModelFromJSONTyped(json: any, ignoreDiscri
         'suggestedAddress': json['suggestedAddress'] == null ? undefined : json['suggestedAddress'],
         'suggestedCanalName': json['suggestedCanalName'] == null ? undefined : json['suggestedCanalName'],
         'suggestedPhoneNumber': json['suggestedPhoneNumber'] == null ? undefined : json['suggestedPhoneNumber'],
+        'services': json['services'] == null ? undefined : json['services'],
         'otherComments': json['otherComments'] == null ? undefined : json['otherComments'],
     };
 }
 
-export function UpdateMarinaSuggestionModelToJSON(value?: Omit<UpdateMarinaSuggestionModel, 'id'|'sessionId'|'requestTimestamp'> | null): any {
+export function UpdateMarinaSuggestionModelToJSON(value?: Omit<UpdateMarinaSuggestionModel, 'id'|'sessionId'|'submissionTimeStamp'> | null): any {
     if (value == null) {
         return value;
     }
@@ -139,6 +146,7 @@ export function UpdateMarinaSuggestionModelToJSON(value?: Omit<UpdateMarinaSugge
         'suggestedAddress': value['suggestedAddress'],
         'suggestedCanalName': value['suggestedCanalName'],
         'suggestedPhoneNumber': value['suggestedPhoneNumber'],
+        'services': value['services'],
         'otherComments': value['otherComments'],
     };
 }

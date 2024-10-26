@@ -108,34 +108,46 @@
                 </ul>
             </div>
                     <!-- Update Marina Info Section -->
-        <!-- <div id="update-marina-info" class="mt-4 text-center">
+          <div id="update-marina-info" class="mt-4 text-center">
             <p class="text-gray-600">Is the information incomplete or inaccurate?</p>
-            <a
+            <!-- <a
               href="/update-marina/{{ marina.id }}"
               class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded"
             >
               Update Marina Info
-            </a>
-        </div> -->
+            </a> -->
+            <button class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded" type="button" @click="openUpdateModal">
+              Update Marina Info
+            </button>
+          </div>
         </section>
     </main>
     </div>
 
+    <updateMarinaModal v-if="updateMarinaModalOpen" :open="updateMarinaModalOpen" :marina="marina!" @close="closeUpdateModal" @submitted="formSubmitted"></updateMarinaModal>
+    <div class="p-4">   
+       <toast v-if="toastOpen" :success="toastSuccess" :message="toastMessage"></toast>
+    </div>
 </template>
   
   <script setup lang="ts">
   import { onMounted, ref, computed } from 'vue';
   import * as client from '../api-client';
   import { useRouter } from 'vue-router';
-//   import cpBarIcon from '../assets/icons/cp-bar.svg'; // Import the SVG
-//@ts-ignore
-import mapboxgl, {Map} from 'mapbox-gl';
-//@ts-ignore
-// import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import { useMapStore } from '../stores/mapStore';
-import { useSearchStore } from '../stores/searchStore';
-import {useSavedMarinasStore} from "../stores/savedMarinasStore";
+  //   import cpBarIcon from '../assets/icons/cp-bar.svg'; // Import the SVG
+  //@ts-ignore
+  import mapboxgl, {Map} from 'mapbox-gl';
+  //@ts-ignore
+  // import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+  import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+  import { useMapStore } from '../stores/mapStore';
+  import { useSearchStore } from '../stores/searchStore';
+  import {useSavedMarinasStore} from "../stores/savedMarinasStore";
+  import updateMarinaModal from "../components/updateComponents/updateMarinaModal.vue";
+  import { useModalStore } from '../stores/modalStore';
+import { format } from 'path';
+import toast from '../components/updateComponents/toast.vue';
+  const modalStore = useModalStore();
 
   const savedMarinasStore = useSavedMarinasStore();
   const searchStore = useSearchStore();
@@ -171,6 +183,7 @@ const map = ref<Map|null>(null);
   });
 
   const marina = ref<client.MarinaModel>();
+  const updateMarinaModalOpen = ref<boolean>(false);
 
   const goBack = () => {
     // alert(searchStore.searchLocationValue)
@@ -179,6 +192,34 @@ const map = ref<Map|null>(null);
         return;
     } 
     router.push("/Results");
+  }
+
+  const openUpdateModal = () => {
+    updateMarinaModalOpen.value = true;
+    modalStore.showBackdrop = true;
+  }
+
+  const closeUpdateModal = () => {
+    updateMarinaModalOpen.value = false;
+    modalStore.showBackdrop = false;
+  }
+
+  const toastSuccess = ref<boolean>(false);
+  const toastMessage = ref<string>("");
+  const toastOpen = ref<boolean>(false);
+  const formSubmitted = (success: boolean) => {
+    closeUpdateModal();
+    if(success){
+      toastOpen.value = true;
+      toastSuccess.value = success;
+      toastMessage.value = "Thanks for the submission, we wil take it into consideration";
+      alert("Thanks for the submission, we wil take it into consideration ");
+    }else{
+      alert("something went wrong, try again later")
+      toastOpen.value = true;
+      toastSuccess.value = success;
+      toastMessage.value = "something went wrong, try again later";
+    }
   }
 
   function saveMarina() {

@@ -29,11 +29,11 @@ import {
 } from '../models/index';
 
 export interface SuggestionMarinaSuggestionsAddPostRequest {
-    newMarinaSuggestionModel?: Omit<NewMarinaSuggestionModel, 'id'|'sessionId'|'requestTimestamp'>;
+    newMarinaSuggestionModel?: Omit<NewMarinaSuggestionModel, 'id'|'sessionId'|'submissionTimeStamp'>;
 }
 
 export interface SuggestionMarinaSuggestionsUpdatePostRequest {
-    updateMarinaSuggestionModel?: Omit<UpdateMarinaSuggestionModel, 'id'|'sessionId'|'requestTimestamp'>;
+    updateMarinaSuggestionModel?: Omit<UpdateMarinaSuggestionModel, 'id'|'sessionId'|'submissionTimeStamp'>;
 }
 
 /**
