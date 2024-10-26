@@ -210,9 +210,9 @@
         const response = await TypesApi.typesServiceTypesGet();
         // Filter out undefined values and map to a string array
         services.value = response
-            .map(x => x.value)
-            .filter(value => value !== undefined)
-            .filter(value => value !== null);
+            .map((x:any) => x.value)
+            .filter((value:any) => value !== undefined)
+            .filter((value:any) => value !== null);
         
         services.value.push("Other (please specify below)");
 
