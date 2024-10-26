@@ -107,17 +107,11 @@
                     <li v-for="service in marina?.services" :key="service.id">{{ service.serviceType?.value }}</li>
                 </ul>
             </div>
-                    <!-- Update Marina Info Section -->
+
           <div id="update-marina-info" class="mt-4 text-center">
             <p class="text-gray-600">Is the information incomplete or inaccurate?</p>
-            <!-- <a
-              href="/update-marina/{{ marina.id }}"
-              class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded"
-            >
-              Update Marina Info
-            </a> -->
             <button class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded" type="button" @click="openUpdateModal">
-              Update Marina Info
+              Suggest a Change
             </button>
           </div>
         </section>
@@ -130,7 +124,7 @@
     </div>
 </template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
   import { onMounted, ref, computed } from 'vue';
   import * as client from '../api-client';
   import { useRouter } from 'vue-router';
@@ -145,18 +139,18 @@
   import {useSavedMarinasStore} from "../stores/savedMarinasStore";
   import updateMarinaModal from "../components/updateComponents/updateMarinaModal.vue";
   import { useModalStore } from '../stores/modalStore';
-import { format } from 'path';
-import toast from '../components/updateComponents/toast.vue';
+  import { format } from 'path';
+  import toast from '../components/updateComponents/toast.vue';
   const modalStore = useModalStore();
 
   const savedMarinasStore = useSavedMarinasStore();
   const searchStore = useSearchStore();
 
-const saving = ref<boolean>(true);
-const marinaIsSaved = ref<boolean>(false);
+  const saving = ref<boolean>(true);
+  const marinaIsSaved = ref<boolean>(false);
 
-mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
-const map = ref<Map|null>(null);
+  mapboxgl.accessToken = import.meta.env.VITE_API_KEY;
+  const map = ref<Map|null>(null);
     const mapStore = useMapStore();
 
 
@@ -208,14 +202,13 @@ const map = ref<Map|null>(null);
   const toastOpen = ref<boolean>(false);
   const formSubmitted = (success: boolean) => {
     closeUpdateModal();
-    if(success){
-      toastOpen.value = true;
-      toastSuccess.value = success;
-      toastMessage.value = "Thanks for the submission, we wil take it into consideration";
-    }else{
-      toastOpen.value = true;
-      toastSuccess.value = success;
-      toastMessage.value = "something went wrong, try again later";
+    toastOpen.value = true;
+    toastSuccess.value = success;
+
+    if (success) {
+      toastMessage.value = "Thanks for helping us keep our information accurate! We'll review your submission shortly.";
+    } else {
+      toastMessage.value = "Something went wrong. Please try again later.";
     }
   }
 

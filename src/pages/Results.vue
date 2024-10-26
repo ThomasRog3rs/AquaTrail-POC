@@ -118,6 +118,15 @@
 
       </div>
     </div>
+    <!-- New Marina Suggestion Section -->
+    <div class="text-center ml-auto">
+      <p class="text-gray-600">
+        Didn't find the marina you're looking for?
+      </p>
+      <button class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded" type="button" @click="openSuggestModal">
+        Suggest a New Marina
+      </button>
+    </div>  
   </div>
   <div id="searchResults" class="text-center mt-[25px]" v-else>
   <p class="text-lg font-semibold text-gray-700">
@@ -132,20 +141,19 @@
   </div>
 
   <!-- New Marina Suggestion Section -->
-  <!-- <div class="mt-8">
-    <p class="text-gray-600">
-      Can't find the marina you're looking for?
-    </p>
-    <a
-      href="/suggest-marina" 
-      class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded"
-      >
-      Suggest a Marina
-    </a>
-  </div> -->
+  <div class="text-center ml-auto mt-8">
+      <p class="text-gray-600">
+        Didn't find the marina you're looking for?
+      </p>
+      <button class="inline-block mt-4 bg-blue-700 text-white hover:bg-blue-800 font-bold py-2 px-4 rounded" type="button" @click="openSuggestModal">
+        Suggest a New Marina
+      </button>
+    </div> 
 </div>
 
+<newMarinaModal v-if="suggestModalOpen" :open="suggestModalOpen" @close="closeSuggestModal" @submitted="formSubmitted"></newMarinaModal>
 
+<toast v-if="toastOpen" :success="toastSuccess" :message="toastMessage"></toast>
 
   <transition name="slide">
     <SortBox :open="sortResultsOpen" title="Sort By" @close="closeSort">
@@ -181,10 +189,14 @@ import SearchForm from '../components/experimental/SearchForm.vue';
 import * as client from '../api-client';
 import {useSavedMarinasStore} from "../stores/savedMarinasStore";
 import {filterOption, SearchType} from "../types/search";
+import { useModalStore } from '../stores/modalStore';
+import newMarinaModal from '../components/updateComponents/newMarinaModal.vue';
+import toast from '../components/updateComponents/toast.vue';
 
 const router = useRouter();
 const searchStore = useSearchStore();
 const savedMarinasStore = useSavedMarinasStore();
+const modalStore = useModalStore();
 
 const showAllServiceOptions = ref<boolean>(false);
 
@@ -192,9 +204,36 @@ const searchBoxOpen = ref<boolean>(false);
 const sortResultsOpen = ref<boolean>(false);
 const filterResultsOpen = ref<boolean>(false);
 
+const suggestModalOpen = ref<boolean>(false);
+function openSuggestModal(){
+  modalStore.showBackdrop = true;
+  suggestModalOpen.value = true;
+}
+
+function closeSuggestModal(){
+  modalStore.showBackdrop = false;
+  suggestModalOpen.value = false;
+}
+
+const toastSuccess = ref<boolean>(false);
+const toastMessage = ref<string>("");
+const toastOpen = ref<boolean>(false);
+const formSubmitted = (success: boolean) => {
+  closeSuggestModal();
+  toastOpen.value = true;
+  toastSuccess.value = success;
+
+  if (success) {
+    toastMessage.value = "Thanks for helping us keep our information accurate! We'll review your submission shortly.";
+  } else {
+    toastMessage.value = "Something went wrong. Please try again later.";
+  }
+}
+
 function marinaIsSaved(marinaId: string){
   return savedMarinasStore.savedMarinas?.some(x => x.id === marinaId)!;
 }
+
 const stillNoRes = ref<boolean>(false);
 function setStillNoRes(){
   stillNoRes.value = true;
