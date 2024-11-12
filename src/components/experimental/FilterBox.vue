@@ -105,7 +105,6 @@
                 break;
     
             case SearchType.Coordinates:
-                //alert("FILTER Marina Search by Coordinates with a radius");
                 params = {
                     searchCoordinates: searchStore.searchLocationCoordinatesValue ?? undefined,
                     searchDistance: searchStore.searchRadiusValue,

@@ -19,7 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useNavStore } from '../stores/navStore';
-const navStore = useNavStore();
-
+  import { useNavStore } from '../stores/navStore';
+  const navStore = useNavStore();
 </script>
