@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
+    import {onActivated, onMounted, ref, watch, watchEffect} from 'vue';
     import { useSearchStore } from '../../stores/searchStore';
     import * as client from '../../api-client';
     import { DataApi } from '../../api-client';
