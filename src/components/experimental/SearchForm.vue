@@ -335,6 +335,7 @@ function calculateScore(currentSearchValue: string, name: string, type: string):
         suggestions.value = [];
         return;
       }
+      
       currentSearchValue = normalize(currentSearchValue)
 
       const GetMapBoxSuggestions = await getMapBoxSuggestions(currentSearchValue);
@@ -461,24 +462,6 @@ function calculateScore(currentSearchValue: string, name: string, type: string):
         suggestions.value = [];
         throw error;
       }
-
-
-
-      // if(currentSearchValue === ""){
-      //   suggestions.value = [];
-      //   return;
-      // }
-      // const locationParams : client.LocationSearchGetRequest = {
-      //   query: currentSearchValue
-      // }
-
-      // try{
-      //   const loactionResponse : Array<client.LocationModel> = await locationApi.locationSearchGet(locationParams);
-      //   suggestions.value = loactionResponse;
-      // }catch(err){
-      //   suggestions.value = [];
-      // }
-
     }
 
     async function search() {

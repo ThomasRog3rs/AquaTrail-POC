@@ -32,8 +32,7 @@ export const useSearchStore = defineStore('searchStore', () => {
     sortOptions.value = [
         {name: "Alphabetically", active: true, enabled: true, id: 1},
         {name: "Number Of Services", active: false, enabled: true, id: 2},
-        {name: "Distance", active: true, enabled: false, id: 3},
-
+        {name: "Distance", active: true, enabled: false, id: 3}
     ];
 
     async function searchMarinas(searchParams: client.DataMarinasSearchGetRequest) {
@@ -199,6 +198,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         resetSortOptions,
         userLocation,
         resetServiceFilterOptions,
-        serviceFilterOptions,setServiceFilterOptionActive
+        serviceFilterOptions,
+        setServiceFilterOptionActive
     };
 });
