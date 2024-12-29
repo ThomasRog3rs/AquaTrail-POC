@@ -72,6 +72,7 @@ interface userLocation {
   latitude: number;
   longitude: number;
 }
+
 const userLocation = ref<userLocation | null>(null);
 const error = ref<string | null>(null);
 const requestLocation = () => {
